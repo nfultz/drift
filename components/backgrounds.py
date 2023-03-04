@@ -14,7 +14,7 @@ class Background():
     def reward(self):
         pass
 
-class Soldier():
+class Soldier(Background):
     def __init__(self):
         super().__init__(3,1,2)
 
@@ -35,7 +35,7 @@ class Soldier():
         player.h += 1
 
 
-class Merchant():
+class Merchant(Background):
     def __init__(self):
         super().__init__(2,3,1)
 
@@ -54,7 +54,7 @@ class Merchant():
     def reward(self, player):
         player.HARD_BARGIN = 5 #TODO
 
-class Explorer():
+class Explorer(Background):
     def __init__(self):
         super().__init__(2,1,3)
 
@@ -74,7 +74,7 @@ class Explorer():
         player.SURVIVAL_KNOWLEDGE = 5 #TODO
 
 
-class Scoundrel():
+class Scoundrel(Background):
     def __init__(self):
         super().__init__(1,2,3)
 
@@ -94,7 +94,7 @@ class Scoundrel():
         player.r += 1
         player.HIGHEST_BIDDERS = 25 #TODO
 
-class Navigator():
+class Navigator(Background):
     def __init__(self):
         super().__init__(1,3,2)
 
@@ -114,7 +114,7 @@ class Navigator():
         player.PATHFINDER = 1 #TODO
 
 
-class Freelancer():
+class Freelancer(Background):
     def __init__(self):
         super().__init__(3,2,1)
 

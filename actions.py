@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 class Action:
+    COST = 0
     def __init__(self, engine: Engine = None, entity: Entity = None) -> None:
         super().__init__()
         self.engine = engine
@@ -29,6 +30,18 @@ class EscapeAction(Action):
     def perform(self) -> None:
         raise SystemExit()
 
+class FuelAction(Action): #TODO
+    COST = 0
+    def perform(self) -> None:
+        self.ap += .5
+
+
+class DrinkAction(Action):
+    COST = 0
+    def perform(self) -> None:
+        if self.entity.water > 0:
+            self.entity.water -= 1
+            self.entity.stamina = max(self.entity.stamina+3, self.entity.max_stamina)
 
 class MovementAction(Action):
     def __init__(self, engine: Engine, entity: Entity, dx: int, dy: int):
@@ -36,6 +49,8 @@ class MovementAction(Action):
 
         self.dx = dx
         self.dy = dy
+
+        self.COST = 1 / 2 / entity.speed
 
     def perform(self) -> None:
         dest_x = self.entity.x + self.dx
