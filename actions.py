@@ -44,13 +44,14 @@ class DrinkAction(Action):
             self.entity.stamina = max(self.entity.stamina+3, self.entity.max_stamina)
 
 class MovementAction(Action):
+    from fractions import Fraction
     def __init__(self, engine: Engine, entity: Entity, dx: int, dy: int):
         super().__init__(engine, entity)
 
         self.dx = dx
         self.dy = dy
 
-        self.COST = 1 / 2 / entity.speed
+        self.COST = Fraction(1, 2 * entity.speed)
 
     def perform(self) -> None:
         dest_x = self.entity.x + self.dx
