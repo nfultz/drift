@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 import tcod.event
 
-from actions import Action, EscapeAction, MovementAction
+from components.actions import Action, EscapeAction, MovementAction
 
 if TYPE_CHECKING:
     from engine import Engine

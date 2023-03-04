@@ -3,7 +3,7 @@ from typing import Set, Iterable, Any
 from tcod.context import Context
 from tcod.console import Console
 
-from actions import EscapeAction, MovementAction
+from components.actions import EscapeAction, MovementAction
 from components.entity import Entity
 from components.deck import Deck
 from components import weather
