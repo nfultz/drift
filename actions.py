@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from engine import Engine
-    from entity import Entity
+    from components.entity import Entity
 
 
 class Action:
