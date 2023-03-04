@@ -32,6 +32,7 @@ class Entity:
             self.k = background.k
             self.r = background.r
             background.bonus(self)
+            self.goal_completed = False
         else:
             self.h = 2
             self.k = 2

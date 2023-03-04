@@ -14,9 +14,13 @@ class Card(str):
     def suit(self):
         return self[1]
 
+    @propert
+    def major(self):
+        return self.suit in "HS"
+
     @property
     def value(self):
-        if self.rank == 'x':
+        if self.rank == 'W':
             return 14
         return 1 + RANKS.find(self.rank)
 
@@ -24,13 +28,14 @@ class Deck(list):
 
     def __init__(self):
         self += [Card(r+s) for s in SUITS for r in RANKS]
-        self.append(Card("xS"))
-        self.append(Card("xH"))
+        self.append(Card("WS"))
+        self.append(Card("WH"))
         self._top = len(self)
         self._bottom = 0
 
     def shuffle(self):
         random.shuffle(self)
+        return self
 
     @property
     def drift(self):
