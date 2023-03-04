@@ -36,5 +36,8 @@ WEATHER_EVENTS = {
   'J': extreme_sun,
   'Q': spice_clouds,
   'K': noxious_miasma,
-  'x': rain
+  'W': rain
 }
+
+def draw(deck):
+    return WEATHER_EVENTS[deck.bottom.rank]

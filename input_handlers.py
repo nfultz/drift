@@ -25,7 +25,6 @@ class EventHandler(tcod.event.EventDispatch[Action]):
                 continue
 
             action.perform()
-            self.engine.handle_enemy_turns()
 
     def ev_quit(self, event: tcod.event.Quit) -> Optional[Action]:
         raise SystemExit()

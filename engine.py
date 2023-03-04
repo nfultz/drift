@@ -6,13 +6,14 @@ from tcod.console import Console
 from actions import EscapeAction, MovementAction
 from components.entity import Entity
 from components.deck import Deck
+from components import weather
 from game_map import GameMap
 from input_handlers import EventHandler
 
 
 class Engine:
     def __init__(self, entities: Set[Entity], game_map: GameMap, player: Entity):
-        self.entities = entities
+        self.entities = entities | set(player)
         self.event_handler = EventHandler(self)
         self.game_map = game_map
         self.player = player
@@ -39,9 +40,24 @@ class Engine:
 
         while True:  # Main loop, runs until SystemExit is raised.
             print("New Day")
+            print("DATE)")
+            print(weather.draw(deck) is None)
+            print(deck.drift)
+            print(deck.heat)
 
-            while(self.player.ap > 0):
-                engine.render(console=console, context=context)
+            for e in entities:
+                while e.ap > 0:
+                    engine.render(console=console, context=context)
 
-                events = tcod.event.wait()
-                engine.event_handler.handle_events(events)
+                    if e is self.player:
+                        events = tcod.event.wait()
+                        engine.event_handler.handle_events(events)
+                    else:
+                        e.ai()
+
+                if e.background:
+                    if not e.goal_completed:
+                        if e.background.goal(e):
+                            e.goal_completed = TRUE
+                            e.background.reward(e)
+
