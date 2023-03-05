@@ -2,6 +2,7 @@ from typing import Tuple
 
 from .backgrounds import Background
 
+import datetime
 
 class Entity:
     """
@@ -58,6 +59,10 @@ class Entity:
 
         self.fame_per_companion = 4
 
+
+        self.birthdate = datetime.date(3055,
+                datetime.date.today().month,
+                datetime.date.today().day)
 
     def move(self, dx: int, dy: int) -> None:
         # Move the entity by a given amount
