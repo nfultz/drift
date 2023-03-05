@@ -111,7 +111,7 @@ class Navigator(Background):
         return False
 
     def reward(self, player):
-        player.PATHFINDER = 1 #TODO
+        player.PATHFINDER = 1 #DONE
 
 
 class Freelancer(Background):

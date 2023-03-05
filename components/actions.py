@@ -96,16 +96,21 @@ class MovementAction(Action):
         dest_x = self.entity.x + self.dx
         dest_y = self.entity.y + self.dy
 
-        if not self.engine.game_map.in_bounds(dest_x, dest_y):
-            return  # Destination is out of bounds.
+        if not self.engine.game_map.is_revealed(dest_x, dest_y):
+            if not hasattr(self.entity, "PATHFINDER_TOOLS"):
+                return  # Destination is out of bounds.
+        elif not self.engine.game_map.is_traversable(dest_x, dest_y):
+            if not hasattr(self.entity, "PATHFINDER"):
+                return
+
 #        if not self.engine.game_map.tiles["walkable"][dest_x, dest_y]:
 #            return  # Destination is blocked by a tile.
 
         self.entity.move(self.dx, self.dy)
         self.entity.ap -= self.COST
 
-        loc = self.engine.game_map.locations[self.entity.y][self.entity.x]
-        print(f'({loc.x},{loc.y}) {type(loc)}')
+        loc = self.engine.game_map.get_loc(self.entity.x,self.entity.y)
+        print(f'({loc.x},{loc.y}) {type(loc)}') if loc else ''
 
 class PassAction(Action):
     COST = 0

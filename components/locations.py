@@ -6,6 +6,7 @@ class Location():
     desert = 0
     xp = 1
     tile = tile_types.error
+    traversable = True
 
     def __init__(self, x, y, level=None):
         self.x = x
@@ -25,6 +26,7 @@ class Desert(Location):
 class NonTraversable(Location):
     level = 3
     tile = tile_types.nontraversable
+    traversable = False
 
     def can_explore(self, entity):
         return hasattr(entity, "PATHFINDER")

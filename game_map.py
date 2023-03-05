@@ -78,14 +78,18 @@ class GameMap:
             self.locations[y] = sortedcontainers.SortedDict()
         self.locations[y][x] = loc
 
-    def in_bounds(self,x,y):
-        return self.is_revealed(x,y)
-
     def is_revealed(self,x,y):
-        return not self.is_empty(x,y)
+        return self.get_loc(x,y) is not None
 
     def is_empty(self,x,y):
-        return not y in self.locations or not x in self.locations[y]
+        return self.get_loc(x,y) is None
+
+    def is_traversable(self,x,y):
+        loc = self.get_loc(x,y)
+        return loc is not None and loc.traversable
+
+    def get_loc(self,x,y):
+        return self.locations[y][x] if y in self.locations and x in self.locations[y] else None
 
     def nearest_empty(self, x, y,r=1):
         d = 9999
