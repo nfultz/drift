@@ -31,7 +31,7 @@ class GameMap:
         for y in self.locations.islice(bottom, top):
             for x in self.locations[y].islice(left, right):
                 print(x,y)
-                tiles[y-bottom,x-left] = tile_types.desert
+                tiles[x-bottom,y-left] = tile_types.desert
 
         console.tiles_rgb[0:self.dim[0], 0:self.dim[1]] = tiles["dark"]
 

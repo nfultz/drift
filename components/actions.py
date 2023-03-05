@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from fractions import Fraction
+from . import locations
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -108,12 +109,12 @@ class RevealAction(Action):
     COST = 1
 
     def perform(self) -> None:
-        loc = locations.draw(self.dest_x, self.dest_y)
+        loc = locations.draw(self.engine.deck, self.dest_x, self.dest_y)
 
         map = self.engine.game_map
         map.add_location(loc)
 
-        self.entity.ap -= self.cost
+        self.entity.ap -= self.COST
 
     def available(self) -> bool:
         x = self.entity.x

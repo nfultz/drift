@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 
 import tcod.event
 
-from components.actions import Action, EscapeAction, MovementAction
+from components.actions import Action, EscapeAction, MovementAction, RevealAction
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -44,6 +44,11 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             action = MovementAction(engine, player, dx=-1, dy=0)
         elif key == tcod.event.K_RIGHT:
             action = MovementAction(engine, player, dx=1, dy=0)
+
+        elif key == tcod.event.K_r:
+            action = RevealAction(engine, player)
+            if not action.available(): return None
+
 
         elif key == tcod.event.K_ESCAPE:
             action = EscapeAction()
