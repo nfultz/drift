@@ -117,6 +117,30 @@ class RevealAction(Action):
         map = self.engine.game_map
         map.add_location(loc)
 
+        # If large size, add if possible
+        tiles = [(loc.x, loc.y)]
+        for _ in range(1, loc.size):
+            for t in tiles:
+                dx,dy = map.nearest_empty(t[0], t[1])
+                if dx is None:
+                    continue
+                map.add_location(loc, x=dx,y=dy)
+                tiles.append((dx,dy))
+                break
+            else: break
+
+        # If deserts, add if possible
+        for _ in range(0, loc.desert):
+            for t in tiles:
+                dx,dy = map.nearest_empty(t[0], t[1], r=3)
+                if dx is None:
+                    continue
+                map.add_location(locations.Desert(dx,dy))
+                tiles.append((dx,dy))
+                break
+            else: break
+
+
         self.entity.ap -= self.COST
         print(f'({loc.x},{loc.y}) {type(loc)}')
 
@@ -130,19 +154,7 @@ class RevealAction(Action):
 
         map = self.engine.game_map
 
-        if map.is_empty(x-1, y):
-            self.dest_x, self.dest_y = x-1, y
-            return True
-        if map.is_empty(x, y-1):
-            self.dest_x, self.dest_y = x, y-1
-            return True
-        if map.is_empty(x+1, y):
-            self.dest_x, self.dest_y = x+1, y
-            return True
-        if map.is_empty(x, y+1) :
-            self.dest_x, self.dest_y = x, y+1
-            return True
-
-        return False
+        self.dest_x,self.dest_y = map.nearest_empty(x,y)
+        return self.dest_x is not None
 
 

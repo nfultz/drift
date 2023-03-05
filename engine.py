@@ -43,9 +43,9 @@ class Engine:
         while True:  # Main loop, runs until SystemExit is raised.
             self.fatigue = 1
             print("New Day")
-            print("DATE)")
+#            print("DATE)")
             self.weather = weather.draw(deck)
-            print(type(self.weather))
+#            print(type(self.weather))
             print(deck.drift)
             print(deck.heat)
 

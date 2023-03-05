@@ -3,7 +3,9 @@ from . import tile_types
 class Location():
     level = 2
     size = 1
-    tile = tile_types.empty
+    desert = 0
+    xp = 1
+    tile = tile_types.error
 
     def __init__(self, x, y, level=None):
         self.x = x

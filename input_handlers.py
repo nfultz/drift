@@ -29,12 +29,16 @@ class EventHandler(tcod.event.EventDispatch[Action]):
     def ev_quit(self, event: tcod.event.Quit) -> Optional[Action]:
         raise SystemExit()
 
+    debug = False
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[Action]:
         action: Optional[Action] = None
 
         key = event.sym
         engine = self.engine
         player = engine.player
+
+        if self.debug:
+            breakpoint()
 
         if key == tcod.event.K_UP:
             action = MovementAction(engine, player, dx=0, dy=-1)
@@ -49,6 +53,8 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             action = RevealAction(engine, player)
             if not action.available(): return None
 
+        elif key == tcod.event.K_d:
+            self.debug = not self.debug
 
         elif key == tcod.event.K_ESCAPE:
             action = EscapeAction()
