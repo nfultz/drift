@@ -65,7 +65,7 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         elif key == tcod.event.K_f:
             action = FuelAction(engine, player)
 
-        elif key == tcod.event.K_d:
+        elif key == tcod.event.K_z:
             self.debug = not self.debug
 
         elif key == tcod.event.K_q:

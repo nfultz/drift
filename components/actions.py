@@ -1,8 +1,51 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from fractions import Fraction
+import fractions
 from . import locations
+
+
+class MixedFrac(fractions.Fraction):
+    """
+    A helper class for printing mixed fractions correctly.
+    """
+
+    def __str__(self):
+        whole,space, n, slash, d = '','', '', '', ''
+        i, j = divmod(self.numerator, self.denominator)
+
+        if i != 0 or j == 0:
+            whole = i
+
+        if j != 0:
+            n = j
+            slash = '/'
+            d = self.denominator
+            if i != 0:
+                space=' '
+
+        return f'{whole}{space}{n}{slash}{d}'
+
+    def __add__(a,b):
+        return MixedFrac(super().__add__(b))
+    def __radd__(a,b):
+        return MixedFrac(super().__radd__(b))
+    def __sub__(a,b):
+        return MixedFrac(super().__sub__(b))
+    def __rsub__(a,b):
+        return MixedFrac(super().__rsub__(b))
+    def __mul__(a,b):
+        return MixedFrac(super().__mul__(b))
+    def __rmul__(a,b):
+        return MixedFrac(super().__rmul__(b))
+    def __div__(a,b):
+        return MixedFrac(super().__div__(b))
+    def __rdiv__(a,b):
+        return MixedFrac(super().__rdiv__(b))
+
+
+
+
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -45,7 +88,7 @@ class FuelAction(Action): #TODO
     COST = 0
     def perform(self) -> None:
         self.entity.fuel -= 1
-        self.entity.ap += Fraction(1,2)
+        self.entity.ap += MixedFrac(1,2)
     def available(self) -> bool:
         return self.entity.fuel > 0
 
@@ -106,7 +149,7 @@ class MovementAction(Action):
         self.dx = dx
         self.dy = dy
 
-        self.COST = Fraction(1, 2 * entity.speed)
+        self.COST = MixedFrac(1, 2 * entity.speed)
 
     def perform(self) -> None:
         self.entity.move(self.dx, self.dy)
@@ -144,6 +187,10 @@ class RevealAction(Action):
         map.add_location(loc)
 
         self.engine.msg(f"You see a {loc} on the horizon.")
+
+        if isinstance(loc, location.Unique):
+            self.fame += MixedFrac(1,2)
+
 
         # If large size, add if possible
         tiles = [(loc.x, loc.y)]
