@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from fractions import Fraction
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -36,7 +37,8 @@ class EscapeAction(Action):
 class FuelAction(Action): #TODO
     COST = 0
     def perform(self) -> None:
-        self.entity.ap += .5
+        self.entity.fuel -= 1
+        self.entity.ap += Fraction(1,2)
     def available(self) -> bool:
         return self.entity.fuel > 0
 
@@ -63,15 +65,16 @@ class CampingAction(Action):
 
         recover = 3
 
-        if   v > 12: pass
+        if   v > 12:
             entity.water = min(self.entity.water+1, self.entity.max_water)
         elif v > 10:
             recover = 0
         elif v >  8:
             entity.fuel = min(self.entity.fuel+1, self.entity.max_fuel)
-        elif v >  6: pass
+        elif v >  6:
             recover = 2
-        elif v >  4: pass #TODO +1 speed next turn
+        elif v >  4: #TODO +1 speed next turn
+            pass
         else:
             recover = entity.MAX_STAMINA
 
@@ -80,7 +83,6 @@ class CampingAction(Action):
         entity.fatigue = 0
 
 class MovementAction(Action):
-    from fractions import Fraction
     def __init__(self, engine: Engine, entity: Entity, dx: int, dy: int):
         super().__init__(engine, entity)
 
@@ -99,7 +101,39 @@ class MovementAction(Action):
             return  # Destination is blocked by a tile.
 
         self.entity.move(self.dx, self.dy)
+        self.entity.ap -= self.cost
 
 
+class RevealAction(Action):
+    COST = 1
+
+    def perform(self) -> None:
+        loc = locations.draw(self.dest_x, self.dest_y)
+
+        map = self.engine.game_map
+        map.add_location(loc)
+
+        self.entity.ap -= self.cost
+
+    def available(self) -> bool:
+        x = self.entity.x
+        y = self.entity.y
+
+        map = self.engine.game_map
+
+        if map.is_empty(x-1, y):
+            self.dest_x, self.dest_y = x-1, y
+            return True
+        if map.is_empty(x, y-1):
+            self.dest_x, self.dest_y = x, y-1
+            return True
+        if map.is_empty(x+1, y):
+            self.dest_x, self.dest_y = x+1, y
+            return True
+        if map.is_empty(x, y+1) :
+            self.dest_x, self.dest_y = x, y+1
+            return True
+
+        return False
 
 

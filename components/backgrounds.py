@@ -131,7 +131,7 @@ class Freelancer(Background):
                 return True
         return False
 
-    @static
+    @staticmethod
     def choose_stat(): #TODO
         pass
 
@@ -176,7 +176,7 @@ def friendly_face(player):
     player.GUILD_QUEST_DIFFICULTY = 1
     player.COMPANION_DISCOUNT = 50
 
-def skilled_laborer(player)
+def skilled_laborer(player):
     player.MOONDEW_LABORER = 1 #TODO ADD ACTION
 
 
@@ -184,7 +184,7 @@ def introduction(deck, player):
     card = deck.bottom
 
     if card.major:
-        if card.rank = 'W':
+        if card.rank == 'W':
             rebuilding_the_past(player)
         elif card.value > 10:
             hard_times(player)
@@ -195,7 +195,7 @@ def introduction(deck, player):
         else :
             familiar_face(player)
     elif not card.major:
-        if card.rank = 'W':
+        if card.rank == 'W':
             place_to_hide(player)
         elif card.value > 10:
             quiet_wanderer(player)

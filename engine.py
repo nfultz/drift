@@ -1,5 +1,6 @@
 from typing import Set, Iterable, Any
 
+import tcod
 from tcod.context import Context
 from tcod.console import Console
 
@@ -13,7 +14,7 @@ from input_handlers import EventHandler
 
 class Engine:
     def __init__(self, entities: Set[Entity], game_map: GameMap, player: Entity):
-        self.entities = entities | set(player)
+        self.entities = entities | {player}
         self.event_handler = EventHandler(self)
         self.game_map = game_map
         self.player = player
@@ -36,7 +37,7 @@ class Engine:
         console.clear()
 
 
-    def loop(self):
+    def loop(self, console: Console, context: Context):
         deck = self.deck
 
         while True:  # Main loop, runs until SystemExit is raised.
@@ -49,14 +50,15 @@ class Engine:
             print(deck.heat)
 
 
-            for e in entities:
+            for e in self.entities:
+                e.ap = 2
                 e.fatigue = self.fatigue
                 while e.ap > 0:
-                    engine.render(console=console, context=context)
+                    self.render(console=console, context=context)
 
                     if e is self.player:
                         events = tcod.event.wait()
-                        engine.event_handler.handle_events(events)
+                        self.event_handler.handle_events(events)
                     else:
                         e.ai()
 

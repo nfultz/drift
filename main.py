@@ -35,7 +35,7 @@ def main() -> None:
         columns=console.width, rows=console.height, tileset=tileset,
         title="drift"
     ) as context:
-        engine.loop()
+        engine.loop(console, context)
 
 if __name__ == "__main__":
     if __debug__:

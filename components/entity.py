@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from background import Background
+from .backgrounds import Background
 
 
 class Entity:
