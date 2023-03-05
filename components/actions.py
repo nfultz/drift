@@ -58,7 +58,7 @@ class CampingAction(Action):
     def available(self) -> bool:
         # TODO Not on desert w/o gear
         # Not on settlements
-        return self.entity.water > 0
+        return self.entity.water > 0 and self.entity.ap >= self.COST
 
     def perform(self):
         v = self.engine.deck.top.value
@@ -121,6 +121,10 @@ class RevealAction(Action):
         print(f'({loc.x},{loc.y}) {type(loc)}')
 
     def available(self) -> bool:
+
+        if self.entity.ap < self.COST:
+            return False
+
         x = self.entity.x
         y = self.entity.y
 

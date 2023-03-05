@@ -45,7 +45,7 @@ class Engine:
             print("New Day")
             print("DATE)")
             self.weather = weather.draw(deck)
-            print(self.weather is None)
+            print(type(self.weather))
             print(deck.drift)
             print(deck.heat)
 
