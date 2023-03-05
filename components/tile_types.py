@@ -44,10 +44,10 @@ desert = new_tile(
     walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (150, 150, 50)),
 )
 unique = new_tile(
-    walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (150, 150, 150)),
+    walkable=True, transparent=True, dark=(ord("u"), (255, 255, 255), (100, 100, 100)),
 )
 settlement = new_tile(
-    walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (50, 50, 150)),
+    walkable=True, transparent=True, dark=(ord("s"), (255, 255, 255), (50, 50, 150)),
 )
 explorable = new_tile(
     walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (180, 70, 180)),

@@ -107,6 +107,11 @@ class MovementAction(Action):
         loc = self.engine.game_map.locations[self.entity.y][self.entity.x]
         print(f'({loc.x},{loc.y}) {type(loc)}')
 
+class PassAction(Action):
+    COST = 0
+    def perform(self) -> None:
+        self.entity.ap = 0
+
 
 class RevealAction(Action):
     COST = 1
@@ -142,7 +147,7 @@ class RevealAction(Action):
 
 
         self.entity.ap -= self.COST
-        print(f'({loc.x},{loc.y}) {type(loc)}')
+#        print(f'({loc.x},{loc.y}) {type(loc)}')
 
     def available(self) -> bool:
 
