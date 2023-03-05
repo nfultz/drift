@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 # https://pyinstaller.readthedocs.io/en/stable/spec-files.html
 block_cipher = None
-PROJECT_NAME = "roguelike_tutorial"
+PROJECT_NAME = "drift"
 
 a = Analysis(
     ["main.py"],
