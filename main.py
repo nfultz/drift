@@ -24,7 +24,7 @@ def main() -> None:
 
 
 
-    player = Entity(int(WIDTH / 2), int(HEIGHT / 2), "@", (255, 255, 255))
+    player = Entity(0, 0, "@", (255, 255, 255))
 
     game_map = GameMap(WIDTH, HEIGHT-10)
 

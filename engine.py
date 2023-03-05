@@ -30,7 +30,7 @@ class Engine:
     def render(self, console: Console, context: Context) -> None:
         self.game_map.render(console)
         for entity in self.entities:
-            console.print(entity.x, entity.y, entity.char, fg=entity.color)
+            console.print(entity.x +10, entity.y +10, entity.char, fg=entity.color)
 
         context.present(console)
 
@@ -54,6 +54,7 @@ class Engine:
                 e.ap = 2
                 e.fatigue = self.fatigue
                 while e.ap > 0:
+                    print(f'ap: {e.ap}')
                     self.render(console=console, context=context)
 
                     if e is self.player:
