@@ -59,6 +59,12 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             action = PassAction(engine, player)
 
         elif key == tcod.event.K_d:
+            action = DrinkAction(engine, player)
+
+        elif key == tcod.event.K_f:
+            action = FuelAction(engine, player)
+
+        elif key == tcod.event.K_d:
             self.debug = not self.debug
 
         elif key == tcod.event.K_q:

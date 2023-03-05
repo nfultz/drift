@@ -50,7 +50,6 @@ class GameMap:
 
         for y in self.locations.irange(self.bottom, self.top-1):
             for x in self.locations[y].irange(self.left, self.right-1):
-#                print(x,y)
                 tiles[x-self.left,y-self.bottom] = self.locations[y][x].tile
 
 
@@ -105,7 +104,6 @@ class GameMap:
                 new_d = math.dist((x,y), (i,j))
 
                 if new_d > r: continue
-                print(f'({x},{y}) => ({i}{j}) / {new_d}')
 
                 if new_d < d:
                     ties = 1

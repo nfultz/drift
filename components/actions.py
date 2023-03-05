@@ -9,6 +9,12 @@ if TYPE_CHECKING:
     from components.entity import Entity
 
 
+def check_ap(entity, action):
+    if entity.ap < action.COST:
+        action.engine.msg("Not enough AP")
+        return False
+    return True
+
 class Action:
     COST = 0
     def __init__(self, engine: Engine = None, entity: Entity = None) -> None:
@@ -60,31 +66,34 @@ class CampingAction(Action):
         # Not on settlements
         loc = self.engine.game_map.get_loc(self.entity.x, self.entity.y)
         if isinstance(loc, locations.Settlement):
+            self.engine.msg(f"No camping in town. Move along.")
             return False
         if isinstance(loc, locations.Desert):
             if not hasattr(self.entity, "DESERT_CAMPSITE_TOOLKIT"):
+                self.engine.msg(f"Too rough camping on the dunes.")
                 return False
-        return self.entity.ap >= self.COST
+        return check_ap(self.entity, self)
 
     def perform(self):
-        print("camping")
         v = self.engine.deck.top.value
         entity = self.entity
 
         recover = 3
 
         if   v > 12:
-            entity.water = min(self.entity.water+1, self.entity.max_water)
+            entity.water = min(entity.water+1, entity.max_water)
         elif v > 10:
             recover = 0
         elif v >  8:
-            entity.fuel = min(self.entity.fuel+1, self.entity.max_fuel)
+            entity.fuel = min(entity.fuel+1, entity.max_fuel)
         elif v >  6:
             recover = 2
         elif v >  4: #TODO +1 speed next turn
             pass
         else:
             recover = entity.MAX_STAMINA
+
+        self.engine.msg(f"You spend the night and recover {recover} stamina.")
 
         entity.stamina = min(self.entity.stamina+recover, self.entity.max_stamina)
         entity.ap = 0 #end turn
@@ -103,8 +112,6 @@ class MovementAction(Action):
         self.entity.move(self.dx, self.dy)
         self.entity.ap -= self.COST
 
-        loc = self.engine.game_map.get_loc(self.entity.x,self.entity.y)
-        print(f'({loc.x},{loc.y}) {type(loc)}') if loc else ''
 
     def available(self):
         dest_x = self.entity.x + self.dx
@@ -117,7 +124,7 @@ class MovementAction(Action):
             if not hasattr(self.entity, "PATHFINDER"):
                 return False
 
-        return True
+        return check_ap(self.entity, self)
 
 
 
@@ -135,6 +142,8 @@ class RevealAction(Action):
 
         map = self.engine.game_map
         map.add_location(loc)
+
+        self.engine.msg(f"You see a {loc} on the horizon.")
 
         # If large size, add if possible
         tiles = [(loc.x, loc.y)]
@@ -161,11 +170,10 @@ class RevealAction(Action):
 
 
         self.entity.ap -= self.COST
-#        print(f'({loc.x},{loc.y}) {type(loc)}')
 
     def available(self) -> bool:
 
-        if self.entity.ap < self.COST:
+        if not check_ap(self.entity,self):
             return False
 
         x = self.entity.x
@@ -174,6 +182,10 @@ class RevealAction(Action):
         map = self.engine.game_map
 
         self.dest_x,self.dest_y = map.nearest_empty(x,y)
+
+        if self.dest_x is None:
+            self.engine.msg(f"Nothing to see here. Move along.")
+
         return self.dest_x is not None
 
 
