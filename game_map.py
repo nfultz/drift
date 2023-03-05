@@ -19,19 +19,57 @@ class GameMap:
         self.add_location(locations.Desert(1,0))
         self.add_location(locations.Desert(-1,0))
 
+        self.top, self.left, self.bottom, self.right = height//2, -width//2, -height//2, width//2
+
+    def center(self, entity) -> None:
+        width, height = self.dim
+        x, y = entity.x, entity.y
+
+        if x - self.left < width // 4:
+#            breakpoint()
+            self.left -= width // 4
+            self.right -= width // 4
+        elif self.right - x < width // 4:
+#            breakpoint()
+            self.left += width // 4
+            self.right += width // 4
+
+        if y - self.bottom < height // 4:
+#            breakpoint()
+            self.bottom -= height // 4
+            self.top -= height // 4
+        elif self.top - y < height // 4:
+#            breakpoint()
+            self.bottom += height // 4
+            self.top += height // 4
+
     def render(self, console: Console) -> None:
         tiles = np.full(self.dim, fill_value=tile_types.empty, order="F")
 
-#        tiles[32:33, 22] = tile_types.wall
-
-        top, left, bottom, right = 10, -10, -10, 10
-
-        for y in self.locations.islice(bottom, top):
-            for x in self.locations[y].islice(left, right):
+        for y in self.locations.irange(self.bottom, self.top-1):
+            for x in self.locations[y].irange(self.left, self.right-1):
 #                print(x,y)
-                tiles[x-bottom,y-left] = self.locations[y][x].tile
+                tiles[x-self.left,y-self.bottom] = self.locations[y][x].tile
+
+
+        # border
+        tiles[0, 0:self.dim[1]] = tile_types.border_left
+        tiles[self.dim[0]-1, 0:self.dim[1]] =  tile_types.border_right
+        tiles[0:self.dim[0], 0] =  tile_types.border_top
+        tiles[0:self.dim[0], self.dim[1]-1] =  tile_types.border_bottom
+
+        width, height = self.dim
+        tiles[0, height//4] = tile_types.border_top
+        tiles[0, height//2] = tile_types.border_top
+        tiles[0,3* height//4] = tile_types.border_top
+        tiles[width//4, 0] = tile_types.border_left
+        tiles[width//2, 0] = tile_types.border_left
+        tiles[3*width//4,0] = tile_types.border_left
 
         console.tiles_rgb[0:self.dim[0], 0:self.dim[1]] = tiles["dark"]
+
+    def render_entity(self, entity, console: Console) -> None:
+        console.print(entity.x -self.left, entity.y -self.bottom, entity.char, fg=entity.color)
 
     def add_location(self,loc,*,x=None,y=None):
         if x is None:

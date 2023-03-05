@@ -53,3 +53,16 @@ explorable = new_tile(
     walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (180, 70, 180)),
 )
 
+
+border_left = new_tile(
+    walkable=False, transparent=True, dark=(ord("|"), (255, 255, 255), (0, 0, 0)),
+)
+border_right = new_tile(
+    walkable=False, transparent=True, dark=(ord("|"), (255, 255, 255), (0, 0, 0)),
+)
+border_top = new_tile(
+    walkable=False, transparent=True, dark=(ord("-"), (255, 255, 255), (0, 0, 0)),
+)
+border_bottom = new_tile(
+    walkable=False, transparent=True, dark=(ord("-"), (255, 255, 255), (0, 0, 0)),
+)

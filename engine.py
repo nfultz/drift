@@ -28,9 +28,10 @@ class Engine:
 
 
     def render(self, console: Console, context: Context) -> None:
+        self.game_map.center(self.player)
         self.game_map.render(console)
         for entity in self.entities:
-            console.print(entity.x +10, entity.y +10, entity.char, fg=entity.color)
+            self.game_map.render_entity(entity, console)
 
         context.present(console)
 
