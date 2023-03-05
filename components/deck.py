@@ -14,7 +14,7 @@ class Card(str):
     def suit(self):
         return self[1]
 
-    @propert
+    @property
     def major(self):
         return self.suit in "HS"
 

@@ -37,15 +37,20 @@ class Engine:
 
 
     def loop(self):
+        deck = self.deck
 
         while True:  # Main loop, runs until SystemExit is raised.
+            self.fatigue = 1
             print("New Day")
             print("DATE)")
-            print(weather.draw(deck) is None)
+            self.weather = weather.draw(deck)
+            print(self.weather is None)
             print(deck.drift)
             print(deck.heat)
 
+
             for e in entities:
+                e.fatigue = self.fatigue
                 while e.ap > 0:
                     engine.render(console=console, context=context)
 
@@ -60,4 +65,6 @@ class Engine:
                         if e.background.goal(e):
                             e.goal_completed = TRUE
                             e.background.reward(e)
+
+                e.stamina = max(0, e.stamina - e.fatigue)
 

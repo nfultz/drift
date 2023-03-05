@@ -14,6 +14,9 @@ class Action:
         self.engine = engine
         self.entity = entity
 
+    def available(self) -> bool:
+        return True
+
     def perform(self) -> None:
         """Perform this action with the objects needed to determine its scope.
 
@@ -33,15 +36,48 @@ class EscapeAction(Action):
 class FuelAction(Action): #TODO
     COST = 0
     def perform(self) -> None:
-        self.ap += .5
-
+        self.entity.ap += .5
+    def available(self) -> bool:
+        return self.entity.fuel > 0
 
 class DrinkAction(Action):
     COST = 0
     def perform(self) -> None:
         if self.entity.water > 0:
             self.entity.water -= 1
-            self.entity.stamina = max(self.entity.stamina+3, self.entity.max_stamina)
+            self.entity.stamina = min(self.entity.stamina+3, self.entity.max_stamina)
+    def available(self) -> bool:
+        return self.entity.water > 0
+
+class CampingAction(Action):
+    COST = 1
+
+    def available(self) -> bool:
+        # TODO Not on desert w/o gear
+        # Not on settlements
+        return self.entity.water > 0
+
+    def perform(self):
+        v = self.engine.deck.top.value
+        entity = self.entity
+
+        recover = 3
+
+        if   v > 12: pass
+            entity.water = min(self.entity.water+1, self.entity.max_water)
+        elif v > 10:
+            recover = 0
+        elif v >  8:
+            entity.fuel = min(self.entity.fuel+1, self.entity.max_fuel)
+        elif v >  6: pass
+            recover = 2
+        elif v >  4: pass #TODO +1 speed next turn
+        else:
+            recover = entity.MAX_STAMINA
+
+        entity.stamina = min(self.entity.stamina+recover, self.entity.max_stamina)
+        entity.ap = 0 #end turn
+        entity.fatigue = 0
 
 class MovementAction(Action):
     from fractions import Fraction
