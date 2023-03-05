@@ -61,7 +61,7 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         elif key == tcod.event.K_d:
             self.debug = not self.debug
 
-        elif key == tcod.event.K_ESCAPE:
+        elif key == tcod.event.K_q:
             action = EscapeAction()
 
 
