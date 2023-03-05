@@ -51,6 +51,12 @@ class Entity:
         self.fuel = 1
         self.speed = 1
 
+        # win conditon
+        self.fame = 0
+        self.rebuilding = 0
+        self.secrecy = 0
+
+        self.fame_per_companion = 4
 
 
     def move(self, dx: int, dy: int) -> None:

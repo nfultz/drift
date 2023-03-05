@@ -141,3 +141,66 @@ class Freelancer(Background):
         y = choose_stat(x!='h', x!='k', x!='r')
         player[y] += 1
 
+
+def rebuilding_the_past(player):
+    player.RESTORATION = 1 #TODO
+
+def hard_times(player):
+    x = choose_stat() #TODO
+    player[x] += 1
+    player.max_stamina -= 1
+
+def no_intro_needed(player):
+    player.credits += 100
+    player.GLIDER_DISCOUNT = 4
+
+def returning_home(player):
+    player.credits += 50
+    player.MOONDEW_REST_DISCOUNT = 1
+    player.MOONDEW_REST_WATER = 1
+
+def familiar_face(player):
+    player.MOONDEW_REST_DISCOUNT = 1
+    player.EQUIP_DISCOUNT = 4
+
+def place_to_hide(player):
+    player.SECRECY = 1 #TODO
+
+def quiet_wanderer(player):
+    x = choose_stat() #TODO
+    player[x] += 1
+    player.max_stamina += 1
+    player.fame_per_companion = 99
+
+def friendly_face(player):
+    player.GUILD_QUEST_DIFFICULTY = 1
+    player.COMPANION_DISCOUNT = 50
+
+def skilled_laborer(player)
+    player.MOONDEW_LABORER = 1 #TODO ADD ACTION
+
+
+def introduction(deck, player):
+    card = deck.bottom
+
+    if card.major:
+        if card.rank = 'W':
+            rebuilding_the_past(player)
+        elif card.value > 10:
+            hard_times(player)
+        elif card.value > 7 :
+            no_intro_needed(player)
+        elif card.value > 4 :
+            returning_home(player)
+        else :
+            familiar_face(player)
+    elif not card.major:
+        if card.rank = 'W':
+            place_to_hide(player)
+        elif card.value > 10:
+            quiet_wanderer(player)
+        elif card.value > 5 :
+            friendly_face(player)
+        else:
+            skilled_laborer(player)
+

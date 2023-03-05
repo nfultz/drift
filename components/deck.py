@@ -19,6 +19,14 @@ class Card(str):
         return self.suit in "HS"
 
     @property
+    def red(self):
+        return self.suit in "HD"
+
+    @property
+    def black(self):
+        return self.suit in "CS"
+
+    @property
     def value(self):
         if self.rank == 'W':
             return 14
