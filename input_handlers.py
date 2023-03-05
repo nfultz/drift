@@ -51,7 +51,9 @@ class EventHandler(tcod.event.EventDispatch[Action]):
 
         elif key == tcod.event.K_r:
             action = RevealAction(engine, player)
-            if not action.available(): return None
+
+        elif key == tcod.event.K_c:
+            action = CampingAction(engine, player)
 
         elif key == tcod.event.K_p:
             action = PassAction(engine, player)
@@ -61,6 +63,12 @@ class EventHandler(tcod.event.EventDispatch[Action]):
 
         elif key == tcod.event.K_ESCAPE:
             action = EscapeAction()
+
+
+        # validation
+        if action and not action.available():
+            return None
+
 
         # No valid key was pressed
         return action

@@ -58,9 +58,16 @@ class CampingAction(Action):
     def available(self) -> bool:
         # TODO Not on desert w/o gear
         # Not on settlements
-        return self.entity.water > 0 and self.entity.ap >= self.COST
+        loc = self.engine.game_map.get_loc(self.entity.x, self.entity.y)
+        if isinstance(loc, locations.Settlement):
+            return False
+        if isinstance(loc, locations.Desert):
+            if not hasattr(self.entity, "DESERT_CAMPSITE_TOOLKIT"):
+                return False
+        return self.entity.ap >= self.COST
 
     def perform(self):
+        print("camping")
         v = self.engine.deck.top.value
         entity = self.entity
 
@@ -93,24 +100,26 @@ class MovementAction(Action):
         self.COST = Fraction(1, 2 * entity.speed)
 
     def perform(self) -> None:
-        dest_x = self.entity.x + self.dx
-        dest_y = self.entity.y + self.dy
-
-        if not self.engine.game_map.is_revealed(dest_x, dest_y):
-            if not hasattr(self.entity, "PATHFINDER_TOOLS"):
-                return  # Destination is out of bounds.
-        elif not self.engine.game_map.is_traversable(dest_x, dest_y):
-            if not hasattr(self.entity, "PATHFINDER"):
-                return
-
-#        if not self.engine.game_map.tiles["walkable"][dest_x, dest_y]:
-#            return  # Destination is blocked by a tile.
-
         self.entity.move(self.dx, self.dy)
         self.entity.ap -= self.COST
 
         loc = self.engine.game_map.get_loc(self.entity.x,self.entity.y)
         print(f'({loc.x},{loc.y}) {type(loc)}') if loc else ''
+
+    def available(self):
+        dest_x = self.entity.x + self.dx
+        dest_y = self.entity.y + self.dy
+
+        if not self.engine.game_map.is_revealed(dest_x, dest_y):
+            if not hasattr(self.entity, "PATHFINDER_TOOLS"):
+                return  False
+        elif not self.engine.game_map.is_traversable(dest_x, dest_y):
+            if not hasattr(self.entity, "PATHFINDER"):
+                return False
+
+        return True
+
+
 
 class PassAction(Action):
     COST = 0
