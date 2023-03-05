@@ -1,7 +1,9 @@
+from . import tile_types
 
 class Location():
     level = 2
     size = 1
+    tile = tile_types.empty
 
     def __init__(self, x, y, level=None):
         self.x = x
@@ -16,18 +18,22 @@ class Location():
 
 class Desert(Location):
     level  = 3
+    tile = tile_types.desert
 
 class NonTraversable(Location):
     level = 3
+    tile = tile_types.nontraversable
 
     def can_explore(self, entity):
         return hasattr(entity, "PATHFINDER")
 
 class Unique(Location):
     level = 2
+    tile = tile_types.unique
 
 class Settlement(Location):
     level = 2
+    tile = tile_types.settlement
 
 
 class Home(Settlement):
@@ -35,6 +41,7 @@ class Home(Settlement):
 
 
 class Explorable(Location):
+    tile = tile_types.explorable
     pass
 
 ## Revealables:

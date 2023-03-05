@@ -1,11 +1,9 @@
 import numpy as np  # type: ignore
 from tcod.console import Console
 
-import tile_types
-
 import sortedcontainers
 
-from components import locations
+from components import locations, tile_types
 
 class GameMap:
     def __init__(self, width: int, height: int):
@@ -18,7 +16,6 @@ class GameMap:
         self.add_location(locations.Desert(0,-1))
         self.add_location(locations.Desert(1,0))
         self.add_location(locations.Desert(-1,0))
-        print(self.locations)
 
     def render(self, console: Console) -> None:
         tiles = np.full(self.dim, fill_value=tile_types.empty, order="F")
@@ -31,7 +28,7 @@ class GameMap:
         for y in self.locations.islice(bottom, top):
             for x in self.locations[y].islice(left, right):
                 print(x,y)
-                tiles[x-bottom,y-left] = tile_types.desert
+                tiles[x-bottom,y-left] = self.locations[y][x].tile
 
         console.tiles_rgb[0:self.dim[0], 0:self.dim[1]] = tiles["dark"]
 
