@@ -20,10 +20,12 @@ class GameMap:
         self.add_location(locations.Desert(-1,0))
 
         self.top, self.left, self.bottom, self.right = height//2, -width//2, -height//2, width//2
+        self.title = ''
 
     def center(self, entity) -> None:
         width, height = self.dim
         x, y = entity.x, entity.y
+        self.title = f'{x} {y}'
 
         if x - self.left < width // 4:
 #            breakpoint()
@@ -58,15 +60,16 @@ class GameMap:
         tiles[0:self.dim[0], 0] =  tile_types.border_top
         tiles[0:self.dim[0], self.dim[1]-1] =  tile_types.border_bottom
 
-        width, height = self.dim
-        tiles[0, height//4] = tile_types.border_top
-        tiles[0, height//2] = tile_types.border_top
-        tiles[0,3* height//4] = tile_types.border_top
-        tiles[width//4, 0] = tile_types.border_left
-        tiles[width//2, 0] = tile_types.border_left
-        tiles[3*width//4,0] = tile_types.border_left
+#        width, height = self.dim
+#        tiles[0, height//4] = tile_types.border_top
+#        tiles[0, height//2] = tile_types.border_top
+#        tiles[0,3* height//4] = tile_types.border_top
+#        tiles[width//4, 0] = tile_types.border_left
+#        tiles[width//2, 0] = tile_types.border_left
+#        tiles[3*width//4,0] = tile_types.border_left
 
         console.tiles_rgb[0:self.dim[0], 0:self.dim[1]] = tiles["dark"]
+        console.draw_frame(0,0,self.dim[0],self.dim[1], title=self.title, clear=False)
 
     def render_entity(self, entity, console: Console) -> None:
         console.print(entity.x -self.left, entity.y -self.bottom, entity.char, fg=entity.color)
