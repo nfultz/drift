@@ -25,6 +25,7 @@ class EventHandler(tcod.event.EventDispatch[Action]):
                 continue
 
             action.perform()
+            self.engine.player.moves.append(action)
 
     def ev_quit(self, event: tcod.event.Quit) -> Optional[Action]:
         raise SystemExit()
