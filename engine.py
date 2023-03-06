@@ -118,3 +118,6 @@ class Engine:
 
                 e.stamina = max(0, e.stamina - e.fatigue)
 
+                if e.win_condition():
+                    raise WinException()
+

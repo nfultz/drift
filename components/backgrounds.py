@@ -143,7 +143,7 @@ class Freelancer(Background):
 
 
 def rebuilding_the_past(player):
-    player.RESTORATION = 1 #TODO
+    player.restoration = 0
 
 def hard_times(player):
     x = choose_stat() #TODO
@@ -164,7 +164,7 @@ def familiar_face(player):
     player.EQUIP_DISCOUNT = 4
 
 def place_to_hide(player):
-    player.SECRECY = 1 #TODO
+    player.secrecy = 0
 
 def quiet_wanderer(player):
     x = choose_stat() #TODO

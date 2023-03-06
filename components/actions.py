@@ -357,9 +357,9 @@ class RebuildAction(VisitAction)
     def perform(self) -> None:
         self.entity.cargo -= 2
         self.entity.credits -= 50:
-        self.entity.rebuilding += 1
+        self.entity.restoration += 1
     def available(self) -> bool:
-        return self.entity.cargo >= 2 or self.entity.credits >= 50
+        return self.restoration != 99 and self.entity.cargo >= 2 or self.entity.credits >= 50
 
 class HideAction(VisitAction)
     def perform(self) -> None:
@@ -370,7 +370,7 @@ class HideAction(VisitAction)
             self.credits -= 150:
             self.entity.secrecy += 1
     def available(self) -> bool:
-        return self.entity.relic >= 2 or self.entity.credits >= 150
+        return self.secrecy != 99 and self.entity.relic >= 2 or self.entity.credits >= 150
 
 
 #TODO

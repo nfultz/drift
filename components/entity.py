@@ -63,8 +63,8 @@ class Entity:
 
         # win conditon
         self.fame = 0
-        self.rebuilding = 0
-        self.secrecy = 0
+        self.restoration = 99
+        self.secrecy = 99
 
         self.fame_per_companion = 4
 
@@ -87,3 +87,15 @@ class Entity:
             if c == 'K': n = max(n, self.k)
             if c == 'R': n = max(n, self.r)
         return n
+
+    def win_condition(self):
+        if self.secrecy != 99 :
+            if self.secrecy >= 5:
+                return True
+        elif self.restoration != 99 :
+            if self.restoration >= 10:
+                return True
+        elif self.fame >= 10:
+            return True
+        return False
+
