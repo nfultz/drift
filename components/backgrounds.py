@@ -71,7 +71,7 @@ class Explorer(Background):
         return False
 
     def reward(self, player):
-        player.SURVIVAL_KNOWLEDGE = 5 #TODO
+        player.SURVIVAL_KNOWLEDGE = 5
 
 
 class Scoundrel(Background):
