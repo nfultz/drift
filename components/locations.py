@@ -23,7 +23,10 @@ class Location():
     def __str__(self):
         if hasattr(self, "name"):
             return self.name
-        return type(self).__name__
+        t = type(self).__name__.replace("_", " ").title()
+        if t.endswith(('1','2')):
+            t = t[:-1]
+        return t
 
 class Desert(Location):
     level  = 3
@@ -59,6 +62,9 @@ class Settlement(Location):
     xp = 3
     tile = tile_types.settlement
     can_visit = True
+
+    def can_explore(self): return False
+    # Settlements are explored via visiting
 
 
 class Home(Settlement):

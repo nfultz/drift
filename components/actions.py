@@ -84,7 +84,7 @@ class EscapeAction(Action):
     def perform(self) -> None:
         raise SystemExit()
 
-class FuelAction(Action): #TODO
+class FuelAction(Action):
     COST = 0
     def perform(self) -> None:
         self.entity.fuel -= 1
@@ -104,10 +104,11 @@ class DrinkAction(Action):
 class CampingAction(Action):
     COST = 1
 
+    def __init__(self, engine, entity):
+        self.loc = self.engine.game_map.get_loc(self.entity.x, self.entity.y)
+
     def available(self) -> bool:
-        # TODO Not on desert w/o gear
-        # Not on settlements
-        loc = self.engine.game_map.get_loc(self.entity.x, self.entity.y)
+        loc = self.loc
         if isinstance(loc, locations.Settlement):
             self.engine.msg(f"No camping in town. Move along.")
             return False
@@ -141,6 +142,9 @@ class CampingAction(Action):
             pass
         else:
             self.engine.msg("Exhaustion creeps across you. You sleep a deep and restful sleep.")
+            recover = entity.MAX_STAMINA
+
+        if hasattr(entity, "SURVIVAL_KNOWLEDGE"):
             recover = entity.MAX_STAMINA
 
         self.engine.msg(f"You spend the night and recover {recover} stamina.")
