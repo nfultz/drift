@@ -143,6 +143,9 @@ class CampingAction(Action):
             self.engine.msg("Exhaustion creeps across you. You sleep a deep and restful sleep.")
             recover = entity.MAX_STAMINA
 
+        if hasattr(entity, "MEDICAL_PACK"):
+            recover += 1
+
         if hasattr(entity, "SURVIVAL_KNOWLEDGE"):
             recover = entity.MAX_STAMINA
 

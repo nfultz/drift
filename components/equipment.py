@@ -6,34 +6,39 @@ def _equip(f, name, cost):
     return f
 
 
+#TODO
 @_equip("Snack Containers",25)
 def snack(entity):
     pass
 
 @_equip("Scavengers' Modular Storage", 25)
-def f(entity):
-    pass
+def scav_storage(entity):
+    entity.max_cargo += 2
 
 @_equip("Desert Campsite Toolkit", 50)
-def f(entity):
-    pass
+def desert_campsite_toolkit(entity):
+    self.entity.DESERT_CAMPSITE_TOOLKIT = 1
 
+#TODO
 @_equip("Weather Monitor", 60)
 def f(entity):
     pass
 
+#TODO
 @_equip("Explorer Sling", 75)
 def f(entity):
     pass
 
+#TODO
 @_equip("Heat Regulator", 80)
 def f(entity):
     pass
 
 @_equip("Medical Pack", 90)
-def f(entity):
-    pass
+def medical_pack(entity):
+    entry.MEDICAL_PACK = 1
 
+#TODO
 @_equip("Air Purifier Mask", 95)
 def f(entity):
     pass
