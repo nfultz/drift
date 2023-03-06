@@ -351,7 +351,27 @@ class DonateRelic(VisitAction):
         self.entity.relics -= 2
         self.entity.fame += 1
     def available(self) -> bool:
-        self.entity.relics >= 2
+        return self.entity.relics >= 2
+
+class RebuildAction(VisitAction)
+    def perform(self) -> None:
+        self.entity.cargo -= 2
+        self.entity.credits -= 50:
+        self.entity.rebuilding += 1
+    def available(self) -> bool:
+        return self.entity.cargo >= 2 or self.entity.credits >= 50
+
+class HideAction(VisitAction)
+    def perform(self) -> None:
+        if self.entity.relics >= 2:
+            self.entity.relics -= 2
+            self.entity.secrecy += 1
+        elif self.credits >= 150:
+            self.credits -= 150:
+            self.entity.secrecy += 1
+    def available(self) -> bool:
+        return self.entity.relic >= 2 or self.entity.credits >= 150
+
 
 #TODO
 class FindCompanionAction(VisitAction):
