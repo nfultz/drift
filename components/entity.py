@@ -47,10 +47,13 @@ class Entity:
         self.water = 1
 
         # Glider
-        self.max_cargo = 7
+        self.max_cargo = 5
+        self.max_relic = 5
         self.max_fuel = 3
         self.fuel = 1
         self.speed = 1
+        self.relic = 0
+        self.cargo = 0
 
         # win conditon
         self.fame = 0
@@ -60,9 +63,11 @@ class Entity:
         self.fame_per_companion = 4
 
 
-        self.birthdate = datetime.date(3055,
+        self.birthdate = datetime.date(
+                3055,
                 datetime.date.today().month,
-                datetime.date.today().day)
+                datetime.date.today().day
+        )
 
     def move(self, dx: int, dy: int) -> None:
         # Move the entity by a given amount
