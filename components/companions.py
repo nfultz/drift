@@ -48,3 +48,20 @@ class Mystic(Companion):
     cost = 0
     name = 'Kale'
     title = 'Mysteic'
+
+COMPANION_DECK = {
+  'A' : Scoundrel,
+  '2' : Scoundrel,
+  '3' : Doctor,
+  '4' : Doctor,
+  '5' : Mercenary,
+  '6' : Mercenary,
+  '7' : Robot,
+  '8' : Robot,
+  '9' : Mechanic,
+  '0' : Mechanic,
+  'J' : Seeker,
+  'Q' : Cartographer,
+  'K' : HouseAgent,
+  'W' : Mystic
+  }
