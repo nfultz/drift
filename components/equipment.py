@@ -43,8 +43,8 @@ def hot_weather_clothes(entity):
     entity.max_stamina += 1
 
 @_equip("Wayfinding Binoculars", 130)
-def f(entity):
-    pass
+def wayfinding_binoculars(entity):
+    entry.WAYFINDING = 1
 
 @_equip("Data Decryption Algo", 140)
 def data_decrypt(entity):
@@ -58,14 +58,16 @@ def drummer(entity):
 def grapple(entity):
     entity.h += 1
 
+#TODO
 @_equip("Scrap Detection Unit", 160)
 def f(entity):
     pass
 
 @_equip("Pathfinder Tools", 175)
-def f(entity):
-    pass
+def pathfinder_toosl(entity):
+    entity.PATHFINDER_TOOLS = 1
 
+#TODO
 @_equip("Environment Scanner Unit", 180)
 def f(entity):
     pass
@@ -85,14 +87,17 @@ def tech_toolkit(entity):
     entity.r += 1
     entity.h -= 1
 
+#TODO
 @_equip("Credit Duplication Program", 250)
 def f(entity):
     pass
 
 @_equip("Piezo Moisture Capture", 300)
-def f(entity):
+def piezo_capture(entity):
+    entity.PIEZO_CAPTURE = 1
     pass
 
+#TODO
 @_equip("Thermal Cooling Underwear", 360)
 def f(entity):
     pass
@@ -100,48 +105,58 @@ def f(entity):
 
 ### Glider Upgrades
 
+#TODO
 @_equip("Optical Navigation Glasses", 80)
 def f(entity):
     pass
 
 @_equip("Stabilized Relic Storage", 90)
-def f(entity):
-    pass
+def stabilized_relics(entity):
+    entity.max_cargo -= 2
+    entity.max_relic += 1
 
 @_equip("Anti-Gravity Towing Unit", 120)
-def f(entity):
-    pass
+def antigrav_towing(entity):
+    entity.max_cargo += 6
+    entity.speed -= 1
 
 @_equip("Reserve Fuel Canisters", 145)
-def f(entity):
-    pass
+def reserve_fuel(entity):
+    entity.max_fuel += 2
+    entity.max_cargo -= 4
 
 @_equip("Fuel Drip Injection Systems", 180)
-def f(entity):
-    pass
+def fuel_drip(entity):
+    entity.max_fuel += 2
+    entity.speed += 1
 
+#TODO
 @_equip("Long Range Communications", 200)
 def f(entity):
     pass
 
+#TODO
 @_equip("Scavenger Arm", 260)
 def f(entity):
     pass
 
+#TODO
 @_equip("Onboard Scanner", 260)
 def f(entity):
     pass
 
+#TODO
 @_equip("Hacking Module", 260)
 def f(entity):
     pass
 
 @_equip("Portable Repair Kit", 300)
-def f(entity):
-    pass
+def portable_repait(entity):
+    entity.PORTABLE_REPAIR = 1
 
 @_equip("Fuel Recycle Kit", 400)
-def f(entity):
+def fuel_recycler(entity):
+    entity.FUEL_RECYCLE = 1
     pass
 
 ## Cargo upgrades

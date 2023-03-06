@@ -99,7 +99,7 @@ class Navigator(Background):
         super().__init__(1,3,2)
 
     def bonus(self, player):
-        player.inventory += "WAYFINDING" #TODO
+        player.WAYFINDING = 1
 
     def goal(self, player):
         n = 0

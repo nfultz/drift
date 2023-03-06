@@ -139,7 +139,6 @@ class CampingAction(Action):
         elif v >  4: # +1 speed next turn => +.5 AP
             self.engine.msg("You take time to tweak your Glider, adjusting it for the weather ahead")
             entity.CAMPING_TWEAK = MixedFrac(1,2)
-            pass
         else:
             self.engine.msg("Exhaustion creeps across you. You sleep a deep and restful sleep.")
             recover = entity.MAX_STAMINA
@@ -147,9 +146,18 @@ class CampingAction(Action):
         if hasattr(entity, "SURVIVAL_KNOWLEDGE"):
             recover = entity.MAX_STAMINA
 
+        if hasattr(entity, "PIEZO_CAPTURE"):
+            entity.water = min(entity.water+1, entity.max_water)
+
+        if hasattr(entity,"PORTABLE_REPAIR"):
+            v = self.engine.deck.top.value
+            if v.value >= 10:
+                entity.fuel = min(entity.fuel + 1, entity.max_fuel)
+
+
         self.engine.msg(f"You spend the night and recover {recover} stamina.")
 
-        entity.stamina = min(self.entity.stamina+recover, self.entity.max_stamina)
+        entity.stamina = min(entity.stamina+recover, entity.max_stamina)
         entity.ap = 0 #end turn
         entity.fatigue = 0
 
@@ -163,9 +171,14 @@ class MovementAction(Action):
         self.COST = MixedFrac(1, 2 * entity.speed)
 
     def perform(self) -> None:
-        self.entity.move(self.dx, self.dy)
-        self.entity.ap -= self.COST
+        entity = self.entity
+        entity.move(self.dx, self.dy)
+        entity.ap -= self.COST
 
+        if hasattr(entity,"FUEL_RECYCLE"):
+            v = self.engine.deck.top.value
+            if v.value >= 10:
+                entity.fuel = min(entity.fuel + 1, entity.max_fuel)
 
     def available(self):
         dest_x = self.entity.x + self.dx
@@ -239,7 +252,9 @@ class RevealAction(Action):
 
         map = self.engine.game_map
 
-        self.dest_x,self.dest_y = map.nearest_empty(x,y)
+        r = 2 if hasattr(self.entity, "WAYFINDING") else 1
+
+        self.dest_x,self.dest_y = map.nearest_empty(x,y,r)
 
         if self.dest_x is None:
             self.engine.msg(f"Nothing to see here. Move along.")
