@@ -7,6 +7,7 @@ class Location():
     xp = 1
     tile = tile_types.error
     traversable = True
+    can_visit = False
 
     def __init__(self, x, y, level=None):
         self.x = x
@@ -57,6 +58,7 @@ class Settlement(Location):
     level = 2
     xp = 3
     tile = tile_types.settlement
+    can_visit = True
 
 
 class Home(Settlement):

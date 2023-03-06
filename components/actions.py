@@ -254,7 +254,7 @@ class ExploreAction(Action):
         #TODO
         self.entity.stamina -= 1
         self.entity.ap -= self.COST
-        self.entity.can_explore = True
+        self.entity.can_explore = False
 
     def available(self) -> bool:
         if not self.entity.can_explore:
@@ -271,3 +271,80 @@ class ExploreAction(Action):
 
         return check_ap(self.entity, self)
 
+### Settlement actions
+
+class VisitAction(Action):
+    COST = 1
+    def __init__(self, engine, entity):
+        super().__init__(engine, entity)
+        self.loc = engine.game_map.get_loc(entity.x, entity.y)
+
+    def perform(self) -> None:
+        #TODO
+        self.entity.ap -= self.COST
+        self.entity.can_visit = False
+    def available(self) -> bool:
+        if not self.entity.can_explore:
+            self.engine.msg("Limit once per turn.")
+            return False
+        if not self.loc.can_visit:
+            self.engine.msg("Not a settlement.")
+            return False
+        return True
+
+class RestAction(VisitAction):
+    COST = 1
+    def perform(self) -> None:
+        self.entry.credits -= 5
+        self.entry.stamina = self.entry.max_stamina
+
+    def available(self) -> bool:
+        return self.entry.credits >= 5 and self.entry.stamina < self.entry.max_stamina
+
+class WaterMerchant(VisitAction):
+    COST = 1
+    def perform(self) -> None:
+        self.entry.credits -= 10
+        self.entry.water = self.entry.water + 1
+
+    def available(self) -> bool:
+        return self.entry.credits >= 10 and self.entry.water < self.entry.max_water
+
+class FuelMerchant(VisitAction):
+    COST = 1
+    def perform(self) -> None:
+        self.entry.credits -= 5
+        self.entry.fuel += 1
+    def available(self) -> bool:
+        return self.entry.credits >= 5 and self.entry.fuel < self.entry.max_fuel
+
+class ShoppingAction(VisitAction):
+    def perform(self) -> None:
+        pass
+    def available(self) -> bool:
+        pass
+
+
+class GuildAction(VisitAction):
+    def perform(self) -> None:
+        pass
+    def available(self) -> bool:
+        pass
+
+class SellScrap(VisitAction):
+    def perform(self) -> None:
+        pass
+    def available(self) -> bool:
+        pass
+
+class SellRelic(VisitAction):
+    def perform(self) -> None:
+        pass
+    def available(self) -> bool:
+        pass
+
+class FindCompanionAction(VisitAction):
+    def perform(self) -> None:
+        pass
+    def available(self) -> bool:
+        pass
