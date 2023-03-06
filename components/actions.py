@@ -318,31 +318,42 @@ class FuelMerchant(VisitAction):
     def available(self) -> bool:
         return self.entry.credits >= 5 and self.entry.fuel < self.entry.max_fuel
 
+#TODO
 class ShoppingAction(VisitAction):
     def perform(self) -> None:
         pass
     def available(self) -> bool:
         pass
 
-
+#TODO
 class GuildAction(VisitAction):
     def perform(self) -> None:
         pass
     def available(self) -> bool:
         pass
 
+#TODO
 class SellScrap(VisitAction):
     def perform(self) -> None:
         pass
     def available(self) -> bool:
         pass
 
+#TODO
 class SellRelic(VisitAction):
     def perform(self) -> None:
         pass
     def available(self) -> bool:
         pass
 
+class DonateRelic(VisitAction):
+    def perform(self) -> None:
+        self.entity.relics -= 2
+        self.entity.fame += 1
+    def available(self) -> bool:
+        self.entity.relics >= 2
+
+#TODO
 class FindCompanionAction(VisitAction):
     def perform(self) -> None:
         pass
