@@ -2,7 +2,7 @@
 def _equip(f, name, cost):
     f.name = name
     f.cost = cost
-    items.append(f)
+#    items.append(f)
     return f
 
 
@@ -39,24 +39,24 @@ def f(entity):
     pass
 
 @_equip("Improved Hot Weather Clothing", 100)
-def f(entity):
-    pass
+def hot_weather_clothes(entity):
+    entity.max_stamina += 1
 
 @_equip("Wayfinding Binoculars", 130)
 def f(entity):
     pass
 
 @_equip("Data Decryption Algo", 140)
-def f(entity):
-    pass
+def data_decrypt(entity):
+    entity.k += 1
 
 @_equip("Sand Drummer System", 140)
-def f(entity):
-    pass
+def drummer(entity):
+    entity.r += 1
 
 @_equip("Magnetic Grapple Gloves", 140)
-def f(entity):
-    pass
+def grapple(entity):
+    entity.h += 1
 
 @_equip("Scrap Detection Unit", 160)
 def f(entity):
@@ -71,16 +71,19 @@ def f(entity):
     pass
 
 @_equip("Information Visor", 200)
-def f(entity):
-    pass
+def info_visor(entity):
+    entity.k += 1
+    entity.r -= 1
 
 @_equip("Enhanced Strength Suit Switches", 200)
-def f(entity):
-    pass
+def strength_suit(entity):
+    entity.h += 1
+    entity.k -= 1
 
 @_equip("Technicians' Tookit", 200)
-def f(entity):
-    pass
+def tech_toolkit(entity):
+    entity.r += 1
+    entity.h -= 1
 
 @_equip("Credit Duplication Program", 250)
 def f(entity):
