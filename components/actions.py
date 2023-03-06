@@ -135,7 +135,7 @@ class CampingAction(Action):
         elif v >  6:
             self.engine.msg("A strong smell lingers in the air, distracting and intrusive to your senses.")
             recover = 2
-        elif v >  4: #TODO +1 speed next turn
+        elif v >  4: # +1 speed next turn => +.5 AP
             self.engine.msg("You take time to tweak your Glider, adjusting it for the weather ahead")
             entity.CAMPING_TWEAK = MixedFrac(1,2)
             pass
