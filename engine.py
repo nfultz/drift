@@ -94,6 +94,8 @@ class Engine:
 
 
             for e in self.entities:
+
+                e.can_explore = True
                 e.ap = 2
                 e.fatigue = self.fatigue
 

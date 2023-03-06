@@ -19,9 +19,27 @@ class Location():
     def explore(self, entity):
         pass
 
+    def __str__(self):
+        if hasattr(self, "name"):
+            return self.name
+        return type(self).__name__
+
 class Desert(Location):
     level  = 3
     tile = tile_types.desert
+
+    def can_explore(self, entity):
+        if xp > 0:
+            return True
+        if xp > -1 and hasattr(entity, "SMUGGLER_L1"):
+            return True
+        return True
+
+    def explore(self, entity):
+        if xp == 0 and hasattr(entity, "SMUGGLER_L1"):
+            return do_smuggler_explore(self, entity)
+        return do_desert_explore(self, entity)
+
 
 class NonTraversable(Location):
     level = 3
@@ -29,7 +47,7 @@ class NonTraversable(Location):
     traversable = False
 
     def can_explore(self, entity):
-        return hasattr(entity, "PATHFINDER")
+        return False
 
 class Unique(Location):
     level = 2
@@ -37,6 +55,7 @@ class Unique(Location):
 
 class Settlement(Location):
     level = 2
+    xp = 3
     tile = tile_types.settlement
 
 
@@ -251,9 +270,11 @@ class desert_lighthouse2(Unique):
 
 class onyx_pillars(Unique):
     desert = 4
+    xp = 3
 
 class floating_obelisk(Unique) :
     desert = 3
+    xp = 3
 
 
 

@@ -236,3 +236,31 @@ class RevealAction(Action):
         return self.dest_x is not None
 
 
+class ExploreAction(Action):
+    COST = 1
+    def __init__(self, engine, entity):
+        super().__init__(engine, entity)
+        self.loc = engine.game_map.get_loc(entity.x, entity.y)
+
+
+    def perform(self) -> None:
+        #TODO
+        self.entity.stamina -= 1
+        self.entity.ap -= self.COST
+        self.entity.can_explore = True
+
+    def available(self) -> bool:
+        if not self.entity.can_explore:
+            self.engine.msg("Limit once per turn.")
+            return False
+
+        if not self.loc.can_explore():
+            self.engine.msg("Not explorable.")
+            return False
+
+        if not self.entity.stamina > = 1:
+            self.engine.msg("Not enough stamina to explore.")
+            return False
+
+        return check_ap(self.entity, self)
+
