@@ -105,6 +105,7 @@ class CampingAction(Action):
     COST = 1
 
     def __init__(self, engine, entity):
+        super().__init__(engine, entity);
         self.loc = self.engine.game_map.get_loc(self.entity.x, self.entity.y)
 
     def available(self) -> bool:
@@ -356,24 +357,71 @@ class GuildAction(VisitAction):
 
 #TODO
 class SellScrap(VisitAction):
-    def perform(self) -> None:
-        pass
-    def available(self) -> bool:
-        pass
+    def __init__(self, engine: Engine, entity: Entity, dx: int, dy: int):
+        super().__init__(engine, entity)
+        self.card = engine.deck.top
+        self.price = 5
 
-#TODO
-class SellRelic(VisitAction):
+        if self.card.rank == 'W':
+            self.price = 30
+        elif self.card.rank == 'K':
+            self.price = 25
+        elif self.card.value >= 11:
+            self.price = 20
+        elif self.card.value >= 10:
+            self.price = 60
+        elif self.card.rank >= 6:
+            self.price = 40
+
     def perform(self) -> None:
-        pass
+        self.amount = self.entity.cargo
+        self.entity.credits += self.amount * self.price
+        self.entity.cargo = 0
+
     def available(self) -> bool:
-        pass
+        return self.entity.cargo > 0
+
+class SellRelic(VisitAction):
+    def __init__(self, engine: Engine, entity: Entity, dx: int, dy: int):
+        super().__init__(engine, entity)
+        self.card = engine.deck.top
+        self.limit = 0
+        self.price = 0
+
+        if self.card.rank == 'W':
+            self.limit = 2
+            self.price = 100
+        elif self.card.rank == 'K':
+            self.limit = 3
+            self.price = 80
+        elif self.card.rank == 'Q':
+            self.limit = 1
+            self.price = 100
+        elif self.card.value >= 10:
+            self.limit = 2
+            self.price = 60
+        elif self.card.rank >= 6:
+            self.limit = 2
+            self.price = 40
+
+    def perform(self) -> None:
+        self.amount = min(self.limit, self.entity.relic)
+        self.entity.credits += self.amount * self.price
+        self.entity.relic = 0
+        if self.card.rank == 'W':
+            self.entity.fame += 1
+
+    def available(self) -> bool:
+        return self.entity.relic > 0 and self.card >= 6
+
 
 class DonateRelic(VisitAction):
     def perform(self) -> None:
-        self.entity.relics -= 2
-        self.entity.fame += 1
+        r = min(self.entity.relic, 2)
+        self.entity.relic -= r
+        self.entity.fame += MixedFrac(r,2)
     def available(self) -> bool:
-        return self.entity.relics >= 2
+        return self.entity.relic > 0
 
 class RebuildAction(VisitAction)
     def perform(self) -> None:
@@ -385,14 +433,14 @@ class RebuildAction(VisitAction)
 
 class HideAction(VisitAction)
     def perform(self) -> None:
-        if self.entity.relics >= 2:
-            self.entity.relics -= 2
+        if self.entity.relic >= 2:
+            self.entity.relic -= 2
             self.entity.secrecy += 1
         elif self.credits >= 150:
             self.credits -= 150:
             self.entity.secrecy += 1
     def available(self) -> bool:
-        return self.secrecy != 99 and self.entity.relic >= 2 or self.entity.credits >= 150
+        return self.secrecy != 99 and (self.entity.relic >= 2 or self.entity.credits >= 150)
 
 
 #TODO
