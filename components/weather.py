@@ -6,11 +6,11 @@ def weather_reset(engine):
 
 def sand_storm(engine):
     engine.msg("A sand storm is on the horizon, preventing movement for a while.")
-    engine.WEATHER_SAND_STORM = 1
+    engine.WEATHER_SAND_STORM = 1#TODO
 
 def wind_at_your_back(engine):
     engine.msg("The wind is at your back - take advantage of the opportunity to explore.")
-    engine.WEATHER_WIND_BACK = 1
+    engine.WEATHER_WIND_BACK = 1#TODO
 
 def calm_breeze(engine):
     engine.msg("Clear skies and a pleasnt breeze across the golden dunes.")
@@ -18,11 +18,11 @@ def calm_breeze(engine):
 
 def extreme_sun(engine):
     engine.msg("The sun beats down, making it hard to move.")
-    engine.WEATHER_EXREME_HEAT = 1
+    engine.WEATHER_EXREME_HEAT = 1#TODO
 
 def spice_clouds(engine):
     engine.msg("Blue and orange dance together in pockets of brilliant spice.")
-    engine.WEATHER_SPICE_CLOUDS = 1
+    engine.WEATHER_SPICE_CLOUDS = 1#TODO
 
 def noxious_miasma(engine):
     engine.msg("The smell of something rotten blankets your senses and turns your stomach.")
