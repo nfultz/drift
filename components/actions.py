@@ -124,16 +124,23 @@ class CampingAction(Action):
         recover = 3
 
         if   v > 12:
+            self.engine.msg("At dawn break, you notice moisture trickling down nearby rocks. You collect the dew stream into your canteen")
             entity.water = min(entity.water+1, entity.max_water)
         elif v > 10:
+            self.engine.msg("Winds and sand howl outside your tent, tearing at the material. You spend most of the night keeping the tent down.")
             recover = 0
         elif v >  8:
+            self.engine.msg("You hear a swish in your fuel tank - a welcome surprise!")
             entity.fuel = min(entity.fuel+1, entity.max_fuel)
         elif v >  6:
+            self.engine.msg("A strong smell lingers in the air, distracting and intrusive to your senses.")
             recover = 2
         elif v >  4: #TODO +1 speed next turn
+            self.engine.msg("You take time to tweak your Glider, adjusting it for the weather ahead")
+            entity.CAMPING_TWEAK = MixedFrac(1,2)
             pass
         else:
+            self.engine.msg("Exhaustion creeps across you. You sleep a deep and restful sleep.")
             recover = entity.MAX_STAMINA
 
         self.engine.msg(f"You spend the night and recover {recover} stamina.")

@@ -87,8 +87,8 @@ class Engine:
             self.fatigue = 1
             self.msg("")
             self.msg(self.tomorrow().strftime("=== %A %B %d, %Y ==="))
-            self.weather = weather.draw(deck)
-#            print(type(self.weather))
+            weather.reset(self)
+            weather.draw(deck)(engine)
             self.msg("The drift today is {0}".format(deck.drift))
             self.msg("with a high of {1} and low of {0}".format(*deck.heat))
 
@@ -96,7 +96,8 @@ class Engine:
             for e in self.entities:
 
                 e.can_explore = True
-                e.ap = 2
+                e.ap = 2 + e.CAMPING_TWEAK
+                e.CAMPING_TWEAK = 0
                 e.fatigue = self.fatigue
 
                 while e.ap > 0:
