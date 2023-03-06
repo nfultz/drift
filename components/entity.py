@@ -14,7 +14,7 @@ class Entity:
     MAX_FUEL = 6
 
     def __init__(self, x: int, y: int, char: str, color: Tuple[int, int, int],
-            name: str = "<Unnamed>", background: Background = None, ai_cls = None):
+            name: str = "<Unnamed>", background: Background = Background(), ai_cls = None):
         self.x = x
         self.y = y
         self.char = char
@@ -67,6 +67,15 @@ class Entity:
         self.secrecy = 99
 
         self.fame_per_companion = 4
+        self.companions = set()
+
+        self.inventory = list()
+
+        #quests
+        self.quest_item_label = None
+        self.quest_item_count = 0
+        self.quest_guild = None
+
 
 
         self.birthdate = datetime.date(

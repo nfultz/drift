@@ -1,6 +1,6 @@
 
 class Background():
-    def __init__(self, h, k, r):
+    def __init__(self, h=2, k=2, r=2):
         self.h=h
         self.k=k
         self.r=r
@@ -9,7 +9,7 @@ class Background():
         pass
 
     def goal(self):
-        pass
+        return False
 
     def reward(self):
         pass

@@ -93,7 +93,7 @@ class GameMap:
     def get_loc(self,x,y):
         return self.locations[y][x] if y in self.locations and x in self.locations[y] else None
 
-    def nearest_empty(self, x, y,r=1):
+    def nearest_empty(self, x, y,r=1, at_least=0):
         d = 9999
         ret = (None, None)
 
@@ -104,6 +104,7 @@ class GameMap:
                 new_d = math.dist((x,y), (i,j))
 
                 if new_d > r: continue
+                if new_d < at_least: continue
 
                 if new_d < d:
                     ties = 1
