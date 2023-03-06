@@ -144,59 +144,87 @@ def f(entity):
 def f(entity):
     pass
 
+## Cargo upgrades
+
 @_equip("Cargo Upgrade X", 90)
-def f(entity):
-    pass
+def cargo_x(entity):
+    entity.max_cargo += 2
+    entity.cargo_upgrade += 1
+    if entity.cargo_upgrade == 3: entity.fame += 1
 
 @_equip("Cargo Upgrade Y", 145)
-def f(entity):
-    pass
+def cargo_y(entity):
+    entity.max_cargo += 2
+    entity.cargo_upgrade += 1
+    if entity.cargo_upgrade == 3: entity.fame += 1
 
 @_equip("Cargo Upgrade Z", 215)
-def f(entity):
-    pass
+def cargo_z(entity):
+    entity.max_cargo += 3
+    entity.cargo_upgrade += 1
+    if entity.cargo_upgrade == 3: entity.fame += 1
+
+## Fuel upgrades
 
 @_equip("Fuel Capacity Upgrade X", 110)
-def f(entity):
-    pass
+def fuel_x(entity):
+    entity.max_fuel += 1
+    entity.fuel_upgrade += 1
+    if entity.fuel_upgrade == 3: entity.fame += 1
 
 @_equip("Fuel Capacity Upgrade Y", 140)
-def f(entity):
-    pass
+def fuel_y(entity):
+    entity.max_fuel += 1
+    entity.fuel_upgrade += 1
+    if entity.fuel_upgrade == 3: entity.fame += 1
 
 @_equip("Fuel Capacity Upgrade Z", 180)
-def f(entity):
-    pass
+def fuel_z(entity):
+    entity.max_fuel += 1
+    entity.fuel_upgrade += 1
+    if entity.fuel_upgrade == 3: entity.fame += 1
+
+
+## Relic upgrades
 
 @_equip("Relic Capacity Upgrade X", 100)
-def f(entity):
-    pass
+def relic_x(entity):
+    entity.max_relic += 1
+    entity.relic_upgrade += 1
+    if entity.relic_upgrade == 3: entity.fame += 1
 
 @_equip("Relic Capacity Upgrade Y", 200)
-def f(entity):
-    pass
+def relic_y(entity):
+    entity.max_relic += 1
+    entity.relic_upgrade += 1
+    if entity.relic_upgrade == 3: entity.fame += 1
 
 @_equip("Relic Capacity Upgrade Z", 300)
-def f(entity):
-    pass
+def relic_z(entity):
+    entity.max_relic += 1
+    entity.relic_upgrade += 1
+    if entity.relic_upgrade == 3: entity.fame += 1
 
+
+## Speed upgrades
 
 @_equip("Top Speed Upgrade X", 120)
-def f(entity):
-    pass
+def speed_x(entity):
+    entity.speed += 1
+    entity.speed_upgrade += 1
+    if entity.speed_upgrade == 3: entity.fame += 1
 
 @_equip("Top Speed Upgrade Y", 240)
-def f(entity):
-    pass
+def speed_y(entity):
+    entity.speed += 1
+    entity.speed_upgrade += 1
+    if entity.speed_upgrade == 3: entity.fame += 1
 
 @_equip("Top Speed Upgrade Z", 420)
-def f(entity):
-    pass
+def speed_z(entity):
+    entity.speed += 1
+    entity.speed_upgrade += 1
+    if entity.speed_upgrade == 3: entity.fame += 1
 
 
 
-
-
-@_equip()
-@_equip()
-@_equip()

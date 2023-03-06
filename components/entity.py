@@ -47,13 +47,19 @@ class Entity:
         self.water = 1
 
         # Glider
+        self.speed = 1
         self.max_cargo = 5
+        self.cargo = 0
         self.max_relic = 5
+        self.relic = 0
         self.max_fuel = 3
         self.fuel = 1
-        self.speed = 1
-        self.relic = 0
-        self.cargo = 0
+
+        #upgrade counters = if hits 3, 1 fame
+        self.speed_upgrade = 0
+        self.relic_upgrade = 0
+        self.cargo_upgrade = 0
+        self.fuel_upgrade = 0
 
         # win conditon
         self.fame = 0
