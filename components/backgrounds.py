@@ -5,13 +5,13 @@ class Background():
         self.k=k
         self.r=r
 
-    def bonus(self):
+    def bonus(self, player):
         pass
 
-    def goal(self):
+    def goal(self, player):
         return False
 
-    def reward(self):
+    def reward(self, player):
         pass
 
 class Soldier(Background):

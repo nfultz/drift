@@ -88,7 +88,7 @@ class Engine:
             self.msg("")
             self.msg(self.tomorrow().strftime("=== %A %B %d, %Y ==="))
             weather.reset(self)
-            weather.draw(deck)(engine)
+            weather.draw(deck)(self)
             self.msg("The drift today is {0}".format(deck.drift))
             self.msg("with a high of {1} and low of {0}".format(*deck.heat))
 
@@ -97,7 +97,7 @@ class Engine:
 
                 e.can_explore = True
                 e.can_visit = True
-                e.ap = 2 + e.CAMPING_TWEAK
+                e.ap = 2 + getattr(e,"CAMPING_TWEAK", 0)
                 e.CAMPING_TWEAK = 0
                 e.fatigue = self.fatigue
 

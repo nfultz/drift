@@ -1,4 +1,4 @@
-def weather_reset(engine):
+def reset(engine):
     engine.WEATHER_SPICE_CLOUDS = 0
     engine.WEATHER_EXREME_HEAT  = 0
     engine.WEATHER_SAND_STORM   = 0

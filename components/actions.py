@@ -288,7 +288,7 @@ class ExploreAction(Action):
             self.engine.msg("Not explorable.")
             return False
 
-        if not self.entity.stamina > = 1:
+        if not self.entity.stamina >= 1:
             self.engine.msg("Not enough stamina to explore.")
             return False
 
@@ -423,21 +423,21 @@ class DonateRelic(VisitAction):
     def available(self) -> bool:
         return self.entity.relic > 0
 
-class RebuildAction(VisitAction)
+class RebuildAction(VisitAction):
     def perform(self) -> None:
         self.entity.cargo -= 2
-        self.entity.credits -= 50:
+        self.entity.credits -= 50
         self.entity.restoration += 1
     def available(self) -> bool:
         return self.restoration != 99 and self.entity.cargo >= 2 or self.entity.credits >= 50
 
-class HideAction(VisitAction)
+class HideAction(VisitAction):
     def perform(self) -> None:
         if self.entity.relic >= 2:
             self.entity.relic -= 2
             self.entity.secrecy += 1
         elif self.credits >= 150:
-            self.credits -= 150:
+            self.credits -= 150
             self.entity.secrecy += 1
     def available(self) -> bool:
         return self.secrecy != 99 and (self.entity.relic >= 2 or self.entity.credits >= 150)
