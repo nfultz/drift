@@ -25,7 +25,7 @@ class GameMap:
     def center(self, entity) -> None:
         width, height = self.dim
         x, y = entity.x, entity.y
-        self.title = f'{x} {y}'
+        self.title = f'{x} {y} ({self.locations[y][x]})'
 
         if x - self.left < width // 4:
 #            breakpoint()

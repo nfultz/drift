@@ -216,8 +216,8 @@ class RevealAction(Action):
 
         self.engine.msg(f"You see a {loc} on the horizon.")
 
-        if isinstance(loc, location.Unique):
-            self.fame += MixedFrac(1,2)
+        if isinstance(loc, locations.Unique):
+            self.entity.fame += MixedFrac(1,2)
 
 
         # If large size, add if possible

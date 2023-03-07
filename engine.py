@@ -49,7 +49,7 @@ class Engine:
         background = type(p.background).__name__
         stats = 'h'*p.h + 'k'*p.k + 'r'*p.r
 
-        return f"{name} ({background}) {stats} / {p.fame} fame"
+        return f"{name} ({background}) {stats} : {p.fame} fame"
 
     @property
     def status_bar2(self):
