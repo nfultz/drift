@@ -4,6 +4,7 @@ import traceback
 
 import tcod
 
+import getpass
 
 from engine import Engine
 from components.entity import Entity
@@ -24,7 +25,7 @@ def main() -> None:
 
 
 
-    player = Entity(0, 0, "@", (255, 255, 255))
+    player = Entity(0, 0, "@", (255, 255, 255), name=getpass.getuser())
 
     game_map = GameMap(WIDTH, HEIGHT-15)
 
