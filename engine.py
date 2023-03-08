@@ -20,6 +20,7 @@ class Engine:
         self.game_map = game_map
         self.player = player
         self.deck = Deck().shuffle()
+        game_map.get_loc(0,0).populate(self.deck)
         self.date = player.birthdate + datetime.timedelta(
                 days=365*(self.deck.top.value + 16) +
                       30*self.deck.bottom.value +
@@ -93,6 +94,7 @@ class Engine:
         for i, j in zip(range(4,9), range(-5,0)):
             console.print(0, h+i, string=self.messages[j])
         context.present(console)
+        console.clear()
 
     def loop(self, console: Console, context: Context):
         deck = self.deck

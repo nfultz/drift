@@ -52,21 +52,6 @@ class GameMap:
             for x in self.locations[y].irange(self.left, self.right-1):
                 tiles[x-self.left,y-self.bottom] = self.locations[y][x].tile
 
-
-        # border
-        tiles[0, 0:self.dim[1]] = tile_types.border_left
-        tiles[self.dim[0]-1, 0:self.dim[1]] =  tile_types.border_right
-        tiles[0:self.dim[0], 0] =  tile_types.border_top
-        tiles[0:self.dim[0], self.dim[1]-1] =  tile_types.border_bottom
-
-#        width, height = self.dim
-#        tiles[0, height//4] = tile_types.border_top
-#        tiles[0, height//2] = tile_types.border_top
-#        tiles[0,3* height//4] = tile_types.border_top
-#        tiles[width//4, 0] = tile_types.border_left
-#        tiles[width//2, 0] = tile_types.border_left
-#        tiles[3*width//4,0] = tile_types.border_left
-
         console.tiles_rgb[0:self.dim[0], 0:self.dim[1]] = tiles["dark"]
         console.draw_frame(0,0,self.dim[0],self.dim[1], title=self.title, clear=False)
 

@@ -329,11 +329,11 @@ class VisitAction(Action):
         actions[event.K_x] = SettlementExploreAction(self.engine, self.entity)
 
         for i, item in enumerate(self.loc.items):
-            key = event._K_0 + i
+            key = event.K_0 + i + 1
             actions[key] = ShoppingAction(self.engine, self.entity, item, key, self.loc)
 
         if self.loc.companion:
-            actions[event.K_] = FindCompanion(self.engine, self.entity,self. loc)
+            actions[event.K_h] = FindCompanion(self.engine, self.entity,self. loc)
 
 
 
@@ -398,17 +398,24 @@ class ShoppingAction(VisitAction):
         self.item = item
         self.key = key
         self.loc = loc
+        self.FLAVOR = f" Buy {item.name} ({item.cost})"
     def perform(self) -> None:
-        self.engine.settlement_actions.pop(key)
-        pass
+        if self.entity.credits < self.item.cost:
+            self.engine.msg("Not enough credits")
+            return None
+        self.engine.msg("You buy the {self.item.name}")
+        self.engine.settlement_actions.pop(self.key)
+        self.entity.credits -= self.item.cost
+        self.item(self.entity)
     def available(self) -> bool:
-        pass
+        return True
 
 #TODO
 class GuildAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
         self.loc = loc
+        self.FLAVOR = "Visit the {} guild"
     def perform(self) -> None:
         self.engine.settlement_actions.pop(event.K_g)
     def available(self) -> bool:

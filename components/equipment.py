@@ -1,10 +1,15 @@
 
-def _equip(f, name, cost):
-    f.name = name
-    f.cost = cost
-    items.append(f)
-    return f
+items = []
+def draw(i):
+    return items.pop(i % len(items))
 
+def _equip(name='', cost=0):
+    def wrap(f):
+        f.name = name
+        f.cost = cost
+        items.append(f)
+        return f
+    return wrap
 
 @_equip("Snack Containers",25)
 def snack(entity):
@@ -190,10 +195,3 @@ def f(entity):
 def f(entity):
     pass
 
-
-
-
-
-@_equip()
-@_equip()
-@_equip()

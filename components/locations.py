@@ -63,12 +63,18 @@ class Settlement(Location):
     tile = tile_types.settlement
     can_visit = True
 
-    def __init__(self, x, y, level=None):
+    def __init__(self, x, y, level=None, deck=None):
         super().__init__(x,y,level)
         self.items = list()
         self.guild = None
         self.companion = None
+        if deck: self.populate(deck)
 
+    def populate(self, deck):
+        from . import equipment, guilds, companions
+        for i in range(deck.bottom.value // 3):
+            self.items.append(equipment.draw(deck.top.value))
+        print(self.items)
 
     def can_explore(self): return False
     # Settlements are explored via visiting
@@ -363,6 +369,8 @@ def draw(deck, x, y):
     ret = REVEAL_DECK[card](x,y)
     if isinstance(ret, Unique):
         REVEAL_DECK[card] = Desert
+    if isinstance(ret, Settlement):
+        ret.populate(deck)
     if isinstance(ret, Explorable):
         card2 = deck.top
         if card2.major:
