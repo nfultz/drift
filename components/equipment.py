@@ -22,7 +22,7 @@ def scav_storage(entity):
 
 @_equip("Desert Campsite Toolkit", 50)
 def desert_campsite_toolkit(entity):
-    self.entity.DESERT_CAMPSITE_TOOLKIT = 1
+    entity.DESERT_CAMPSITE_TOOLKIT = 1
 
 #TODO
 @_equip("Weather Monitor", 60)
