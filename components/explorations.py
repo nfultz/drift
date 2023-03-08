@@ -19,6 +19,8 @@ def earn(entity, level=1, **kwargs):
             entity.quest += v*level
         if k == 'water':
             entity.water = min(entity.water + v, entity.max_water)
+        if k == 'fame':
+            entity.fame += 1
     return kwargs
 
 
@@ -215,3 +217,254 @@ DESERT_EXPLORATIONS = {
       'W': small_otherworldly_spaceship,
       }
     }
+
+
+#### Location explorations
+
+def spices_once_flowed(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=2, quest=1)
+
+def gone_with_the_desert_winds(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("rk"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=1, quest=1)
+
+def a_friendly_keeper(loc, entity, deck):
+    e = earn(entity, stamina=e.max_stamina)
+    # TODO Reveal
+    return e
+
+def a_long_and_quiet_view(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    return earn(entity, water=1, credits=5, quest=1)
+
+def cracked_shell(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=2, quest=2, relic=1)
+
+def encrypted_security(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("k"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=3, quest=3, relic=3)
+
+def captains_log(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("h"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=1, quest=1)
+
+def engineers_log(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("rk"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=3)
+
+def warehouse_wonders(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    return earn(entity, cargo=4 if j ==0 else 1, quest=2 if j == 0 else 1)
+
+def rusted_robotics_workshop(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("k"), deck)
+    return earn(entity, cargo=1, quest=1, relics=2 if j == 0 else 0)
+
+def guiding_light_keeper(loc, entity, deck):
+    #TODO
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("k"), deck)
+    return earn(entity, cargo=1, quest=1, relics=2 if j == 0 else 0)
+
+def lost_ways(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    return earn(entity, cargo=1,  credits=20 if j == 0 else 0, relics=1 if j == 0 else 0, stamina=entity.max_stamina if j ==0 else 0)
+
+def empty_escape_pods(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    return earn(entity, cargo=3 if j == 0 else 2,  credits=5, relics=1 if j == 0 else 0)
+
+def sealed_for_your_protection(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hk"), deck)
+    if i > 0 : return i
+    return earn(entity, relic=2, cargo=1, credits=100)
+
+def the_sound_of_eridoor(loc, entity, deck):
+    #todo
+    if i > 0 : return i
+    return earn(entity, relic=2, cargo=1, credits=100)
+
+def the_light_of_eridoor(loc, entity, deck):
+    #todo
+    if i > 0 : return i
+    return earn(entity, relic=2, cargo=1, credits=100)
+
+
+def untouched_relics_of_the_past(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("k"), deck)
+    return earn(entity, relic=1, credtis=50, quest = 2 if j ==0 else 0, cargo=3 if j ==0 else 0)
+
+def abandoned_and_worn_to_time(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    return earn(entity, cargo=3 if j ==0 else 2, quest=1, relic=1 if j ==0 else 0, credits = 30 if j == 0 else 0)
+
+def jaws_of_razors(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    return earn(entity, relic=1, quest=2)
+
+def belly_of_the_beast(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=3, quest=1)
+
+def bottom_of_the_tank(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    return earn(entity, fuel=entity.max_fuel, cargo=2 if j ==0 else 0, quest=1 if j ==0 else 0)
+    #TODO choose
+
+def glider_mods_galore(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
+    if i > 0 : return i
+    #TODO earn upgrade
+    j = skill_check(loc.level, entity.skill_test_n("hk"), deck)
+    #TODO earn upgrade
+
+    return earn(entity )
+
+    #TODO choose
+
+
+def a_long_way_down(loc, entity, deck):
+    return earn(entity, cargo=1)
+
+def an_even_longer_way(loc, entity, deck):
+    return earn(entity, quest=1)
+
+def the_heart_of_eridoor(loc, entity, deck):
+    return earn(entity, stamina=entity.max_stamina, fame=1)
+
+def the_vision_of_eridoor(loc, entity, deck):
+    #TODO reveal
+    return earn(entity, fame=1)
+
+def a_big_hole(loc, entity, deck):
+    return earn(entity, quest=1)
+
+def an_even_bigger_hole(loc, entity, deck):
+    return earn(entity, cargo=1)
+
+def miners_bounty(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
+    if i > 0 : return i
+    #TODO teleport
+    return earn(entity, cargo=2, quest=1)
+
+def credit_payment_machine(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    #TODO teleport
+    return earn(entity, credits=20, quest=1)
+
+def battlefield_spoils(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    if i > 0 : return i
+    #TODO choose
+    return earn(entity, cargo=1, relic=1)
+
+def buried_memories(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("hr"), deck)
+    #TODO choose
+    return earn(entity, cargo=1, quest=1 if j == 0 else 0)
+
+def researchers_score(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("k"), deck)
+    return earn(entity, cargo=1, credits=5, quest=2 if j ==0 else 0 )
+
+def scientists_working(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("k"), deck)
+    #TODO choose
+    return earn(entity, cargo=2,  quest=3 if j ==0 else 1 )
+
+def sanded_down_over_time(loc, entity, deck):
+    return earn(entity, quest=1)
+
+def never_ending_height(loc, entity, deck):
+    return earn(entity, cargo=1)
+
+def that_sinking_feeling(loc, entity, deck):
+    return earn(entity,credits=5)
+
+def down_the_drain(loc, entity, deck):
+    return earn(entity, cargo=1, quest=1)
+
+def scattered_ruins(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=1, quest=1, stamina=2)
+
+def barely_standing_structures(loc, entity, deck):
+    i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
+    if i > 0 : return i
+    return earn(entity, cargo=2, quest=1)
+
+def tip_of_the_sunken_tower(loc, entity, deck):
+    return earn(entity,cargo=5)
+
+def safe_haven(loc, entity, deck):
+    return earn(entity, cargo=2, quest=1, stamina=3, water=1)
+
+def operation_restore_eridoor(loc,entity,deck):
+    i = skill_check(loc.level, entity.skill_test_n("k"), deck)
+    if i > 0 : return i
+    j = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    return earn(entity, cargo=1 if j==0 else 0,  relic=2 if j ==0 else 1 )
+
+def tour_the_facility(loc,entity,deck):
+    #water stat any stat #TODO
+    pass
+
+def an_old_convoy(loc,entity,deck):
+    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    if i > 0 : return i
+    return earn(entity, credits=60,quest=1 )
+
+def glider_transports(loc,entity,deck):
+    i = skill_check(loc.level, entity.skill_test_n("r"), deck)
+    #TODO glider upgrade
+    if i > 0 : return i
+    return earn(entity, fuel=1)
+
+def recording_weather_data(loc,entity,deck):
+    i = skill_check(loc.level, entity.skill_test_n("hk"), deck)
+    if i > 0 : return i
+    # TODO ignore weather
+    # TODO reveal
+    return earn(entity, cargo=1)
+
+def damaged_relay(loc,entity,deck):
+    i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
+    if i > 0 : return i
+    # TODO ignore weather
+    # TODO reveal
+    return earn(entity, cargo=2)
