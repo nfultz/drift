@@ -20,7 +20,11 @@ class Engine:
         self.game_map = game_map
         self.player = player
         self.deck = Deck().shuffle()
-        game_map.get_loc(0,0).populate(self.deck)
+
+        for y in self.game_map.locations:
+            for x in self.game_map.locations[y]:
+                self.game_map.locations[y][x].populate(self.deck)
+
         self.date = player.birthdate + datetime.timedelta(
                 days=365*(self.deck.top.value + 16) +
                       30*self.deck.bottom.value +

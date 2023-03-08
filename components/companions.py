@@ -80,4 +80,5 @@ COMPANION_DECK = {
   }
 
 def draw(card):
-    return COMPANION_DECK[card.rank]
+    ret = COMPANION_DECK[card.rank]
+    return ret() if ret else ret

@@ -1,4 +1,5 @@
 from . import tile_types
+from . import explorations
 
 class Location():
     level = 2
@@ -9,7 +10,7 @@ class Location():
     traversable = True
     can_visit = False
 
-    def __init__(self, x, y, level=None):
+    def __init__(self, x, y, level=None, deck=None):
         self.x = x
         self.y = y
         if level: self.level = level
@@ -20,17 +21,27 @@ class Location():
     def explore(self, entity):
         pass
 
+    def populate(self, deck):
+        pass
+
     def __str__(self):
         if hasattr(self, "name"):
             return self.name
         t = type(self).__name__.replace("_", " ").title()
         if t.endswith(('1','2')):
             t = t[:-1]
+        if self.level:
+            t += f': {self.level}'
+
         return t
 
 class Desert(Location):
     level  = 3
     tile = tile_types.desert
+
+    def __init__(self, x, y, level=None, deck=None):
+        super().__init__(x,y,level)
+        if deck: self.populate(deck)
 
     def can_explore(self, entity):
         if xp > 0:
@@ -44,6 +55,8 @@ class Desert(Location):
             return do_smuggler_explore(self, entity)
         return do_desert_explore(self, entity)
 
+    def populate(self, deck):
+        pass
 
 class NonTraversable(Location):
     level = 3
@@ -51,7 +64,7 @@ class NonTraversable(Location):
     traversable = False
 
     def can_explore(self, entity):
-        return False
+        return True
 
 class Unique(Location):
     level = 2
@@ -78,9 +91,6 @@ class Settlement(Location):
         self.guild = guilds.draw(deck.bottom)
         self.companion = companions.draw(deck.bottom)
 
-        if self.guild: self.guild = self.guild()
-        if self.companion: self.companion = self.companion()
-
     def can_explore(self): return False
     # Settlements are explored via visiting
 
@@ -91,7 +101,16 @@ class Home(Settlement):
 
 class Explorable(Location):
     tile = tile_types.explorable
-    pass
+    def __init__(self, x, y, level=None, deck=None):
+        super().__init__(x,y,level)
+        if not level and deck:
+            card2 = deck.top
+            if card2.major:
+                self.level = 2
+            elif card2.value > 10:
+                self.level = 3
+            else :
+                self.level = 1
 
 ## Revealables:
 
@@ -371,19 +390,9 @@ REVEAL_DECK = {
 
 def draw(deck, x, y):
     card = deck.top
-    ret = REVEAL_DECK[card](x,y)
+    ret = REVEAL_DECK[card](x,y,deck=deck)
     if isinstance(ret, Unique):
         REVEAL_DECK[card] = Desert
-    if isinstance(ret, Settlement):
-        ret.populate(deck)
-    if isinstance(ret, Explorable):
-        card2 = deck.top
-        if card2.major:
-            ret.level = 2
-        elif card2.value > 10:
-            ret.level = 3
-        else :
-            ret.level = 1
     return ret
 
 

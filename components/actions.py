@@ -242,7 +242,7 @@ class RevealAction(Action):
                 dx,dy = map.nearest_empty(t[0], t[1], r=3)
                 if dx is None:
                     continue
-                map.add_location(locations.Desert(dx,dy))
+                map.add_location(locations.Desert(dx,dy, deck=self.engine.deck))
                 tiles.append((dx,dy))
                 break
             else: break
@@ -416,10 +416,11 @@ class GuildAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
         self.loc = loc
-        self.FLAVOR = f"Visit the {self.guild.label}."
+        if self.loc.guild:
+            self.FLAVOR = f"Visit the {self.loc.guild.label}."
     def perform(self) -> None:
         self.engine.settlement_actions.pop(event.K_g)
-        self.loc.guild.advance(self.player)
+        self.loc.guild.advance(self.entity)
     def available(self) -> bool:
         return self.loc.guild is not None
 

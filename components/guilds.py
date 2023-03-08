@@ -1,6 +1,6 @@
 
 class Guild():
-    def advance(entity):
+    def advance(self, entity):
         pass
 
 
@@ -26,4 +26,4 @@ class SmugglersGuild(Guild):
 items = [EcologyGuild, RelicsGuild, ExplorationGuild, RestorationGuild, GliderGuild, SmugglersGuild]
 
 def draw(card):
-    return items.pop(card.value % len(items))
+    return items.pop(card.value % len(items))() if len(items) else None
