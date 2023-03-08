@@ -320,6 +320,7 @@ class VisitAction(Action):
         actions[event.K_w] = WaterMerchant(self.engine, self.entity)
         actions[event.K_s] = SellScrap(self.engine, self.entity)
         actions[event.K_l] = SellRelic(self.engine, self.entity)
+
         actions[event.K_g] = GuildAction(self.engine, self.entity, self.loc)
 
         actions[event.K_d] = DonateRelic(self.engine, self.entity)
@@ -329,11 +330,11 @@ class VisitAction(Action):
         actions[event.K_x] = SettlementExploreAction(self.engine, self.entity)
 
         for i, item in enumerate(self.loc.items):
-            key = event.K_0 + i + 1
+            key = event.K_0 + i + 2
             actions[key] = ShoppingAction(self.engine, self.entity, item, key, self.loc)
 
         if self.loc.companion:
-            actions[event.K_h] = FindCompanion(self.engine, self.entity,self. loc)
+            actions[event.K_h] = FindCompanionAction(self.engine, self.entity,self. loc)
 
 
 
@@ -398,7 +399,7 @@ class ShoppingAction(VisitAction):
         self.item = item
         self.key = key
         self.loc = loc
-        self.FLAVOR = f" Buy {item.name} ({item.cost})"
+        self.FLAVOR = f"Buy {item.name} ({item.cost})"
     def perform(self) -> None:
         if self.entity.credits < self.item.cost:
             self.engine.msg("Not enough credits")
@@ -415,9 +416,11 @@ class GuildAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
         self.loc = loc
-        self.FLAVOR = "Visit the {} guild"
+        self.guild = loc.guild
+        self.FLAVOR = f"Visit the {self.guild.label} guild."
     def perform(self) -> None:
         self.engine.settlement_actions.pop(event.K_g)
+        #TODO
     def available(self) -> bool:
         return self.loc.guild is not None
 
@@ -530,7 +533,8 @@ class FindCompanionAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
         self.loc = loc
-        self.FLAVOR = "Hire a companion"
+        self.companion = loc.companion
+        self.FLAVOR = f"Hire {self.companion.name}, a {self.companion.title} for {self.companion.cost} credits."
     def perform(self) -> None:
         pass
     def available(self) -> bool:

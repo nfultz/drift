@@ -1,7 +1,7 @@
 
 items = []
-def draw(i):
-    return items.pop(i % len(items))
+def draw(card):
+    return items.pop(card.value % len(items))
 
 def _equip(name='', cost=0):
     def wrap(f):

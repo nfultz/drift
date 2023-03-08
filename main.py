@@ -26,7 +26,7 @@ def main() -> None:
 
     player = Entity(0, 0, "@", (255, 255, 255))
 
-    game_map = GameMap(WIDTH, HEIGHT-10)
+    game_map = GameMap(WIDTH, HEIGHT-15)
 
     engine = Engine(entities={player}, game_map=game_map, player=player)
 

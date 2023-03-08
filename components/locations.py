@@ -73,8 +73,13 @@ class Settlement(Location):
     def populate(self, deck):
         from . import equipment, guilds, companions
         for i in range(deck.bottom.value // 3):
-            self.items.append(equipment.draw(deck.top.value))
-        print(self.items)
+            self.items.append(equipment.draw(deck.top))
+        # NB call constructor that is returned...
+        self.guild = guilds.draw(deck.bottom)
+        self.companion = companions.draw(deck.bottom)
+
+        if self.guild: self.guild = self.guild()
+        if self.companion: self.companion = self.companion()
 
     def can_explore(self): return False
     # Settlements are explored via visiting

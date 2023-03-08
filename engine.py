@@ -11,7 +11,7 @@ from components import weather
 from game_map import GameMap
 from input_handlers import EventHandler
 
-import datetime
+import datetime, time
 
 class Engine:
     def __init__(self, entities: Set[Entity], game_map: GameMap, player: Entity):
@@ -72,7 +72,7 @@ class Engine:
         console.print(0, h+1, string=self.status_bar)
         console.print(0, h+2, string=self.status_bar2)
 
-        for i, j in zip(range(4,9), range(-5,0)):
+        for i, j in zip(range(4,12), range(-8,0)):
             console.print(0, h+i, string=self.messages[j])
 
 
