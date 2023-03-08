@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 import fractions
 from . import locations
 
+from tcod import event # :(event
 
 class MixedFrac(fractions.Fraction):
     """
@@ -78,6 +79,9 @@ class Action:
         This method must be overridden by Action subclasses.
         """
         raise NotImplementedError()
+
+    def __str__(self):
+        return getattr(self, "FLAVOR", super().__str__())
 
 
 class EscapeAction(Action):
@@ -303,9 +307,39 @@ class VisitAction(Action):
         self.loc = engine.game_map.get_loc(entity.x, entity.y)
 
     def perform(self) -> None:
+        self.engine.msg("You visit the settlement.")
         #TODO
+        self.entity.in_town = True
         self.entity.ap -= self.COST
         self.entity.can_visit = False
+
+        actions = dict()
+
+        actions[event.K_r] = RestAction(self.engine, self.entity)
+        actions[event.K_f] = FuelMerchant(self.engine, self.entity)
+        actions[event.K_w] = WaterMerchant(self.engine, self.entity)
+        actions[event.K_s] = SellScrap(self.engine, self.entity)
+        actions[event.K_l] = SellRelic(self.engine, self.entity)
+        actions[event.K_g] = GuildAction(self.engine, self.entity, self.loc)
+
+        actions[event.K_d] = DonateRelic(self.engine, self.entity)
+        actions[event.K_b] = RebuildAction(self.engine, self.entity)
+        actions[event.K_y] = HideAction(self.engine, self.entity)
+
+        actions[event.K_x] = SettlementExploreAction(self.engine, self.entity)
+
+        for i, item in enumerate(self.loc.items):
+            key = event._K_0 + i
+            actions[key] = ShoppingAction(self.engine, self.entity, item, key, self.loc)
+
+        if self.loc.companion:
+            actions[event.K_] = FindCompanion(self.engine, self.entity,self. loc)
+
+
+
+        self.engine.settlement_actions = {k:v for k,v in actions.items() if v.available()}
+
+
     def available(self) -> bool:
         if not self.entity.can_explore:
             self.engine.msg("Limit once per turn.")
@@ -315,49 +349,74 @@ class VisitAction(Action):
             return False
         return True
 
-class RestAction(VisitAction):
-    COST = 1
+class VisitEndAction(Action):
     def perform(self) -> None:
-        self.entry.credits -= 5
-        self.entry.stamina = self.entry.max_stamina
+        #TODO
+        self.entity.in_town = False
+
+class RestAction(VisitAction):
+    FLAVOR = "Rest and Relax (5 credits)"
+    def perform(self) -> None:
+        self.entity.credits -= 5
+        self.entity.stamina = self.entity.max_stamina
+        self.engine.settlement_actions.pop(event.K_r)
 
     def available(self) -> bool:
-        return self.entry.credits >= 5 and self.entry.stamina < self.entry.max_stamina
+        return self.entity.credits >= 5 and self.entity.stamina < self.entity.max_stamina
 
 class WaterMerchant(VisitAction):
-    COST = 1
+    def __init__(self,engine, entity):
+        super().__init__(engine,entity)
+        self.price =  max(engine.deck.heat) // 10
+        self.FLAVOR = f"Buy from Water Merchant: 1 water for {self.price} credits"
     def perform(self) -> None:
-        self.entry.credits -= 10
-        self.entry.water = self.entry.water + 1
+        self.entity.credits -= self.price
+        self.entity.water = self.entity.water + 1
+        self.engine.settlement_actions.pop(event.K_w)
 
     def available(self) -> bool:
-        return self.entry.credits >= 10 and self.entry.water < self.entry.max_water
+        return self.entity.credits >= self.price and self.entity.water < self.entity.max_water
 
 class FuelMerchant(VisitAction):
-    COST = 1
+    def __init__(self,engine, entity):
+        super().__init__(engine,entity)
+        self.price = 4 + engine.deck.bottom.value % 3
+        self.FLAVOR = f"Refuel your Glider: 1 fuel for {self.price} credits"
     def perform(self) -> None:
-        self.entry.credits -= 5
-        self.entry.fuel += 1
+        self.entity.credits -= self.price
+        self.entity.fuel += 1
+        if self.entity.fuel == self.entity.max_fuel:
+            self.engine.settlement_actions.pop(event.K_f)
+
     def available(self) -> bool:
-        return self.entry.credits >= 5 and self.entry.fuel < self.entry.max_fuel
+        return self.entity.credits >= self.price and self.entity.fuel < self.entity.max_fuel
 
 #TODO
 class ShoppingAction(VisitAction):
+    def __init__(self, engine: Engine, entity: Entity, item, key, loc):
+        super().__init__(engine, entity)
+        self.item = item
+        self.key = key
+        self.loc = loc
     def perform(self) -> None:
+        self.engine.settlement_actions.pop(key)
         pass
     def available(self) -> bool:
         pass
 
 #TODO
 class GuildAction(VisitAction):
+    def __init__(self, engine: Engine, entity: Entity, loc):
+        super().__init__(engine, entity)
+        self.loc = loc
     def perform(self) -> None:
-        pass
+        self.engine.settlement_actions.pop(event.K_g)
     def available(self) -> bool:
-        pass
+        return self.loc.guild is not None
 
 #TODO
 class SellScrap(VisitAction):
-    def __init__(self, engine: Engine, entity: Entity, dx: int, dy: int):
+    def __init__(self, engine: Engine, entity: Entity):
         super().__init__(engine, entity)
         self.card = engine.deck.top
         self.price = 5
@@ -370,7 +429,7 @@ class SellScrap(VisitAction):
             self.price = 20
         elif self.card.value >= 10:
             self.price = 60
-        elif self.card.rank >= 6:
+        elif self.card.value >= 6:
             self.price = 40
 
     def perform(self) -> None:
@@ -378,11 +437,14 @@ class SellScrap(VisitAction):
         self.entity.credits += self.amount * self.price
         self.entity.cargo = 0
 
+        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+            self.engine.settlement_actions.pop(event.K_s, 0)
+
     def available(self) -> bool:
         return self.entity.cargo > 0
 
 class SellRelic(VisitAction):
-    def __init__(self, engine: Engine, entity: Entity, dx: int, dy: int):
+    def __init__(self, engine: Engine, entity: Entity):
         super().__init__(engine, entity)
         self.card = engine.deck.top
         self.limit = 0
@@ -400,7 +462,7 @@ class SellRelic(VisitAction):
         elif self.card.value >= 10:
             self.limit = 2
             self.price = 60
-        elif self.card.rank >= 6:
+        elif self.card.value >= 6:
             self.limit = 2
             self.price = 40
 
@@ -411,6 +473,9 @@ class SellRelic(VisitAction):
         if self.card.rank == 'W':
             self.entity.fame += 1
 
+        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+            self.engine.settlement_actions.pop(event.K_s, 0)
+
     def available(self) -> bool:
         return self.entity.relic > 0 and self.card >= 6
 
@@ -420,7 +485,11 @@ class DonateRelic(VisitAction):
         r = min(self.entity.relic, 2)
         self.entity.relic -= r
         self.entity.fame += MixedFrac(r,2)
+        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+            self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
+        if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
+        if self.entity.secrecy == 99 or self.entity.restoration == 99: return False
         return self.entity.relic > 0
 
 class RebuildAction(VisitAction):
@@ -428,8 +497,11 @@ class RebuildAction(VisitAction):
         self.entity.cargo -= 2
         self.entity.credits -= 50
         self.entity.restoration += 1
+        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+            self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
-        return self.restoration != 99 and self.entity.cargo >= 2 or self.entity.credits >= 50
+        if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
+        return self.entity.restoration != 99 and (self.entity.cargo >= 2 or self.entity.credits >= 50)
 
 class HideAction(VisitAction):
     def perform(self) -> None:
@@ -439,13 +511,29 @@ class HideAction(VisitAction):
         elif self.credits >= 150:
             self.credits -= 150
             self.entity.secrecy += 1
+        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+            self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
-        return self.secrecy != 99 and (self.entity.relic >= 2 or self.entity.credits >= 150)
+        if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
+        return self.entity.secrecy != 99 and (self.entity.relic >= 2 or self.entity.credits >= 150)
 
 
 #TODO
 class FindCompanionAction(VisitAction):
+    def __init__(self, engine: Engine, entity: Entity, loc):
+        super().__init__(engine, entity)
+        self.loc = loc
+        self.FLAVOR = "Hire a companion"
     def perform(self) -> None:
         pass
     def available(self) -> bool:
+        return self.loc.companion is not None
+
+#TODO
+class SettlementExploreAction(ExploreAction):
+    FLAVOR = "Explore the settlement"
+    def perform(self):
         pass
+    def available(self) -> bool:
+        return True
+

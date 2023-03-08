@@ -63,6 +63,13 @@ class Settlement(Location):
     tile = tile_types.settlement
     can_visit = True
 
+    def __init__(self, x, y, level=None):
+        super().__init__(x,y,level)
+        self.items = list()
+        self.guild = None
+        self.companion = None
+
+
     def can_explore(self): return False
     # Settlements are explored via visiting
 

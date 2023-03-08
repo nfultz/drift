@@ -98,13 +98,11 @@ class Entity:
         return n
 
     def win_condition(self):
-        if self.secrecy != 99 :
-            if self.secrecy >= 5:
-                return True
-        elif self.restoration != 99 :
-            if self.restoration >= 10:
-                return True
-        elif self.fame >= 10:
-            return True
-        return False
+        if self.secrecy != 99:
+            self.fame = 0
+            return self.secrecy >= 5
+        if self.restoration != 99:
+            self.fame = 0
+            return self.restoration >= 10
+        return self.fame >= 10
 

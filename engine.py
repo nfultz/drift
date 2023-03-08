@@ -4,7 +4,7 @@ import tcod
 from tcod.context import Context
 from tcod.console import Console
 
-from components.actions import EscapeAction, MovementAction
+from components.actions import VisitAction, VisitEndAction
 from components.entity import Entity
 from components.deck import Deck
 from components import weather
@@ -49,7 +49,7 @@ class Engine:
         background = type(p.background).__name__
         stats = 'h'*p.h + 'k'*p.k + 'r'*p.r
 
-        return f"{name} ({background}) {stats} : {p.fame} fame"
+        return f"{name} ({background}) {stats} : {p.fame} fame, {p.credits} credits"
 
     @property
     def status_bar2(self):
@@ -79,6 +79,20 @@ class Engine:
 
         console.clear()
 
+    def render_town(self, console:Console, context:Context):
+        w,h = self.game_map.dim
+        console.draw_frame(0,0,w-2,h-2, clear=True)
+        for i, k in enumerate(self.settlement_actions):
+            v = self.settlement_actions[k]
+            console.print(1,1+i, f"{chr(k)} - {v}")
+
+        console.print(0,20, self.deck.top)
+        console.print(0, h+1, string=self.status_bar)
+        console.print(0, h+2, string=self.status_bar2)
+
+        for i, j in zip(range(4,9), range(-5,0)):
+            console.print(0, h+i, string=self.messages[j])
+        context.present(console)
 
     def loop(self, console: Console, context: Context):
         deck = self.deck
@@ -97,6 +111,7 @@ class Engine:
 
                 e.can_explore = True
                 e.can_visit = True
+                e.in_town = False
                 e.ap = 2 + getattr(e,"CAMPING_TWEAK", 0)
                 e.CAMPING_TWEAK = 0
                 e.fatigue = self.fatigue
@@ -107,6 +122,15 @@ class Engine:
                     if e is self.player:
                         events = tcod.event.wait()
                         self.event_handler.handle_events(events)
+
+                        while e.in_town:
+                                self.render_town(console=console, context=context)
+                                events = tcod.event.wait()
+                                self.event_handler.handle_events(events)
+
+
+
+
                     else:
                         e.ai()
 

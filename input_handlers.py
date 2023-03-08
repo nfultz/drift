@@ -41,6 +41,9 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         if self.debug:
             breakpoint()
 
+        if player.in_town:
+            return self.ev_keydown_town(event);
+
         if key == tcod.event.K_UP:
             action = MovementAction(engine, player, dx=0, dy=-1)
         elif key == tcod.event.K_DOWN:
@@ -71,6 +74,8 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         elif key == tcod.event.K_q:
             action = EscapeAction()
 
+        elif key == tcod.event.K_v:
+            action = VisitAction(engine, player)
 
         # validation
         if action and not action.available():
@@ -78,4 +83,22 @@ class EventHandler(tcod.event.EventDispatch[Action]):
 
 
         # No valid key was pressed
+        return action
+
+    def ev_keydown_town(self, event: tcod.event.KeyDown) -> Optional[Action]:
+        action: Optional[Action] = None
+
+        key = event.sym
+        engine = self.engine
+        player = engine.player
+
+        if key == tcod.event.K_q:
+            action = VisitEndAction(engine, player)
+
+        elif key in engine.settlement_actions:
+            action = engine.settlement_actions[key]
+        # validation
+        if action and not action.available():
+            return None
+
         return action
