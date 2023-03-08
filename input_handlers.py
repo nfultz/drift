@@ -68,6 +68,10 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         elif key == tcod.event.K_f:
             action = FuelAction(engine, player)
 
+        elif key == tcod.event.K_x:
+            action = ExploreAction(engine, player)
+
+
         elif key == tcod.event.K_z:
             self.debug = not self.debug
 

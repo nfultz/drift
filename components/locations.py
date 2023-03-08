@@ -44,18 +44,21 @@ class Desert(Location):
         if deck: self.populate(deck)
 
     def can_explore(self, entity):
-        if xp > 0:
+        if self.xp > 0:
             return True
-        if xp > -1 and hasattr(entity, "SMUGGLER_L1"):
+        if self.xp > -1 and hasattr(entity, "SMUGGLER_L1"):
             return True
         return True
 
     def explore(self, entity):
-        if xp == 0 and hasattr(entity, "SMUGGLER_L1"):
-            return do_smuggler_explore(self, entity)
-        return do_desert_explore(self, entity)
+        if self.xp == 0 and hasattr(entity, "SMUGGLER_L1"):
+            return self.do_smuggler_explore
+        return self.do_desert_explore
 
     def populate(self, deck):
+        card = deck.top
+        self.do_desert_explore = explorations.DESERT_EXPLORATIONS[card.black][card.rank]
+        self.do_smuggler_explore = explorations.DESERT_EXPLORATIONS[card.black][card.rank] #TODO
         pass
 
 class NonTraversable(Location):

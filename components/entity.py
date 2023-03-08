@@ -73,7 +73,7 @@ class Entity:
 
         #quests
         self.quest_item_label = None
-        self.quest_item_count = 0
+        self.quest = 0
         self.quest_guild = None
 
 

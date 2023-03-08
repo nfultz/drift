@@ -275,10 +275,19 @@ class ExploreAction(Action):
     def __init__(self, engine, entity):
         super().__init__(engine, entity)
         self.loc = engine.game_map.get_loc(entity.x, entity.y)
+        self.success = False
 
 
     def perform(self) -> None:
-        #TODO
+        breakpoint()
+        encounter = self.loc.explore(self.entity)
+        self.engine.msg(encounter.__name__)
+        result = encounter(self.loc, self.entity, self.engine.deck)
+        self.success = not type(result) is int
+        if self.success:
+            print(result)
+            #msg
+            pass
         self.entity.stamina -= 1
         self.entity.ap -= self.COST
         self.entity.can_explore = False
@@ -288,7 +297,7 @@ class ExploreAction(Action):
             self.engine.msg("Limit once per turn.")
             return False
 
-        if not self.loc.can_explore():
+        if not self.loc.can_explore(self.entity):
             self.engine.msg("Not explorable.")
             return False
 

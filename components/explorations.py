@@ -49,7 +49,7 @@ def communications_tower(loc, entity, deck):
     if i > 0 : return i
     return earn(entity, cargo=3, quest=1)
 
-def hibernation pods(loc, entity, deck):
+def hibernation_pods(loc, entity, deck):
     i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
     if i > 0 : return i
     return earn(entity, cargo=3, quest=1, stamina=entity.max_stamina)
@@ -111,7 +111,7 @@ def dried_well_and_ladder(loc, entity, deck):
 
 def lone_trader(loc, entity, deck):
     #TODO
-    pass
+    return 0
 
 def suspicious_small_wind_traps(loc, entity, deck):
     i = skill_check(loc.level, entity.skill_test_n("k"), deck)
@@ -199,7 +199,7 @@ DESERT_EXPLORATIONS = {
       'Q': forgotten_shuttle,
       'K': scrap_stockpile,
       'W': crater_with_glowing_crate_and_goo
-      }
+      },
     False: {
       'A': old_solar_arrays,
       '2': communications_tower,
