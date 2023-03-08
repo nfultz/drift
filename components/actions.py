@@ -416,11 +416,10 @@ class GuildAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
         self.loc = loc
-        self.guild = loc.guild
-        self.FLAVOR = f"Visit the {self.guild.label} guild."
+        self.FLAVOR = f"Visit the {self.guild.label}."
     def perform(self) -> None:
         self.engine.settlement_actions.pop(event.K_g)
-        #TODO
+        self.loc.guild.advance(self.player)
     def available(self) -> bool:
         return self.loc.guild is not None
 
@@ -494,6 +493,7 @@ class DonateRelic(VisitAction):
     def perform(self) -> None:
         r = min(self.entity.relic, 2)
         self.entity.relic -= r
+        self.engine.msg(f"You donate {r} relics for preservation.")
         self.entity.fame += MixedFrac(r,2)
         for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
@@ -504,6 +504,7 @@ class DonateRelic(VisitAction):
 
 class RebuildAction(VisitAction):
     def perform(self) -> None:
+        self.engine.msg("You contribute cargo and cash to the restoration cause.")
         self.entity.cargo -= 2
         self.entity.credits -= 50
         self.entity.restoration += 1
@@ -516,9 +517,11 @@ class RebuildAction(VisitAction):
 class HideAction(VisitAction):
     def perform(self) -> None:
         if self.entity.relic >= 2:
+            self.engine.msg("You stash two relics.")
             self.entity.relic -= 2
             self.entity.secrecy += 1
         elif self.credits >= 150:
+            self.engine.msg("You pay a bribe to quiet loose tongues.")
             self.credits -= 150
             self.entity.secrecy += 1
         for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
@@ -528,7 +531,6 @@ class HideAction(VisitAction):
         return self.entity.secrecy != 99 and (self.entity.relic >= 2 or self.entity.credits >= 150)
 
 
-#TODO
 class FindCompanionAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
@@ -536,7 +538,24 @@ class FindCompanionAction(VisitAction):
         self.companion = loc.companion
         self.FLAVOR = f"Hire {self.companion.name}, a {self.companion.title} for {self.companion.cost} credits."
     def perform(self) -> None:
-        pass
+        e = self.entity
+        if e.credits < self.item.cost:
+            self.engine.msg("Not enough credits")
+            return None
+        if e.fame < len(e.companions) * e.fame_per_companion:
+            leaving = next(iter(e.companions))
+            self.engine.msg(f"{leaving.name} leaves")
+            self.loc.companion = leaving
+            self.companions.remove(leaving)
+            leaving.leave(e)
+        else:
+            self.loc.companion = None
+
+        self.engine.msg(f"{self.companion} joins you")
+        e.companions.add(self.companion)
+        self.companions(e)
+        self.companions.join(e)
+
     def available(self) -> bool:
         return self.loc.companion is not None
 

@@ -3,8 +3,21 @@ class Companion():
     name = ''
     cost = 99999
     title = ''
+
+    def __init__(self):
+        for k,v in COMPANION_DECK.items():
+            if type(self) == v:
+                COMPANION_DECK[k] = None
+
+
     def __str__(self):
         return f"{self.name} ({self.title})"
+
+    def join(self, entity):
+        pass
+
+    def leave(self, entity):
+        pass
 
 class Scoundrel(Companion):
     cost = 100
@@ -67,7 +80,4 @@ COMPANION_DECK = {
   }
 
 def draw(card):
-    global COMPANION_DECK
-    ret = COMPANION_DECK[card.rank]
-    COMPANION_DECK = {k: None if v is ret else v for k,v in COMPANION_DECK.items()}
-    return ret
+    return COMPANION_DECK[card.rank]

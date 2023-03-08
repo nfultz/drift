@@ -1,6 +1,7 @@
 
 class Guild():
-    pass
+    def advance(entity):
+        pass
 
 
 class EcologyGuild(Guild):
