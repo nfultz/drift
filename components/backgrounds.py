@@ -180,27 +180,27 @@ def skilled_laborer(player):
     player.MOONDEW_LABORER = 1 #TODO ADD ACTION
 
 
-def introduction(deck, player):
+def introduction(deck):
     card = deck.bottom
 
     if card.major:
         if card.rank == 'W':
-            rebuilding_the_past(player)
+            return rebuilding_the_past
         elif card.value > 10:
-            hard_times(player)
+            return hard_times
         elif card.value > 7 :
-            no_intro_needed(player)
+            return no_intro_needed
         elif card.value > 4 :
-            returning_home(player)
+            return returning_home
         else :
-            familiar_face(player)
+            return familiar_face
     elif not card.major:
         if card.rank == 'W':
-            place_to_hide(player)
+            return place_to_hide
         elif card.value > 10:
-            quiet_wanderer(player)
+            return quiet_wanderer
         elif card.value > 5 :
-            friendly_face(player)
+            return friendly_face
         else:
-            skilled_laborer(player)
+            return skilled_laborer
 

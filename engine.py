@@ -7,7 +7,7 @@ from tcod.console import Console
 from components.actions import VisitAction, VisitEndAction
 from components.entity import Entity
 from components.deck import Deck
-from components import weather
+from components import weather, backgrounds
 from game_map import GameMap
 from input_handlers import EventHandler
 
@@ -103,6 +103,11 @@ class Engine:
 
     def loop(self, console: Console, context: Context):
         deck = self.deck
+
+
+        intro = backgrounds.introduction(deck)
+        self.msg(intro.__name__.replace('_', ' ').title())
+        intro(self.player)
 
         while True:  # Main loop, runs until SystemExit is raised.
             self.fatigue = 1
