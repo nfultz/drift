@@ -31,7 +31,7 @@ class Engine:
                       self.deck.top.value
               )
         self.firstdate = self.date
-        self.messages = ['']*5
+        self.messages = ['']*50
 
     def tomorrow(self):
         self.date += datetime.timedelta(days=1)
@@ -68,17 +68,16 @@ class Engine:
 
     def render(self, console: Console, context: Context) -> None:
         self.game_map.center(self.player)
+        console.print(0, 1, string=self.status_bar)
+        console.print(0, 2, string=self.status_bar2)
         self.game_map.render(console)
         for entity in self.entities:
             self.game_map.render_entity(entity, console)
 
         h = self.game_map.dim[1]
-        console.print(0, h+1, string=self.status_bar)
-        console.print(0, h+2, string=self.status_bar2)
 
-        for i, j in zip(range(4,12), range(-8,0)):
-            console.print(0, h+i, string=self.messages[j])
-
+        for i, j in enumerate(range(console.height-2,h + 3, -1)):
+            console.print(0, j, string=self.messages[-i-1])
 
         context.present(console)
 
@@ -86,17 +85,19 @@ class Engine:
 
     def render_town(self, console:Console, context:Context):
         w,h = self.game_map.dim
-        console.draw_frame(0,0,w-2,h-2, clear=True)
+
+        console.print(0, 1, string=self.status_bar)
+        console.print(0, 2, string=self.status_bar2)
+
+        console.draw_frame(0,3,w,h, clear=True)
         for i, k in enumerate(self.settlement_actions):
             v = self.settlement_actions[k]
-            console.print(1,1+i, f"{chr(k)} - {v}")
+            console.print(2,5+i, f"{chr(k)} - {v}")
 
-        console.print(0,20, self.deck.top)
-        console.print(0, h+1, string=self.status_bar)
-        console.print(0, h+2, string=self.status_bar2)
 
-        for i, j in zip(range(4,9), range(-5,0)):
-            console.print(0, h+i, string=self.messages[j])
+        for i, j in enumerate(range(console.height-2,h + 3, -1)):
+            console.print(0, j, string=self.messages[-i-1])
+
         context.present(console)
         console.clear()
 

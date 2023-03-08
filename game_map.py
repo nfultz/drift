@@ -52,11 +52,11 @@ class GameMap:
             for x in self.locations[y].irange(self.left, self.right-1):
                 tiles[x-self.left,y-self.bottom] = self.locations[y][x].tile
 
-        console.tiles_rgb[0:self.dim[0], 0:self.dim[1]] = tiles["dark"]
-        console.draw_frame(0,0,self.dim[0],self.dim[1], title=self.title, clear=False)
+        console.tiles_rgb[0:self.dim[0], 3:3+self.dim[1]] = tiles["dark"]
+        console.draw_frame(0,3,self.dim[0],self.dim[1], title=self.title, clear=False)
 
     def render_entity(self, entity, console: Console) -> None:
-        console.print(entity.x -self.left, entity.y -self.bottom, entity.char, fg=entity.color)
+        console.print(entity.x -self.left, entity.y -self.bottom +3, entity.char, fg=entity.color)
 
     def add_location(self,loc,*,x=None,y=None):
         if x is None:
