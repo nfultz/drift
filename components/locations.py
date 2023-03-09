@@ -89,7 +89,11 @@ class Settlement(Location):
     def populate(self, deck):
         from . import equipment, guilds, companions
         for i in range(deck.bottom.value // 3):
-            self.items.append(equipment.draw(deck.top))
+            i = equipment.draw(deck.top)
+            if i:
+                self.items.append(i)
+            else:
+                break
         # NB call constructor that is returned...
         self.guild = guilds.draw(deck.bottom)
         self.companion = companions.draw(deck.bottom)

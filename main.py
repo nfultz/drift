@@ -4,9 +4,12 @@ import traceback
 
 import tcod
 
+import sys
+
 import getpass
 
 from engine import Engine
+from components import backgrounds
 from components.entity import Entity
 from game_map import GameMap
 from input_handlers import EventHandler
@@ -14,7 +17,7 @@ from input_handlers import EventHandler
 WIDTH, HEIGHT = 80, 60  # Console width and height in tiles.
 
 
-def main() -> None:
+def main(args) -> None:
 
     """Script entry point."""
     tileset = tcod.tileset.load_tilesheet(
@@ -24,10 +27,14 @@ def main() -> None:
     console = tcod.Console(WIDTH, HEIGHT, order="F")
 
 
+    if not len(args):
+        args.append("n/a")
+    bg = getattr(backgrounds, args[0], backgrounds.Background)()
 
-    player = Entity(0, 0, "@", (255, 255, 255), name=getpass.getuser())
+    player = Entity(0, 0, "@", (255, 255, 255),
+            name=getpass.getuser(), background=bg)
 
-    game_map = GameMap(WIDTH, HEIGHT-15)
+    game_map = GameMap(WIDTH-2, HEIGHT-15)
 
     engine = Engine(entities={player}, game_map=game_map, player=player)
 
@@ -41,4 +48,6 @@ def main() -> None:
 if __name__ == "__main__":
     if __debug__:
         logging.basicConfig(level=logging.DEBUG)
-    main()
+    args = list(sys.argv)
+    args.pop(0)
+    main(args)

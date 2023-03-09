@@ -76,7 +76,7 @@ class Engine:
 
         h = self.game_map.dim[1]
 
-        for i, j in enumerate(range(console.height-2,h + 3, -1)):
+        for i, j in enumerate(range(console.height-2,h + 4, -1)):
             console.print(0, j, string=self.messages[-i-1])
 
         context.present(console)
@@ -89,13 +89,13 @@ class Engine:
         console.print(0, 1, string=self.status_bar)
         console.print(0, 2, string=self.status_bar2)
 
-        console.draw_frame(0,3,w,h, clear=True)
+        console.draw_frame(0,3,w+2,h+2, clear=True)
         for i, k in enumerate(self.settlement_actions):
             v = self.settlement_actions[k]
             console.print(2,5+i, f"{chr(k)} - {v}")
 
 
-        for i, j in enumerate(range(console.height-2,h + 3, -1)):
+        for i, j in enumerate(range(console.height-2,h + 4, -1)):
             console.print(0, j, string=self.messages[-i-1])
 
         context.present(console)

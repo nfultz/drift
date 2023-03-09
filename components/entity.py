@@ -25,20 +25,6 @@ class Entity:
 
         self.ap = 0 #ACTION POINTS
 
-        # Background and Stats
-        self.background = background
-
-        if background:
-            self.h = background.h
-            self.k = background.k
-            self.r = background.r
-            background.bonus(self)
-            self.goal_completed = False
-        else:
-            self.h = 2
-            self.k = 2
-            self.r = 2
-
         # Resources
         self.credits = 50
         self.max_stamina = 5
@@ -75,6 +61,21 @@ class Entity:
         self.quest_item_label = None
         self.quest = 0
         self.quest_guild = None
+
+        # Background and Stats
+        # NB needs to come near end so that base stats are set and can be modified
+        self.background = background
+
+        if background:
+            self.h = background.h
+            self.k = background.k
+            self.r = background.r
+            background.bonus(self)
+            self.goal_completed = False
+        else:
+            self.h = 2
+            self.k = 2
+            self.r = 2
 
 
 
