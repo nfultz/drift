@@ -69,9 +69,18 @@ class NonTraversable(Location):
     def can_explore(self, entity):
         return self.xp > 0
 
+    def explore(self, entity):
+        return self.encounter
+
 class Unique(Location):
     level = 2
     tile = tile_types.unique
+
+    def can_explore(self, entity):
+        return self.xp > 0
+
+    def explore(self, entity):
+        return self.encounter
 
 class Settlement(Location):
     level = 2
