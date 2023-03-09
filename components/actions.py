@@ -622,7 +622,13 @@ class FindCompanionAction(VisitAction):
 class SettlementExploreAction(ExploreAction):
     FLAVOR = "Explore the settlement"
     def perform(self):
-        pass
+        from .settlement_encounters import draw
+        encounter = draw(self.engine.deck.top)
+        choices = encounter(self.engine, self.entity) or []
+        for i, c in enumerate(choices):
+            if c.available():
+                self.engine.settlement_actions[event.K_6 +i] = c
+        self.engine.settlement_actions.pop(event.K_x, 0)
     def available(self) -> bool:
         return True
 

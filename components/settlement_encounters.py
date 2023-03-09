@@ -2,12 +2,23 @@ from .explorations import skill_check, earn
 
 from .actions import Action, VisitAction
 
-import .locations
+from  . import locations
 
 class SettlementEncounterResultAction(Action):
     pass
 
+items = {}
+def draw(card):
+    return items[card]
 
+def _add(*cards):
+    def wrap(f):
+        for card in cards:
+            items[card] = f
+        return f
+    return wrap
+
+@_add("AC", "AS")
 def mercs(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
@@ -40,6 +51,7 @@ def mercs(engine, entity):
     return [oa, ob]
 
 
+@_add("2C", "2S")
 def water_merchants(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
 
@@ -66,6 +78,7 @@ def water_merchants(engine, entity):
 
     return [oa, ob]
 
+@_add("3C", "3S")
 def hire_minor(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
@@ -96,6 +109,7 @@ def hire_minor(engine, entity):
 
     return [oa, ob]
 
+@_add("4C", "4S")
 def hire_major(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
@@ -127,6 +141,7 @@ def hire_major(engine, entity):
 
 
 
+@_add("5C", "5S")
 def market_day(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("hk"), deck)
@@ -154,6 +169,7 @@ def market_day(engine, entity):
 
     return [oa, ob]
 
+@_add("6C", "6S")
 def work_trader(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
@@ -173,6 +189,7 @@ def work_trader(engine, entity):
 
     return [oa]
 
+@_add("7C", "7S")
 def guild_merchants(engine, entity):
     engine.msg("Guild merchants selling high quality equipment surpluses.")
 
@@ -193,6 +210,7 @@ def guild_merchants(engine, entity):
 
     return [oa, ob]
 
+@_add("8C", "8S")
 def traveling_mechanic(engine, entity):
     engine.msg("A famous traveling mechanic offering services you won't find anywhere else.")
 
@@ -233,6 +251,7 @@ def traveling_mechanic(engine, entity):
 
     return [oa, ob]
 
+@_add("9C", "9S")
 def informant(engine, entity):
     engine.msg("A cloaked house informant selling information on the region")
 
@@ -255,6 +274,7 @@ def informant(engine, entity):
 
     return [oa, ob]
 
+@_add("0C", "0S")
 def fortune_teller(engine, entity):
     engine.msg("a traveling fortune teller who will guide your life in a new direction.")
 
@@ -281,10 +301,13 @@ def fortune_teller(engine, entity):
 
     return none
 
+@_add("JC", "JS")
+@_add("QC", "QS")
+@_add("KC", "KS")
 def cartographer(engine, entity):
     engine.msg("a local cartographer is selling maps of the region")
 
-    class optiona(visitaction):
+    class optiona(VisitAction):
         flavor = "reveal (10)"
         limit = 5
         def perform(self):
@@ -296,13 +319,14 @@ def cartographer(engine, entity):
             if self.limit == 0:
                 self.engine.settlement_actions.pop(event.K_6, None)
 
-    return [oa]
+    return [optiona()]
 
+@_add("WC", "WS")
 def drifter(engine, entity):
     engine.msg("an old drifer, who has lived many years on Eridoor.")
-    import .companions
+    from . import companions
 
-    class optiona(visitaction):
+    class optiona(VisitAction):
         flavor = "Hire Host, a seeker"
         def perform(self):
             companion = companion.Host()
@@ -316,7 +340,7 @@ def drifter(engine, entity):
 
 
 
-    class optionb(visitaction):
+    class optionb(VisitAction):
         flavor = "Hire Kale, a mystic"
         def perform(self):
             companion = companion.Mystic()
@@ -337,6 +361,7 @@ def drifter(engine, entity):
 
 ###
 
+@_add("AD", "AH")
 def scouts(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
@@ -367,6 +392,7 @@ def scouts(engine, entity):
     return [oa, ob]
 
 
+@_add("2D", "2H")
 def scrap_dealers(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
 
@@ -394,6 +420,7 @@ def scrap_dealers(engine, entity):
 
     return [oa, ob]
 
+@_add("3D", "3H")
 def bounty_hunters(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
 
@@ -410,6 +437,7 @@ def bounty_hunters(engine, entity):
 
     return [oa]
 
+@_add("4D", "4H")
 def raided(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("hk"), deck)
@@ -462,6 +490,7 @@ def raided(engine, entity):
 
     return [oa, ob, oc]
 
+@_add("5D", "5H")
 def food_vendor(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
 
@@ -470,7 +499,7 @@ def food_vendor(engine, entity):
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "+1 to h"
         def perform(self):
-            if self.entity.credits >= 25
+            if self.entity.credits >= 25:
                 self.entity.credits -= 25
                 self.entity.h += 1 #TODO choose
                 self.engine.settlement_actions.pop(event.K_6, None)
@@ -478,7 +507,7 @@ def food_vendor(engine, entity):
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "quest item"
         def perform(self):
-            if self.entity.credits >= 10
+            if self.entity.credits >= 10:
                 self.entity.credits -= 10
                 self.entity.stamina = self.entity.max_stamina + 2
                 self.engine.settlement_actions.pop(event.K_6, None)
@@ -490,6 +519,7 @@ def food_vendor(engine, entity):
 
     return [oa, ob]
 
+@_add("6D", "6H")
 def trader_used(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
@@ -514,6 +544,7 @@ def trader_used(engine, entity):
 
     return [oa, ob]
 
+@_add("7D", "7H")
 def tea(engine, entity):
     engine.msg("enjoy a quiet cup of tea.")
 
@@ -561,6 +592,7 @@ def tea(engine, entity):
 
     return [oa, ob, oc, od]
 
+@_add("8D", "8H")
 def red_mercs(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
@@ -578,6 +610,7 @@ def red_mercs(engine, entity):
 
     return [oa]
 
+@_add("9D", "9H")
 def smugglers(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
@@ -604,14 +637,18 @@ def smugglers(engine, entity):
 
     return [oa, ob]
 
+@_add("0D", "0H")
 def festival(engine, entity):
     engine.msg("The Festival of Merchants is happening. Time to kick back and enjoy the celebration.")
-    self.entity.water = self.entity.max_water
-    self.entity.stamina = self.entity.max_stamina + 3 #Temp!
+    entity.water = entity.max_water
+    entity.stamina = entity.max_stamina + 3 #Temp!
     #TODO weather?
 
     return None
 
+@_add("JD", "JH")
+@_add("QD", "QH")
+@_add("KD", "KH")
 def glider_race_mechanic(engine, entity):
     engine.msg("A glider race mechanic offers to increase your speed or fuel capacity.")
 
@@ -638,6 +675,7 @@ def glider_race_mechanic(engine, entity):
 
     return [oa, ob]
 
+@_add("WD", "WH")
 def spike(engine, entity):
     engine.msg("The legendary smuggler is here, of all places.")
 
