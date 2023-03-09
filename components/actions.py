@@ -458,7 +458,7 @@ class ShoppingAction(VisitAction):
         if self.entity.credits < self.item.cost:
             self.engine.msg("Not enough credits")
             return None
-        self.engine.msg("You buy the {self.item.name}")
+        self.engine.msg(f"You buy the {self.item.name}")
         self.engine.settlement_actions.pop(self.key)
         self.entity.credits -= self.item.cost
         self.item(self.entity)
