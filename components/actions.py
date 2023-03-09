@@ -279,15 +279,18 @@ class ExploreAction(Action):
 
 
     def perform(self) -> None:
-        breakpoint()
+#        breakpoint()
         encounter = self.loc.explore(self.entity)
-        self.engine.msg(encounter.__name__)
-        result = encounter(self.loc, self.entity, self.engine.deck)
-        self.success = not type(result) is int
+        label = encounter.__name__.replace("_", " ").title()
+        self.engine.msg(f"Exploring, found a {label}")
+        self.result = encounter(self.loc, self.entity, self.engine.deck)
+        self.success = not type(self.result) is int
         if self.success:
-            print(result)
-            #msg
-            pass
+            self.engine.msg(f"Success! Recieved {self.result}")
+            self.loc.xp -= 1
+        else :
+            self.engine.msg(f"Failed by {self.result}")
+
         self.entity.stamina -= 1
         self.entity.ap -= self.COST
         self.entity.can_explore = False
@@ -307,6 +310,46 @@ class ExploreAction(Action):
 
         return check_ap(self.entity, self)
 
+class RetryAction(Action):
+    COST = 0
+    def __init__(self, engine, entity):
+        super().__init__(engine, entity)
+        self.loc = engine.game_map.get_loc(entity.x, entity.y)
+        self.success = False
+
+
+    def perform(self) -> None:
+#        breakpoint()
+        encounter = self.loc.explore(self.entity)
+        label = encounter.__name__.replace("_", " ").title()
+        self.engine.msg(f"Rerolling, at a {label}")
+
+        # set level to # of failures, retry, then reset
+        self.loc.level, old = self.last.result, self.loc.level
+
+        result = encounter(self.loc, self.entity, self.engine.deck)
+
+        self.loc.level =  old
+
+
+        self.success = not type(result) is int
+        if self.success:
+            self.engine.msg(f"Success! Recieved {result}")
+            self.loc.xp -= 1
+        else :
+            self.engine.msg(f"Failed by {result}")
+
+        self.entity.stamina -= 1
+
+    def available(self) -> bool:
+        if not len(self.entity.moves) > 0: return False
+
+        self.last = self.entity.moves[-1]
+        if not isinstance(self.last, ExploreAction): return False
+        if self.last.success: return False
+
+        return self.entity.stamina > 0
+
 ### Settlement actions
 
 class VisitAction(Action):
@@ -317,7 +360,7 @@ class VisitAction(Action):
 
     def perform(self) -> None:
         self.engine.msg("You visit the settlement.")
-        #TODO
+
         self.entity.in_town = True
         self.entity.ap -= self.COST
         self.entity.can_visit = False

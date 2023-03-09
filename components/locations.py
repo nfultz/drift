@@ -67,7 +67,7 @@ class NonTraversable(Location):
     traversable = False
 
     def can_explore(self, entity):
-        return True
+        return self.xp > 0
 
 class Unique(Location):
     level = 2
@@ -118,6 +118,12 @@ class Explorable(Location):
                 self.level = 3
             else :
                 self.level = 1
+
+    def can_explore(self, entity):
+        return self.xp > 0
+
+    def explore(self, entity):
+        return self.encounter
 
 ## Revealables:
 

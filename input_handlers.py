@@ -71,6 +71,9 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         elif key == tcod.event.K_x:
             action = ExploreAction(engine, player)
 
+        elif key == tcod.event.K_s:
+            action = RetryAction(engine, player)
+
 
         elif key == tcod.event.K_z:
             self.debug = not self.debug
