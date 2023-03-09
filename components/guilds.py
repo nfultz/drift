@@ -24,7 +24,7 @@ class SmugglersGuild(Guild):
     label = "Smugglers"
     pass
 
-items = [EcologyGuild, RelicsGuild, ExplorationGuild, RestorationGuild, GliderGuild]
+items = [EcologyGuild(), RelicsGuild(), ExplorationGuild(), RestorationGuild(), GliderGuild()]
 
 def draw(card):
-    return items.pop(card.value % len(items))() if len(items) else None
+    return items.pop(card.value % len(items)) if len(items) else None

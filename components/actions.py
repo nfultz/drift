@@ -403,7 +403,7 @@ class VisitAction(Action):
         if not self.loc.can_visit:
             self.engine.msg("Not a settlement.")
             return False
-        return True
+        return check_ap(self.entity, self)
 
 class VisitEndAction(Action):
     def perform(self) -> None:
@@ -544,7 +544,7 @@ class SellRelic(VisitAction):
             self.engine.settlement_actions.pop(event.K_s, 0)
 
     def available(self) -> bool:
-        return self.entity.relic > 0 and self.card >= 6
+        return self.entity.relic > 0 and self.card.value >= 6
 
 
 class DonateRelic(VisitAction):
