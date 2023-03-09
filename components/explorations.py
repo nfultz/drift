@@ -16,7 +16,10 @@ def earn(entity, level=1, **kwargs):
         if k == 'credits':
             entity.credits += v*level
         if k == 'quest':
-            entity.quest += v*level
+            if entity.quest_guild is not None:
+                entity.quest += v*level
+            else:
+                kwargs.pop("quest")
         if k == 'water':
             entity.water = min(entity.water + v, entity.max_water)
         if k == 'fame':
