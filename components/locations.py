@@ -129,9 +129,11 @@ class Explorable(Location):
 
 class crashed_spaceship1(Explorable):
     desert = 4
+    encounter = explorations.captains_log
 
 class crashed_spaceship2(Explorable):
     desert = 4
+    encounter = explorations.engineers_log
 
 
 class oasis_settlement1(Settlement):
@@ -150,78 +152,98 @@ class merchant_outpost2(Settlement):
 
 class abandoned_harvester1(Explorable):
     desert = 3
+    encounter = explorations.spices_once_flowed
 
 class abandoned_harvester2(Explorable):
     desert = 3
+    encounter = explorations.gone_with_the_desert_winds
 
 
-class research_output1(Explorable):
+class research_outpost1(Explorable):
     desert = 3
+    encounter = explorations.researchers_score
 
-class research_output2(Explorable):
+class research_outpost2(Explorable):
     desert = 3
+    encounter = explorations.scientists_working
 
 
 class gorge1(NonTraversable):
     size = 3
     desert = 0
+    encounter = explorations.a_long_way_down
 
 class gorge2(NonTraversable):
     size = 3
     desert = 0
+    encounter = explorations.an_even_longer_way
 
 
 class vehicle_scrapyard1(Explorable):
     desert = 2
+    encounter = explorations.credits_unpaid
 
 class vehicle_scrapyard2(Explorable):
     desert = 2
+    encounter = explorations.glider_transports
 
 
 class cartogropher_lookout1(Explorable):
     desert = 3
+    encounter = explorations.a_friendly_keeper
 
 class cartogropher_lookout2(Explorable):
     desert = 3
+    encounter = explorations.a_long_and_quiet_view
 
 
 class sand_pit1(NonTraversable):
     desert = 3
+    encounter = explorations.that_sinking_feeling
 
 class sand_pit2(NonTraversable):
     desert = 3
+    encounter = explorations.down_the_drain
 
 
 class old_battlefield1(Explorable):
     size = 2
     desert = 2
+    encounter = explorations.battlefield_spoils
 
 class old_battlefield2(Explorable):
     size = 2
     desert = 2
+    encounter = explorations.buried_memories
 
 
 class forgotten_guild_hall1(Unique):
     desert = 5
+    encounter = explorations.untouched_relics_of_the_past
 
 class forgotten_guild_hall2(Unique):
     desert = 5
+    encounter = explorations.abandoned_and_worn_to_time
 
 
 class ecological_stations1(Unique):
     size = 3
     desert = 0
+    encounter = explorations.operation_restore_eridoor
 
 class ecological_stations2(Unique):
     size = 3
     desert = 0
+    encounter = explorations.tour_the_facility
 
 
 class chrome_dome1(Unique):
     desert = 2
+    encounter = explorations.cracked_shell
 
 class chrome_dome2(Unique):
     desert = 2
+    encounter = explorations.encrypted_security
 
 
 #
@@ -229,10 +251,12 @@ class chrome_dome2(Unique):
 class giant_snake_skeleton1(Explorable):
     size = 2
     desert = 6
+    encounter = explorations.jaws_of_razors
 
 class giant_snake_skeleton2(Explorable):
     size = 2
     desert = 6
+    encounter = explorations.belly_of_the_beast
 
 
 class moisture_farm1(Settlement):
@@ -251,76 +275,96 @@ class trader_settlement2(Settlement):
 
 class weather_tower1(Explorable):
     desert = 6
+    encounter = explorations.recording_weather_data
 
 class weather_tower2(Explorable):
     desert = 6
+    encounter = explorations.damaged_relay
 
 
 class mining_shaft1(Explorable):
     desert = 1
+    encounter = explorations.miners_bounty
 
 class mining_shaft2(Explorable):
     desert = 1
+    encounter = explorations.credit_payment_machine
 
 
 class rock_cliffs1(NonTraversable):
     size = 4
     desert = 2
+    encounter = explorations.sanded_down_over_time
 
 class rock_cliffs2(NonTraversable):
     size = 4
     desert = 2
+    encounter = explorations.never_ending_height
 
 
 class sunken_outpost1(Explorable):
     desert = 1
+    encounter = explorations.tip_of_the_sunken_tower
 
 class sunken_outpost2(Explorable):
     desert = 1
+    encounter = explorations.safe_haven
 
 
 class settlement_ruins1(Explorable):
     size = 2
     desert = 4
+    encounter = explorations.scattered_ruins
 
 class settlement_ruins2(Explorable):
     size = 2
     desert = 4
+    encounter = explorations.barely_standing_structures
 
 
 class impact_crater1(NonTraversable):
     desert = 0
+    encounter = explorations.a_big_hole
 
 class impact_crater2(NonTraversable):
     desert = 0
+    encounter = explorations.an_even_bigger_hole
 
 
 class glider_station1(Explorable):
     desert = 4
+    encounter = explorations.bottom_of_the_tank
 
 class glider_station2(Explorable):
     desert = 4
+    encounter = explorations.glider_mods_galore
 
 
 class escape_pods1(Unique):
     desert = 2
+    encounter = explorations.empty_escape_pods
 
 class escape_pods2(Unique):
     desert = 2
+    encounter = explorations.sealed_for_your_protection
 
 
 class crumbling_factory1(Unique):
     desert = 6
+    encounter = explorations.warehouse_wonders
 
 class crumbling_factory2(Unique):
     desert = 6
+    encounter = explorations.rusted_robotics_workshop
 
 
 class desert_lighthouse1(Unique):
     desert = 8
+    encounter = explorations.guiding_light_keeper
 
 class desert_lighthouse2(Unique):
     desert = 8
+    encounter = explorations.lost_ways
 
 
 
@@ -329,10 +373,12 @@ class desert_lighthouse2(Unique):
 class onyx_pillars(Unique):
     desert = 4
     xp = 3
+    encounter = explorations.the_heart_of_eridoor
 
 class floating_obelisk(Unique) :
     desert = 3
     xp = 3
+    encounter = explorations.the_sound_of_eridoor
 
 
 
@@ -343,7 +389,7 @@ REVEAL_DECK = {
   '2C': oasis_settlement1,
   '3C': merchant_outpost1,
   '4C': abandoned_harvester1,
-  '5C': research_output1,
+  '5C': research_outpost1,
   '6C': gorge1,
   '7C': vehicle_scrapyard1,
   '8C': cartogropher_lookout1,
@@ -371,7 +417,7 @@ REVEAL_DECK = {
   '2S': oasis_settlement2,
   '3S': merchant_outpost2,
   '4S': abandoned_harvester2,
-  '5S': research_output2,
+  '5S': research_outpost2,
   '6S': gorge2,
   '7S': vehicle_scrapyard2,
   '8S': cartogropher_lookout2,

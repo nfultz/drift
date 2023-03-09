@@ -68,7 +68,6 @@ def buried_storage_crates(loc, entity, deck):
     return earn(entity, level, credits=10, quest=1, cargo=2)
 
 def hidden_landing_pad(loc, entity, deck):
-    entity.cargo += 2
     return earn(entity, cargo=2)
     #TODO choose
 
@@ -444,7 +443,7 @@ def tour_the_facility(loc,entity,deck):
     #water stat any stat #TODO
     pass
 
-def an_old_convoy(loc,entity,deck):
+def credits_unpaid(loc,entity,deck):
     i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
     if i > 0 : return i
     return earn(entity, credits=60,quest=1 )
