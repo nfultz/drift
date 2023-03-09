@@ -7,6 +7,9 @@ def skill_check(level, stat, deck):
 
 def earn(entity, level=1, **kwargs):
     for k,v in list(kwargs.items()): #NB: need list() bc of quest.pop below
+        if v == 0:
+            kwargs.pop(k)
+            continue
         if k == 'stamina':
             entity.stamina = min(entity.stamina + v, entity.max_stamina)
         if k == 'cargo':
