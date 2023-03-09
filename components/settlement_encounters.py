@@ -304,7 +304,7 @@ def drifter(engine, entity):
 
     class optiona(visitaction):
         flavor = "Hire Host, a seeker"
-        def perform(self)
+        def perform(self):
             companion = companion.Host()
             self.engine.msg(f"{companion} joins you")
             companion.join(e)
@@ -318,7 +318,7 @@ def drifter(engine, entity):
 
     class optionb(visitaction):
         flavor = "Hire Kale, a mystic"
-        def perform(self)
+        def perform(self):
             companion = companion.Mystic()
             self.engine.msg(f"{self.companion} joins you")
             companion.join(e)
@@ -345,13 +345,20 @@ def scouts(engine, entity):
     engine.msg("Sand scouts selling information")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+1 Max Stamina (100 credits)"
-        def perform(self)
+        FLAVOR = "reveal(20 credits)"
+        limit = 2
+        def perform(self):
+            if self.entity.credits >= 20:
+                self.entity.credits -= 20
+                self.limit -= 1
+                #TODO reveal
             pass
+        def available(self):
+            return self.limit >= 0
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "+1 H (100 credits)"
-        def perform(self)
+        def perform(self):
             pass
 
     oa = optionA(engine, entity)
@@ -366,14 +373,21 @@ def scrap_dealers(engine, entity):
     engine.msg("Scrap dealers offering good deals for those interested.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
+        FLAVOR = "2 cargo (5 credits)"
+        def perform(self):
+            if self.entity.credits >= 5:
+                self.entity.credits -= 5
+                self.entity.cargo += 2
             pass
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "quest item"
-        def perform(self)
-            pass
+        def perform(self):
+            if self.entity.credits >= 10:
+                self.entity.credits -= 10
+                self.entity.quest += 1
+        def available(self):
+            return self.entity.quest_guild is not None
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -386,19 +400,15 @@ def bounty_hunters(engine, entity):
     engine.msg("Bounty hunters looking for intel.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
-
-    class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
+        FLAVOR = "Sell intel."
+        def perform(self):
+            self.entity.credits += amt
+            self.engine.settlement_actions.pop(event.K_6, None)
             pass
 
     oa = optionA(engine, entity)
-    ob = optionB(engine, entity)
 
-    return [oa, ob]
+    return [oa]
 
 def raided(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
@@ -408,19 +418,49 @@ def raided(engine, entity):
     engine.msg("Water has been raided, and people are paying for any you can spare.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
+        FLAVOR = "Sell 1 water"
+        def perform(self):
+            if self.entity.water >= 1:
+                self.entity.water -= 1
+                self.entity.credits += 30
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
+                self.engine.settlement_actions.pop(event.K_8, None)
             pass
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
+        FLAVOR = "Sell 2 water"
+        def perform(self):
+            if self.entity.water >= 1:
+                self.entity.water -= 1
+                self.entity.credits += 30
+                self.entity.quest += 1
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
+                self.engine.settlement_actions.pop(event.K_8, None)
             pass
+        def available(self):
+            return self.entity.quest_guild is not None
+
+    class optionC(SettlementEncounterResultAction):
+        FLAVOR = "Sell 3 water"
+        def perform(self):
+            if self.entity.water >= 3:
+                self.entity.water -= 3
+                self.entity.credits += 50
+                self.entity.quest += 2
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
+                self.engine.settlement_actions.pop(event.K_8, None)
+            pass
+        def available(self):
+            return self.entity.quest_guild is not None
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
+    oc = optionC(engine, entity)
 
-    return [oa, ob]
+    return [oa, ob, oc]
 
 def food_vendor(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
@@ -428,13 +468,21 @@ def food_vendor(engine, entity):
     engine.msg("A food vendor, cooking up something mouthwatering.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
-
+        FLAVOR = "+1 to h"
+        def perform(self):
+            if self.entity.credits >= 25
+                self.entity.credits -= 25
+                self.entity.h += 1 #TODO choose
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "quest item"
-        def perform(self)
+        def perform(self):
+            if self.entity.credits >= 10
+                self.entity.credits -= 10
+                self.entity.stamina = self.entity.max_stamina + 2
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
             pass
 
     oa = optionA(engine, entity)
@@ -450,13 +498,15 @@ def trader_used(engine, entity):
     engine.msg("a trader selling a large collection of 'gently' used equipment")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
+        FLAVOR = "1 Equipment (100)"
+        def perform(self):
+            #TODO
             pass
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
+        FLAVOR = "2 Equipment (150)"
+        def perform(self):
+            #TODO
             pass
 
     oa = optionA(engine, entity)
@@ -468,19 +518,48 @@ def tea(engine, entity):
     engine.msg("enjoy a quiet cup of tea.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
+        FLAVOR = "h"
+        def perform(self):
+            self.entity.h += 1
+            self.engine.settlement_actions.pop(event.K_6, None)
+            self.engine.settlement_actions.pop(event.K_7, None)
+            self.engine.settlement_actions.pop(event.K_8, None)
+            self.engine.settlement_actions.pop(event.K_9, None)
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
-            pass
+        FLAVOR = "k"
+        def perform(self):
+            self.entity.k += 1
+            self.engine.settlement_actions.pop(event.K_6, None)
+            self.engine.settlement_actions.pop(event.K_7, None)
+            self.engine.settlement_actions.pop(event.K_8, None)
+            self.engine.settlement_actions.pop(event.K_9, None)
+
+    class optionC(SettlementEncounterResultAction):
+        FLAVOR = "r"
+        def perform(self):
+            self.entity.r += 1
+            self.engine.settlement_actions.pop(event.K_6, None)
+            self.engine.settlement_actions.pop(event.K_7, None)
+            self.engine.settlement_actions.pop(event.K_8, None)
+            self.engine.settlement_actions.pop(event.K_9, None)
+
+    class optionD(SettlementEncounterResultAction):
+        FLAVOR = "max stamina"
+        def perform(self):
+            self.entity.max_stamina += 1
+            self.engine.settlement_actions.pop(event.K_6, None)
+            self.engine.settlement_actions.pop(event.K_7, None)
+            self.engine.settlement_actions.pop(event.K_8, None)
+            self.engine.settlement_actions.pop(event.K_9, None)
+
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
+    oc = optionC(engine, entity)
+    od = optionD(engine, entity)
 
-    return [oa, ob]
+    return [oa, ob, oc, od]
 
 def red_mercs(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
@@ -488,22 +567,16 @@ def red_mercs(engine, entity):
     if i > 0 : return None
 
     engine.msg("Mercenaries offering Credits for job leads.")
-    engine.msg("enjoy a quiet cup of tea.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
-
-    class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
+        FLAVOR = "Sell intel."
+        def perform(self):
+            #TODO
             pass
 
     oa = optionA(engine, entity)
-    ob = optionB(engine, entity)
 
-    return [oa, ob]
+    return [oa]
 
 def smugglers(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
@@ -513,14 +586,18 @@ def smugglers(engine, entity):
     engine.msg("Smugglers looking to purchase relics and scrap at a good price.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
+        FLAVOR = "Sell a relic (70 credits)"
+        def perform(self):
+            if self.entity.relic >= 1:
+                self.entity.relic -=1
+                self.entity.credits +=70
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
-            pass
+        FLAVOR = "Sell 2 cargo (20)"
+        def perform(self):
+            if self.entity.cargo >= 2:
+                self.entity.relic -=2
+                self.entity.credits +=20
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -529,34 +606,32 @@ def smugglers(engine, entity):
 
 def festival(engine, entity):
     engine.msg("The Festival of Merchants is happening. Time to kick back and enjoy the celebration.")
+    self.entity.water = self.entity.max_water
+    self.entity.stamina = self.entity.max_stamina + 3 #Temp!
+    #TODO weather?
 
-    class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
-
-    class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
-            pass
-
-    oa = optionA(engine, entity)
-    ob = optionB(engine, entity)
-
-    return [oa, ob]
+    return None
 
 def glider_race_mechanic(engine, entity):
     engine.msg("A glider race mechanic offers to increase your speed or fuel capacity.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
+        FLAVOR = "+1 Speed (65)"
+        def perform(self):
+            if self.entity.credits >= 65:
+                self.entity.relic -=65
+                self.entity.speed += 1
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
-            pass
+        FLAVOR = "+1 max fuel (65)"
+        def perform(self):
+            if self.entity.credits >= 65:
+                self.entity.relic -=65
+                self.entity.max_fuel += 1
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -567,14 +642,27 @@ def spike(engine, entity):
     engine.msg("The legendary smuggler is here, of all places.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+2 cargo (80 credits)"
-        def perform(self)
-            pass
+        FLAVOR = "Sell a relic (200 credits)"
+        def perform(self):
+            if self.entity.relic >= 1:
+                self.entity.relic -=1
+                self.entity.credits +=200
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
-        def perform(self)
-            pass
+        FLAVOR = "Buy quest item (10)"
+        def perform(self):
+            if self.entity.credits >= 10:
+                self.entity.credits -= 10
+                self.entity.quest += 1
+        def available(self):
+            return self.entity.quest_guild is not None
+
+    class optionC(SettlementEncounterResultAction):
+        FLAVOR = "Equipment (100)"
+        def perform(self):
+            #TODO
+            self.engine.settlement_actions.pop(event.K_8, None)
+
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
