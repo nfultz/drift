@@ -44,13 +44,13 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         if player.in_town:
             return self.ev_keydown_town(event);
 
-        if key == tcod.event.K_UP:
+        if key == tcod.event.K_UP or key == tcod.event.K_k:
             action = MovementAction(engine, player, dx=0, dy=-1)
-        elif key == tcod.event.K_DOWN:
+        elif key == tcod.event.K_DOWN or key == tcod.event.K_j:
             action = MovementAction(engine, player, dx=0, dy=1)
-        elif key == tcod.event.K_LEFT:
+        elif key == tcod.event.K_LEFT or key == tcod.event.K_h:
             action = MovementAction(engine, player, dx=-1, dy=0)
-        elif key == tcod.event.K_RIGHT:
+        elif key == tcod.event.K_RIGHT or key == tcod.event.K_l:
             action = MovementAction(engine, player, dx=1, dy=0)
 
         elif key == tcod.event.K_r:
