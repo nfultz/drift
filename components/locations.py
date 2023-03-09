@@ -82,6 +82,9 @@ class Unique(Location):
     def explore(self, entity):
         return self.encounter
 
+class GuildUnique(Location):
+    pass
+
 class Settlement(Location):
     level = 2
     xp = 3
