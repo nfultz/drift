@@ -14,9 +14,16 @@ class Companion():
         return f"{self.name} ({self.title})"
 
     def join(self, entity):
-        pass
+        entity.companions.add(self)
+        self._join(entity)
 
     def leave(self, entity):
+        entity.companions.remove(self)
+        self._leave(entity)
+
+    def _leave(self, entity):
+        pass
+    def _join(self, entity):
         pass
 
 class Scoundrel(Companion):

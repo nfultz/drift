@@ -211,6 +211,7 @@ class PassAction(Action):
 
 class RevealAction(Action):
     COST = 1
+    radius = 1
 
     def perform(self) -> None:
         loc = locations.draw(self.engine.deck, self.dest_x, self.dest_y)
@@ -260,7 +261,7 @@ class RevealAction(Action):
 
         map = self.engine.game_map
 
-        r = 2 if hasattr(self.entity, "WAYFINDING") else 1
+        r = self.radius + 1 if hasattr(self.entity, "WAYFINDING") else self.radius
 
         self.dest_x,self.dest_y = map.nearest_empty(x,y,r)
 
@@ -607,15 +608,12 @@ class FindCompanionAction(VisitAction):
             leaving = next(iter(e.companions))
             self.engine.msg(f"{leaving.name} leaves")
             self.loc.companion = leaving
-            self.companions.remove(leaving)
             leaving.leave(e)
         else:
             self.loc.companion = None
 
         self.engine.msg(f"{self.companion} joins you")
-        e.companions.add(self.companion)
-        self.companions(e)
-        self.companions.join(e)
+        self.companion.join(e)
 
     def available(self) -> bool:
         return self.loc.companion is not None
