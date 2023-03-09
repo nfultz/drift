@@ -63,7 +63,11 @@ class Engine:
         stamina = 's'*p.stamina + '-'*(p.max_stamina - p.stamina)
         water = 'w'*p.water + '-'*(p.max_water - p.water)
 
-        return f"{fuel} {stamina} {water} / AP: {p.ap}"
+        relic = 'R'*p.relic + '-'*(p.max_relic - p.relic)
+        cargo = 'C'*p.cargo + '-'*(p.max_cargo - p.cargo)
+        quest = 'Q'*p.quest
+
+        return f"{fuel} {stamina} {water} | {cargo} {relic} {quest} | AP: {p.ap}"
 
 
     def render(self, console: Console, context: Context) -> None:
