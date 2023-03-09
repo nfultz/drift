@@ -279,7 +279,6 @@ class ExploreAction(Action):
 
 
     def perform(self) -> None:
-#        breakpoint()
         encounter = self.loc.explore(self.entity)
         label = encounter.__name__.replace("_", " ").title()
         self.engine.msg(f"Exploring, found a {label}")
@@ -290,7 +289,6 @@ class ExploreAction(Action):
             self.loc.xp -= 1
             self.loc.tile = self.loc.tile.copy()
             self.loc.tile["dark"]["ch"] = ord(" ")
-            breakpoint()
         else :
             self.engine.msg(f"Failed by {self.result}")
 
@@ -449,7 +447,6 @@ class FuelMerchant(VisitAction):
     def available(self) -> bool:
         return self.entity.credits >= self.price and self.entity.fuel < self.entity.max_fuel
 
-#TODO
 class ShoppingAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, item, key, loc):
         super().__init__(engine, entity)
@@ -481,7 +478,6 @@ class GuildAction(VisitAction):
     def available(self) -> bool:
         return self.loc.guild is not None
 
-#TODO
 class SellScrap(VisitAction):
     def __init__(self, engine: Engine, entity: Entity):
         super().__init__(engine, entity)
@@ -498,6 +494,7 @@ class SellScrap(VisitAction):
             self.price = 60
         elif self.card.value >= 6:
             self.price = 40
+        self.FLAVOR = f"Sell {entity.cargo} cargo at {self.price} each"
 
     def perform(self) -> None:
         self.amount = self.entity.cargo
@@ -533,6 +530,9 @@ class SellRelic(VisitAction):
             self.limit = 2
             self.price = 40
 
+        self.amount = min(self.limit, self.entity.relic)
+        self.FLAVOR = f"Sell {self.amount} relics at {self.price} each"
+
     def perform(self) -> None:
         self.amount = min(self.limit, self.entity.relic)
         self.entity.credits += self.amount * self.price
@@ -548,6 +548,7 @@ class SellRelic(VisitAction):
 
 
 class DonateRelic(VisitAction):
+    FLAVOR = "Donate relics for preservation."
     def perform(self) -> None:
         r = min(self.entity.relic, 2)
         self.entity.relic -= r
@@ -561,6 +562,7 @@ class DonateRelic(VisitAction):
         return self.entity.relic > 0
 
 class RebuildAction(VisitAction):
+    FLAVOR = "Rebuild the town. (2 cargo and 50 credits)"
     def perform(self) -> None:
         self.engine.msg("You contribute cargo and cash to the restoration cause.")
         self.entity.cargo -= 2
@@ -573,6 +575,7 @@ class RebuildAction(VisitAction):
         return self.entity.restoration != 99 and (self.entity.cargo >= 2 or self.entity.credits >= 50)
 
 class HideAction(VisitAction):
+    FLAVOR = "Conceal your true identity. (2 relics or 150 credits)"
     def perform(self) -> None:
         if self.entity.relic >= 2:
             self.engine.msg("You stash two relics.")
@@ -597,7 +600,7 @@ class FindCompanionAction(VisitAction):
         self.FLAVOR = f"Hire {self.companion.name}, a {self.companion.title} for {self.companion.cost} credits."
     def perform(self) -> None:
         e = self.entity
-        if e.credits < self.item.cost:
+        if e.credits < self.companion.cost:
             self.engine.msg("Not enough credits")
             return None
         if e.fame < len(e.companions) * e.fame_per_companion:
