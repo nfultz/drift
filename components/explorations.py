@@ -343,6 +343,7 @@ def jaws_of_razors(loc, entity, deck):
     if i > 0 : return i
     return earn(entity, relic=1, quest=2)
 
+@staticmethod
 def belly_of_the_beast(loc, entity, deck):
     i = skill_check(loc.level, entity.skill_test_n("hkr"), deck)
     if i > 0 : return i

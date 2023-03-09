@@ -288,6 +288,9 @@ class ExploreAction(Action):
         if self.success:
             self.engine.msg(f"Success! Recieved {self.result}")
             self.loc.xp -= 1
+            self.loc.tile = self.loc.tile.copy()
+            self.loc.tile["dark"]["ch"] = ord(" ")
+            breakpoint()
         else :
             self.engine.msg(f"Failed by {self.result}")
 
@@ -336,6 +339,8 @@ class RetryAction(Action):
         if self.success:
             self.engine.msg(f"Success! Recieved {result}")
             self.loc.xp -= 1
+            self.loc.tile = self.loc.tile.copy()
+            self.loc.tile["dark"]["ch"] = ord(" ")
         else :
             self.engine.msg(f"Failed by {result}")
 

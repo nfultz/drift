@@ -38,7 +38,7 @@ error = new_tile(
     walkable=False, transparent=True, dark=(ord(" "), (255, 255, 255), (255, 0, 0)),
 )
 nontraversable = new_tile(
-    walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (110, 110, 30)),
+    walkable=True, transparent=True, dark=(ord("."), (255, 255, 255), (110, 110, 30)),
 )
 desert = new_tile(
     walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (150, 150, 50)),
@@ -50,7 +50,7 @@ settlement = new_tile(
     walkable=True, transparent=True, dark=(ord("s"), (255, 255, 255), (50, 50, 150)),
 )
 explorable = new_tile(
-    walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (180, 70, 180)),
+    walkable=True, transparent=True, dark=(ord("."), (255, 255, 255), (180, 70, 180)),
 )
 
 
