@@ -20,10 +20,11 @@ class GliderGuild(Guild):
     label = "Guild of the Glider"
     pass
 class SmugglersGuild(Guild):
+    #TODO
     label = "Smugglers"
     pass
 
-items = [EcologyGuild, RelicsGuild, ExplorationGuild, RestorationGuild, GliderGuild, SmugglersGuild]
+items = [EcologyGuild, RelicsGuild, ExplorationGuild, RestorationGuild, GliderGuild]
 
 def draw(card):
     return items.pop(card.value % len(items))() if len(items) else None
