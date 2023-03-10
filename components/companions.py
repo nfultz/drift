@@ -121,11 +121,9 @@ class Cartographer(Companion):
 
     def _leave(self, entity):
         entity.SAFFRON_BONUS = 0
-        pass
 
     def _join(self, entity):
         entity.SAFFRON_BONUS = 1
-        pass
         #TODO: draw 2 explore
 
 
@@ -144,8 +142,7 @@ class HouseAgent(Companion):
         entity.max_stamina = max(entity.max_stamina - 3, 1)
         entity.r += 1
         entity.MARJORIE_BONUS = 1
-        # TODO draw 2
-        # TODO pick 2
+        # TODO pick 2 (remainders)
 
 class Mystic(Companion):
     cost = 0
