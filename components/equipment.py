@@ -37,7 +37,7 @@ def f(entity):
 #TODO
 @_equip("Heat Regulator", 80)
 def f(entity):
-    pass
+    entity.HEAT_REGULATOR = 1
 
 @_equip("Medical Pack", 90)
 def medical_pack(entity):

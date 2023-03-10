@@ -161,7 +161,7 @@ class Engine:
                     else:
                         e.ai()
 
-                    if self.WEATHER_EXREME_HEAT == 1:
+                    if self.WEATHER_EXREME_HEAT == 1 and not hasattr(e, "HEAT_REGULATOR"):
                         e.stamina = max(0, e.stamina - 1)
 
                 if e.background:
