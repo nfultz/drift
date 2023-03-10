@@ -26,7 +26,7 @@ def desert_campsite_toolkit(entity):
 
 
 @_equip("Weather Monitor", 60)
-def f(entity):
+def weather_monitor(entity):
     entity.WEATHER_MONITOR = 1
 
 #TODO
@@ -36,16 +36,18 @@ def f(entity):
 
 #TODO
 @_equip("Heat Regulator", 80)
-def f(entity):
+def heat_regulator(entity):
     entity.HEAT_REGULATOR = 1
 
 @_equip("Medical Pack", 90)
 def medical_pack(entity):
-    entry.MEDICAL_PACK = 1
+    entity.MEDICAL_PACK = 1
 
 #TODO
 @_equip("Air Purifier Mask", 95)
-def f(entity):
+def air_purifier(entity):
+    entity.AIR_PURIFIER = 1
+
     pass
 
 @_equip("Improved Hot Weather Clothing", 100)
@@ -54,7 +56,7 @@ def hot_weather_clothes(entity):
 
 @_equip("Wayfinding Binoculars", 130)
 def wayfinding_binoculars(entity):
-    entry.WAYFINDING = 1
+    entity.WAYFINDING = 1
 
 @_equip("Data Decryption Algo", 140)
 def data_decrypt(entity):
