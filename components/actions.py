@@ -526,6 +526,11 @@ class SellScrap(VisitAction):
         self.card = engine.deck.top
         self.price = 5
 
+        if hasattr(entity, 'HAGGLER'):
+            card2 = engine.deck.bottom
+            if card2.value > self.card.value:
+                self.card = card2
+
         if self.card.rank == 'W':
             self.price = 30
         elif self.card.rank == 'K':
@@ -539,6 +544,7 @@ class SellScrap(VisitAction):
 
         self.price += getattr(entity, "CREDIT_DUPLICATOR", 0)
         self.price += getattr(entity, "JAX_BONUS", 0)
+        self.price += getattr(entity, "HARD_BARGAIN", 0)
 
         self.FLAVOR = f"Sell {entity.cargo} cargo at {self.price} each"
 

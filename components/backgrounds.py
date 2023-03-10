@@ -41,7 +41,7 @@ class Merchant(Background):
         super().__init__(2,3,1)
 
     def bonus(self, player):
-        player.HAGGLER = 1 #TODO
+        player.HAGGLER = 1
 
     from .actions import SellScrap
     def goal(self, player):
@@ -54,7 +54,7 @@ class Merchant(Background):
         return False
 
     def reward(self, player):
-        player.HARD_BARGIN = 5 #TODO
+        player.HARD_BARGIN = 5
 
 class Explorer(Background):
     def __init__(self):
