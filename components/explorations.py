@@ -13,6 +13,12 @@ def earn(entity, level=1, **kwargs):
         if k == 'stamina':
             entity.stamina = min(entity.stamina + v, entity.max_stamina)
         if k == 'cargo':
+            if entity.cargo >= entity.max_cargo:
+                if hasattr(entity, "ENV_SCANNER") and entity.quest_guild is not None:
+                    entity.quest += 1
+                    kwargs.pop('cargo')
+                    kwargs['quest'] = kwargs.get('quest', 0) + 1
+                continue
             entity.cargo = min(entity.cargo + v*level getattr(entity, "SCRAP_DETECTOR", 0), entity.max_cargo)
         if k == 'relic':
             entity.relic = min(entity.relic + v, entity.max_relic)

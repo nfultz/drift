@@ -66,9 +66,8 @@ def drummer(entity):
 def grapple(entity):
     entity.h += 1
 
-#TODO
 @_equip("Scrap Detection Unit", 160)
-def f(entity):
+def scrap_detector(entity):
     entity.SCRAP_DETECTOR = 1
     pass
 
@@ -76,10 +75,9 @@ def f(entity):
 def pathfinder_toosl(entity):
     entity.PATHFINDER_TOOLS = 1
 
-#TODO
 @_equip("Environment Scanner Unit", 180)
-def f(entity):
-    pass
+def environment_scanner(entity):
+    entity.ENV_SCANNER = 1
 
 @_equip("Information Visor", 200)
 def info_visor(entity):
