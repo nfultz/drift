@@ -212,20 +212,18 @@ def work_trader(engine, entity):
     return [oa]
 
 @_add("7C", "7S")
-def guild_merchants(engine, entity):
+def guild_merchants(engine, entity): #TODO
     engine.msg("Guild merchants selling high quality equipment surpluses.")
 
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "150"
         def perform(self):
             pass
-        #TODO
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "300"
         def perform(self):
             pass
-        #TODO
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -563,7 +561,7 @@ def food_vendor(engine, entity):
     return [oa, ob]
 
 @_add("6D", "6H")
-def trader_used(engine, entity):
+def trader_used(engine, entity): #TODO
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc, entity, "kr", deck)
     if i > 0 : return None
@@ -573,13 +571,11 @@ def trader_used(engine, entity):
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "1 Equipment (100)"
         def perform(self):
-            #TODO
             pass
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "2 Equipment (150)"
         def perform(self):
-            #TODO
             pass
 
     oa = optionA(engine, entity)
@@ -655,9 +651,8 @@ def red_mercs(engine, entity):
     engine.msg("Mercenaries offering Credits for job leads.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "Sell intel."
+        FLAVOR = "Sell intel." #TODO
         def perform(self):
-            #TODO
             pass
 
     oa = optionA(engine, entity)
@@ -756,9 +751,8 @@ def spike(engine, entity):
             return self.entity.quest_guild is not None
 
     class optionC(SettlementEncounterResultAction):
-        FLAVOR = "Equipment (100)"
+        FLAVOR = "Equipment (100)" #TODO
         def perform(self):
-            #TODO
             self.engine.settlement_actions.pop(event.K_8, None)
 
 

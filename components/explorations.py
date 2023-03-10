@@ -6,7 +6,7 @@ def skill_check(loc, entity, skill, deck, level=None):
 
     bonus = {'h':0, 'k':0, 'r':0}
 
-    # TODO
+    # TODO LONG-RANGE_COMS
     # for e in engine.entities:
     #     if e is entity: continue
     #     if hasattr(e, "LONG_RANGE_COMS"):
@@ -161,8 +161,7 @@ def dried_well_and_ladder(loc, entity, deck):
     if i > 0 : return i
     return earn(entity, relic=1, credits=10)
 
-def lone_trader(loc, entity, deck):
-    #TODO
+def lone_trader(loc, entity, deck): #TODO
     return 0
 
 def suspicious_small_wind_traps(loc, entity, deck):
@@ -336,8 +335,7 @@ def rusted_robotics_workshop(loc, entity, deck):
     return earn(entity, cargo=1, quest=1, relics=2 if j == 0 else 0)
 
 @staticmethod
-def guiding_light_keeper(loc, entity, deck):
-    #TODO
+def guiding_light_keeper(loc, entity, deck): #TODO
     i = skill_check(loc, entity, "hkr", deck)
     if i > 0 : return i
     j = skill_check(loc, entity, "k", deck)
@@ -364,14 +362,12 @@ def sealed_for_your_protection(loc, entity, deck):
     return earn(entity, relic=2, cargo=1, credits=100)
 
 @staticmethod
-def the_sound_of_eridoor(loc, entity, deck):
-    #todo
+def the_sound_of_eridoor(loc, entity, deck): #TODO
     if i > 0 : return i
     return earn(entity, relic=2, cargo=1, credits=100)
 
 @staticmethod
-def the_light_of_eridoor(loc, entity, deck):
-    #todo
+def the_light_of_eridoor(loc, entity, deck): #TODO
     if i > 0 : return i
     return earn(entity, relic=2, cargo=1, credits=100)
 

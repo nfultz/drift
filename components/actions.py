@@ -507,7 +507,7 @@ class ShoppingAction(VisitAction):
     def available(self) -> bool:
         return True
 
-#TODO
+#TODO guild actions
 class GuildAction(VisitAction):
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
@@ -681,7 +681,6 @@ class FindCompanionAction(VisitAction):
         if self.entity.fame_per_companion == 99: return FAlse
         return self.loc.companion is not None or len(self.entity.companions) > 0
 
-#TODO
 class SettlementExploreAction(ExploreAction):
     FLAVOR = "Explore the settlement"
     def perform(self):
