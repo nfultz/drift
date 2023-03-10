@@ -109,7 +109,6 @@ def thermal_underwear(entity):
 
 ### Glider Upgrades
 
-#TODO
 @_equip("Optical Navigation Lenses", 80,True)
 def optical_lenses(entity):
     entity.OPTICAL_LENSES = 1
@@ -134,24 +133,23 @@ def fuel_drip(entity):
     entity.max_fuel += 2
     entity.speed += 1
 
-#TODO
 @_equip("Long Range Communications", 200,True)
-def f(entity):
-    pass
+def long_range_communication(entity):
+    entity.LONG_RANGE_COMS = 1
 
-#TODO
 @_equip("Scavenger Arm", 260,True)
-def f(entity):
+def scavenger_arm(entity):
+    entity.SCAVENGER_ARM = 1
     pass
 
-#TODO
 @_equip("Onboard Scanner", 260,True)
-def f(entity):
+def onboard_scanner(entity):
+    entity.ONBOARD_SCANNER = 1
     pass
 
-#TODO
 @_equip("Hacking Module", 260,True)
-def f(entity):
+def hacking_module(entity):
+    entity.HACKING_MODULE = 1
     pass
 
 @_equip("Portable Repair Kit", 300,True)

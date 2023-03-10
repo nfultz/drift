@@ -90,10 +90,10 @@ class Entity:
         self.x += dx
         self.y += dy
 
-    def skill_test_n(self, skills="hkr"):
+    def skill_test_n(self, skills="hkr", bonus={}):
         n = 0
         for c in skills:
-            n = max(n, getattr(self, c, 0))
+            n = max(n, getattr(self, c, 0) + bonus.get(c, 0))
         return n
 
     def win_condition(self):

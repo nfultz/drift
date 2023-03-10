@@ -1,6 +1,26 @@
 def skill_check(loc, entity, skill, deck, level=None):
+
+    from .locations import Desert
+
     level = level or loc.level
-    stat = entity.skill_test_n(skill)
+
+    bonus = {'h':0, 'k':0, 'r':0}
+
+    # TODO
+    # for e in engine.entities:
+    #     if e is entity: continue
+    #     if hasattr(e, "LONG_RANGE_COMS"):
+    #         bonus['h'] += 1
+    #         bonus['k'] += 1
+    #         bonus['r'] += 1
+
+    if isinstance(loc, Desert):
+        if hasattr(entity, "SCAVENGER_ARM"):   bonus["h"] += 1
+        if hasattr(entity, "ONBOARD_SCANNER"): bonus["r"] += 1
+        if hasattr(entity, "HACKING_MODULE"):  bonus["k"] += 1
+
+
+    stat = entity.skill_test_n(skill, bonus)
     stat = {1:2, 2:4, 3:7, 4:9, 5:11, 6:14}[stat]
 
     retry = getattr(entity, "EXPLORER_SLING", 0)
