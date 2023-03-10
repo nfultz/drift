@@ -29,7 +29,8 @@ def main(args) -> None:
 
     if not len(args):
         args.append("n/a")
-    bg = getattr(backgrounds, args[0], backgrounds.Background)()
+    bg = getattr(backgrounds, args[0], None)
+    if bg: bg = bg()
 
     player = Entity(0, 0, "@", (255, 255, 255),
             name=getpass.getuser(), background=bg)

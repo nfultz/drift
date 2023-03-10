@@ -4,6 +4,8 @@ from .actions import Action, VisitAction, RevealAction
 
 from  . import locations
 
+from tcod import event # :(event
+
 class SettlementEncounterResultAction(Action):
     pass
 
@@ -353,7 +355,7 @@ def cartographer(engine, entity):
             if self.limit == 0:
                 self.engine.settlement_actions.pop(event.K_6, None)
 
-    return [optiona()]
+    return [optiona(engine, entity)]
 
 @_add("WC", "WS")
 def drifter(engine, entity):
@@ -690,10 +692,12 @@ def smugglers(engine, entity):
 
 @_add("0D", "0H")
 def festival(engine, entity):
-    engine.msg("The Festival of Merchants is happening. Time to kick back and enjoy the celebration.")
+    engine.msg("The Festival of Merchants is happening.")
+    engine.msg("Time to kick back and enjoy the celebration.")
     entity.water = entity.max_water
     entity.stamina = entity.max_stamina + 3 #Temp!
-    #TODO weather?
+    from . import weather
+    weather.reset(engine)
 
     return None
 

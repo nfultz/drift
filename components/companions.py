@@ -35,7 +35,7 @@ class Scoundrel(Companion):
     title = 'Scoundrel'
     def _leave(self, entity):
         entity.r -=1
-        entity.JAX_BONUS = 0
+        del entity.JAX_BONUS
 
     def _join(self, entity):
         entity.r +=1
@@ -48,7 +48,7 @@ class Doctor(Companion):
 
     def _leave(self, entity):
         entity.k -=1
-        entity.EFRA_BONUS = 0
+        del entity.EFRA_BONUS
 
     def _join(self, entity):
         entity.k +=1
@@ -62,7 +62,7 @@ class Mercenary(Companion):
     def _leave(self, entity):
         entity.h -=1
         entity.max_water -=1
-        entity.DUNCAN_REROLL = 0
+        del entity.DUNCAN_REROLL
 
     def _join(self, entity):
         entity.h +=1
@@ -76,7 +76,7 @@ class Robot(Companion):
 
     def _leave(self, entity):
         entity.h = self.h
-        entity.BETA_REROLL = 0
+        del entity.BETA_REROLL
 
     def _join(self, entity):
         self.h = entity.h
@@ -91,7 +91,7 @@ class Mechanic(Companion):
     def _leave(self, entity):
         entity.max_fuel -= 1
         entity.speed -= 1
-        entity.GERONIMO_BONUS = 0
+        del entity.GERONIMO_BONUS
 
     def _join(self, entity):
         entity.max_fuel += 1
@@ -120,7 +120,7 @@ class Cartographer(Companion):
     title = 'Cartographer'
 
     def _leave(self, entity):
-        entity.SAFFRON_BONUS = 0
+        del entity.SAFFRON_BONUS
 
     def _join(self, entity):
         entity.SAFFRON_BONUS = 1
@@ -135,7 +135,7 @@ class HouseAgent(Companion):
     def _leave(self, entity):
         entity.r -= 1
         entity.max_stamina = self.stamina
-        entity.MARJORIE_BONUS = 0
+        del entity.MARJORIE_BONUS
 
     def _join(self, entity):
         self.stamina = entity.max_stamina

@@ -108,6 +108,8 @@ class Engine:
     def loop(self, console: Console, context: Context):
         deck = self.deck
 
+        if self.player.background is None:
+            self.player.setBG(backgrounds.random_background(deck)())
 
         intro = backgrounds.introduction(deck)
         self.msg(intro.__name__.replace('_', ' ').title())

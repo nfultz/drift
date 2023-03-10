@@ -14,6 +14,9 @@ class Background():
     def reward(self, player):
         pass
 
+class Unskilled(Background):
+    pass
+
 class Soldier(Background):
     from .settlement_encounters import SettlementEncounterResultAction
     def __init__(self):
@@ -25,7 +28,7 @@ class Soldier(Background):
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if ininstance(i, SettlementEncounterResultAction):
+            if isinstance(i, self.SettlementEncounterResultAction):
                 n = n + 1
             if n == 3:
                 return True
@@ -47,7 +50,7 @@ class Merchant(Background):
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if isinstance(i, SellScrap):
+            if isinstance(i, self.SellScrap):
                 n = n + i.amount
             if n >= 10:
                 return True
@@ -67,7 +70,7 @@ class Explorer(Background):
     def goal(self, player):
         n = set()
         for i in player.moves:
-            if isinstance(i, CampingAction):
+            if isinstance(i, self.CampingAction):
                 n.add(i.loc)
             if len(n) == 5:
                 return True
@@ -89,7 +92,7 @@ class Scoundrel(Background):
     def goal(self, player):
         n = 0
         for i in player.events:
-            if isinstace(i, SellRelic):
+            if isinstace(i, self.SellRelic):
                 n = n + i.amount
             if n >= 3:
                 return True
@@ -110,7 +113,7 @@ class Navigator(Background):
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if isinstance(i, RevealAction):
+            if isinstance(i, self.RevealAction):
                 n = n + 1
             if n >= 30:
                 return True
@@ -183,6 +186,9 @@ def friendly_face(player):
 def skilled_laborer(player):
     player.MOONDEW_LABORER = 1
 
+def random_background(deck):
+    choices = [Unskilled, Soldier, Merchant, Explorer, Scoundrel, Navigator, Freelancer]
+    return choices[deck.bottom.value % len(choices)]
 
 def introduction(deck):
     card = deck.bottom

@@ -14,7 +14,7 @@ class Entity:
     MAX_FUEL = 6
 
     def __init__(self, x: int, y: int, char: str, color: Tuple[int, int, int],
-            name: str = "<Unnamed>", background: Background = Background(), ai_cls = None):
+            name: str = "<Unnamed>", background: Background = None, ai_cls = None):
         self.x = x
         self.y = y
         self.char = char
@@ -62,28 +62,31 @@ class Entity:
         self.quest = 0
         self.quest_guild = None
 
+        self.h = 2
+        self.k = 2
+        self.r = 2
+
+
         # Background and Stats
         # NB needs to come near end so that base stats are set and can be modified
-        self.background = background
-
         if background:
-            self.h = background.h
-            self.k = background.k
-            self.r = background.r
-            background.bonus(self)
-            self.goal_completed = False
+            self.setBG(background)
         else:
-            self.h = 2
-            self.k = 2
-            self.r = 2
-
-
+            self.background = None
 
         self.birthdate = datetime.date(
                 3055,
                 datetime.date.today().month,
                 datetime.date.today().day
         )
+
+    def setBG(self, background):
+        self.background = background
+        self.h = background.h
+        self.k = background.k
+        self.r = background.r
+        background.bonus(self)
+        self.goal_completed = False
 
     def move(self, dx: int, dy: int) -> None:
         # Move the entity by a given amount
