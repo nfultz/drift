@@ -34,7 +34,6 @@ def weather_monitor(entity):
 def f(entity):
     pass
 
-#TODO
 @_equip("Heat Regulator", 80)
 def heat_regulator(entity):
     entity.HEAT_REGULATOR = 1
@@ -43,12 +42,9 @@ def heat_regulator(entity):
 def medical_pack(entity):
     entity.MEDICAL_PACK = 1
 
-#TODO
 @_equip("Air Purifier Mask", 95)
 def air_purifier(entity):
     entity.AIR_PURIFIER = 1
-
-    pass
 
 @_equip("Improved Hot Weather Clothing", 100)
 def hot_weather_clothes(entity):
@@ -73,6 +69,7 @@ def grapple(entity):
 #TODO
 @_equip("Scrap Detection Unit", 160)
 def f(entity):
+    entity.SCRAP_DETECTOR = 1
     pass
 
 @_equip("Pathfinder Tools", 175)

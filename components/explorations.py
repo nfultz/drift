@@ -13,7 +13,7 @@ def earn(entity, level=1, **kwargs):
         if k == 'stamina':
             entity.stamina = min(entity.stamina + v, entity.max_stamina)
         if k == 'cargo':
-            entity.cargo = min(entity.cargo + v*level, entity.max_cargo)
+            entity.cargo = min(entity.cargo + v*level getattr(entity, "SCRAP_DETECTOR", 0), entity.max_cargo)
         if k == 'relic':
             entity.relic = min(entity.relic + v, entity.max_relic)
         if k == 'credits':
