@@ -175,5 +175,5 @@ class Engine:
                 if e.win_condition():
                     class WinException(Exception):
                         pass
-                    raise WinException("You Win!")
+                    raise WinException("You Win!") #TODO ADD MORE DETAIL
 

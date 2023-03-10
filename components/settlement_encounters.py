@@ -160,9 +160,25 @@ def market_day(engine, entity):
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "equipment"
+        from .equipment import items
         def perform(self):
+            if self.entity.credits > self.cost:
+                self.entity.credits -= self.cost
+                self.item(self.entity)
+                items.pop(self.idx)
             pass
-        # TODO
+        def available(self):
+            if not any(not i.glider for i in items ) return False
+            n = 1
+            for i, item in enumerate(items):
+                if item.glider:continue
+                if self.engine.deck.bottom.value % n == 0:
+                    n = n+1
+                    self.idx = i
+                    self.item = item
+            self.cost = self.item.cost // 10 * 5
+            self.FLAVOR = f"Purchase {self.item.name} at {self.cost} credits (normally {self.item.cost})"
+            return True
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
