@@ -384,6 +384,7 @@ class VisitAction(Action):
         actions[event.K_y] = HideAction(self.engine, self.entity)
 
         actions[event.K_x] = SettlementExploreAction(self.engine, self.entity)
+        actions[event.K_k] = SkilledLaborerAction(self.engine, self.entity)
 
         for i, item in enumerate(self.loc.items):
             key = event.K_0 + i + 2
@@ -414,12 +415,19 @@ class VisitEndAction(Action):
 class RestAction(VisitAction):
     FLAVOR = "Rest and Relax (5 credits)"
     def perform(self) -> None:
-        self.entity.credits -= 5
+        if isinstace(self, Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
+            if hasattr(self.entity, "MOONDEW_REST_WATER"):
+                self.entity.water = min(self.entity.max_water, self.entity.water + 1)
+        else :
+            self.entity.credits -= 5
         self.entity.stamina = self.entity.max_stamina
         self.engine.settlement_actions.pop(event.K_r)
 
     def available(self) -> bool:
-        return self.entity.credits >= 5 and self.entity.stamina < self.entity.max_stamina
+        if self.entity.stamina >= self.entity.max_stamina: return False #TODO potential bug if gaining water from moondew_rest_water ???
+        if isinstace(self, Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
+            return  True
+        return self.entity.credits >= 5
 
 class WaterMerchant(VisitAction):
     def __init__(self,engine, entity):
@@ -454,15 +462,21 @@ class ShoppingAction(VisitAction):
         self.item = item
         self.key = key
         self.loc = loc
-        self.FLAVOR = f"Buy {item.name} ({item.cost})"
+        self.cost = item.cost
+        if not item.glider and hasattr(entity, 'EQUIP_DISCOUNT'):
+            self.cost -= 25
+        if item.glider and hasattr(entity, 'GLIDER_DISCOUNT'):
+            self.cost -= 25
+        self.FLAVOR = f"Buy {item.name} ({self.cost})"
     def perform(self) -> None:
-        if self.entity.credits < self.item.cost:
+        if self.entity.credits < self.cost:
             self.engine.msg("Not enough credits")
             return None
         self.engine.msg(f"You buy the {self.item.name}")
         self.engine.settlement_actions.pop(self.key)
-        self.entity.credits -= self.item.cost
+        self.entity.credits -= self.cost
         self.item(self.entity)
+        self.loc.items = [i for i in self.loc.items if i is not item]
     def available(self) -> bool:
         return True
 
@@ -600,6 +614,8 @@ class FindCompanionAction(VisitAction):
         self.loc = loc
         self.companion = loc.companion
         if self.companion is not None:
+            self.cost = max(0, self.cost - getattr(entity, "COMPANION_DISCOUNT", 0))
+
             self.FLAVOR = f"Hire {self.companion.name}, a {self.companion.title} for {self.companion.cost} credits."
         if len(self.entity.companions) > 0 :
             self.fire = next(iter(self.entity.companions))
@@ -614,7 +630,7 @@ class FindCompanionAction(VisitAction):
             self.loc.companion = leaving
             leaving.leave(e)
             return
-        if (e.credits < self.companion.cost:
+        if (e.credits < self.cost:
             self.engine.msg("Not enough credits")
             return None
         if e.fame < len(e.companions) * e.fame_per_companion:
@@ -629,6 +645,7 @@ class FindCompanionAction(VisitAction):
         self.companion.join(e)
 
     def available(self) -> bool:
+        if self.entity.fame_per_companion == 99: return FAlse
         return self.loc.companion is not None or len(self.entity.companions) > 0
 
 #TODO
@@ -645,3 +662,14 @@ class SettlementExploreAction(ExploreAction):
     def available(self) -> bool:
         return True
 
+class SkilledLaborerAction(Action):
+    FLAVOR = "Do skilled labor"
+    def perform(self):
+        self.entity.stamina -= 2
+        self.entity.credits += 10
+        self.engine.settlement_actions.pop(event.K_k, 0)
+    def available(self) -> bool:
+        if not hasattr(self.entity, "MOONDEW_LABORER"): return False
+        if not self.entity.x ==0 and self.entity.y == 0: return False
+        if not self.entity.stamina >= 2: return False
+        return True

@@ -3,10 +3,11 @@ items = []
 def draw(card):
     return items.pop(card.value % len(items)) if len(items) >0 else None
 
-def _equip(name='', cost=0):
+def _equip(name='', cost=0, glider=False):
     def wrap(f):
         f.name = name
         f.cost = cost
+        f.glider_upgrade = glider
         items.append(f)
         return f
     return wrap
@@ -116,74 +117,74 @@ def f(entity):
 ### Glider Upgrades
 
 #TODO
-@_equip("Optical Navigation Glasses", 80)
+@_equip("Optical Navigation Glasses", 80,True)
 def f(entity):
     pass
 
-@_equip("Stabilized Relic Storage", 90)
+@_equip("Stabilized Relic Storage", 90,True)
 def stabilized_relics(entity):
     entity.max_cargo -= 2
     entity.max_relic += 1
 
-@_equip("Anti-Gravity Towing Unit", 120)
+@_equip("Anti-Gravity Towing Unit", 120,True)
 def antigrav_towing(entity):
     entity.max_cargo += 6
     entity.speed -= 1
 
-@_equip("Reserve Fuel Canisters", 145)
+@_equip("Reserve Fuel Canisters", 145,True)
 def reserve_fuel(entity):
     entity.max_fuel += 2
     entity.max_cargo -= 4
 
-@_equip("Fuel Drip Injection Systems", 180)
+@_equip("Fuel Drip Injection Systems", 180,True)
 def fuel_drip(entity):
     entity.max_fuel += 2
     entity.speed += 1
 
 #TODO
-@_equip("Long Range Communications", 200)
+@_equip("Long Range Communications", 200,True)
 def f(entity):
     pass
 
 #TODO
-@_equip("Scavenger Arm", 260)
+@_equip("Scavenger Arm", 260,True)
 def f(entity):
     pass
 
 #TODO
-@_equip("Onboard Scanner", 260)
+@_equip("Onboard Scanner", 260,True)
 def f(entity):
     pass
 
 #TODO
-@_equip("Hacking Module", 260)
+@_equip("Hacking Module", 260,True)
 def f(entity):
     pass
 
-@_equip("Portable Repair Kit", 300)
+@_equip("Portable Repair Kit", 300,True)
 def portable_repait(entity):
     entity.PORTABLE_REPAIR = 1
 
-@_equip("Fuel Recycle Kit", 400)
+@_equip("Fuel Recycle Kit", 400,True)
 def fuel_recycler(entity):
     entity.FUEL_RECYCLE = 1
     pass
 
 ## Cargo upgrades
 
-@_equip("Cargo Upgrade X", 90)
+@_equip("Cargo Upgrade X", 90,True)
 def cargo_x(entity):
     entity.max_cargo += 2
     entity.cargo_upgrade += 1
     if entity.cargo_upgrade == 3: entity.fame += 1
 
-@_equip("Cargo Upgrade Y", 145)
+@_equip("Cargo Upgrade Y", 145,True)
 def cargo_y(entity):
     entity.max_cargo += 2
     entity.cargo_upgrade += 1
     if entity.cargo_upgrade == 3: entity.fame += 1
 
-@_equip("Cargo Upgrade Z", 215)
+@_equip("Cargo Upgrade Z", 215,True)
 def cargo_z(entity):
     entity.max_cargo += 3
     entity.cargo_upgrade += 1
@@ -191,19 +192,19 @@ def cargo_z(entity):
 
 ## Fuel upgrades
 
-@_equip("Fuel Capacity Upgrade X", 110)
+@_equip("Fuel Capacity Upgrade X", 110,True)
 def fuel_x(entity):
     entity.max_fuel += 1
     entity.fuel_upgrade += 1
     if entity.fuel_upgrade == 3: entity.fame += 1
 
-@_equip("Fuel Capacity Upgrade Y", 140)
+@_equip("Fuel Capacity Upgrade Y", 140,True)
 def fuel_y(entity):
     entity.max_fuel += 1
     entity.fuel_upgrade += 1
     if entity.fuel_upgrade == 3: entity.fame += 1
 
-@_equip("Fuel Capacity Upgrade Z", 180)
+@_equip("Fuel Capacity Upgrade Z", 180,True)
 def fuel_z(entity):
     entity.max_fuel += 1
     entity.fuel_upgrade += 1
@@ -212,19 +213,19 @@ def fuel_z(entity):
 
 ## Relic upgrades
 
-@_equip("Relic Capacity Upgrade X", 100)
+@_equip("Relic Capacity Upgrade X", 100,True)
 def relic_x(entity):
     entity.max_relic += 1
     entity.relic_upgrade += 1
     if entity.relic_upgrade == 3: entity.fame += 1
 
-@_equip("Relic Capacity Upgrade Y", 200)
+@_equip("Relic Capacity Upgrade Y", 200,True)
 def relic_y(entity):
     entity.max_relic += 1
     entity.relic_upgrade += 1
     if entity.relic_upgrade == 3: entity.fame += 1
 
-@_equip("Relic Capacity Upgrade Z", 300)
+@_equip("Relic Capacity Upgrade Z", 300,True)
 def relic_z(entity):
     entity.max_relic += 1
     entity.relic_upgrade += 1
@@ -233,19 +234,19 @@ def relic_z(entity):
 
 ## Speed upgrades
 
-@_equip("Top Speed Upgrade X", 120)
+@_equip("Top Speed Upgrade X", 120,True)
 def speed_x(entity):
     entity.speed += 1
     entity.speed_upgrade += 1
     if entity.speed_upgrade == 3: entity.fame += 1
 
-@_equip("Top Speed Upgrade Y", 240)
+@_equip("Top Speed Upgrade Y", 240,True)
 def speed_y(entity):
     entity.speed += 1
     entity.speed_upgrade += 1
     if entity.speed_upgrade == 3: entity.fame += 1
 
-@_equip("Top Speed Upgrade Z", 420)
+@_equip("Top Speed Upgrade Z", 420,True)
 def speed_z(entity):
     entity.speed += 1
     entity.speed_upgrade += 1

@@ -15,6 +15,7 @@ class Background():
         pass
 
 class Soldier(Background):
+    from .settlement_encounters import SettlementEncounterResultAction
     def __init__(self):
         super().__init__(3,1,2)
 
@@ -24,7 +25,7 @@ class Soldier(Background):
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if i.type == 'settlement':
+            if ininstance(i, SettlementEncounterResultAction):
                 n = n + 1
             if n == 3:
                 return True
@@ -42,10 +43,11 @@ class Merchant(Background):
     def bonus(self, player):
         player.HAGGLER = 1 #TODO
 
+    from .actions import SellScrap
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if i.type == 'trade-scrap' :
+            if isinstance(i, SellScrap):
                 n = n + i.amount
             if n >= 10:
                 return True
@@ -61,12 +63,13 @@ class Explorer(Background):
     def bonus(self, player):
         player.DELVER = 1 #TODO
 
+    from .actions import CampingAction
     def goal(self, player):
-        n = 0
+        n = set()
         for i in player.moves:
-            if i.type == 'camp':
-                n = n + 1
-            if n == 5:
+            if isinstance(i, CampingAction):
+                n.add(i.loc)
+            if len(n) == 5:
                 return True
         return False
 
@@ -81,10 +84,12 @@ class Scoundrel(Background):
     def bonus(self, player):
         player.OFFWORLD_CONTACTS = 1 #TODO
 
+
+    from .actions import SellRelic
     def goal(self, player):
         n = 0
         for i in player.events:
-            if i.type == 'trade-relic':
+            if isinstace(i, SellRelic):
                 n = n + i.amount
             if n >= 3:
                 return True
@@ -101,17 +106,18 @@ class Navigator(Background):
     def bonus(self, player):
         player.WAYFINDING = 1
 
+    from .actions import RevealAction
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if i.type == 'reveal':
+            if isinstance(i, RevealAction):
                 n = n + 1
             if n >= 30:
                 return True
         return False
 
     def reward(self, player):
-        player.PATHFINDER = 1 #DONE
+        player.PATHFINDER = 1
 
 
 class Freelancer(Background):
@@ -122,32 +128,29 @@ class Freelancer(Background):
     def bonus(self, player):
         player.WORK_FOR_HIRE = 1 #TODO
 
+
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if i.type == 'finish-quest':
+            if False: # TODO i.type == 'finish-quest':
                 n = n + 1
             if n == 6:
                 return True
         return False
 
-    @staticmethod
-    def choose_stat(): #TODO
-        pass
-
     def reward(self, player):
-        x = choose_stat() #TODO
-        player[x] += 1
-        y = choose_stat(x!='h', x!='k', x!='r')
-        player[y] += 1
+        #x = choose_stat() #TODO
+        player.r += 1
+        player.k += 1
 
 
 def rebuilding_the_past(player):
     player.restoration = 0
 
 def hard_times(player):
-    x = choose_stat() #TODO
-    player[x] += 1
+    #x = choose_stat() #TODO
+    #player[x] += 1
+    player.h += 1
     player.max_stamina -= 1
 
 def no_intro_needed(player):
@@ -167,17 +170,18 @@ def place_to_hide(player):
     player.secrecy = 0
 
 def quiet_wanderer(player):
-    x = choose_stat() #TODO
-    player[x] += 1
+    #x = choose_stat() #TODO
+    #player[x] += 1
+    player.r += 1
     player.max_stamina += 1
     player.fame_per_companion = 99
 
 def friendly_face(player):
-    player.GUILD_QUEST_DIFFICULTY = 1
+    player.GUILD_QUEST_DIFFICULTY = 1 #TODO
     player.COMPANION_DISCOUNT = 50
 
 def skilled_laborer(player):
-    player.MOONDEW_LABORER = 1 #TODO ADD ACTION
+    player.MOONDEW_LABORER = 1
 
 
 def introduction(deck):
