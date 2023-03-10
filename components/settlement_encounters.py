@@ -234,7 +234,7 @@ def guild_merchants(engine, entity): #TODO
 def traveling_mechanic(engine, entity):
     engine.msg("A famous traveling mechanic offering services you won't find anywhere else.")
 
-    picked = list(0)
+    picked = [0]
 
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "speed tweaks (75 credits)"
@@ -585,7 +585,7 @@ def trader_used(engine, entity): #TODO
 def tea(engine, entity):
     engine.msg("enjoy a quiet cup of tea.")
 
-    picked = list(0)
+    picked = [0]
 
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "h"

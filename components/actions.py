@@ -437,7 +437,7 @@ class VisitEndAction(Action):
 class RestAction(VisitAction):
     FLAVOR = "Rest and Relax (5 credits)"
     def perform(self) -> None:
-        if isinstace(self.loc, locations.Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
+        if isinstance(self.loc, locations.Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
             if hasattr(self.entity, "MOONDEW_REST_WATER"):
                 self.entity.water = min(self.entity.max_water, self.entity.water + 1)
         else :
@@ -503,7 +503,7 @@ class ShoppingAction(VisitAction):
         self.engine.settlement_actions.pop(self.key)
         self.entity.credits -= self.cost
         self.item(self.entity)
-        self.loc.items = [i for i in self.loc.items if i is not item]
+        self.loc.items = [i for i in self.loc.items if i is not self.item]
     def available(self) -> bool:
         return True
 
@@ -547,7 +547,7 @@ class SellScrap(VisitAction):
         self.entity.credits += self.amount * self.price
         self.entity.cargo = 0
 
-        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+        for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
 
     def available(self) -> bool:
@@ -588,7 +588,7 @@ class SellRelic(VisitAction):
         if self.card.rank == 'W':
             self.entity.fame += 1
 
-        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+        for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
 
     def available(self) -> bool:
@@ -602,7 +602,7 @@ class DonateRelic(VisitAction):
         self.entity.relic -= r
         self.engine.msg(f"You donate {r} relics for preservation.")
         self.entity.fame += MixedFrac(r,2)
-        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+        for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
         if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
@@ -616,7 +616,7 @@ class RebuildAction(VisitAction):
         self.entity.cargo -= 2
         self.entity.credits -= 50
         self.entity.restoration += 1
-        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+        for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
         if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
@@ -633,7 +633,7 @@ class HideAction(VisitAction):
             self.engine.msg("You pay a bribe to quiet loose tongues.")
             self.credits -= 150
             self.entity.secrecy += 1
-        for i in (event.K_s, event.K_r, event.K_d, event.K_b, event.K_y):
+        for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
         if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
@@ -674,8 +674,10 @@ class FindCompanionAction(VisitAction):
         else:
             self.loc.companion = None
 
+        e.credits -= self.cost
         self.engine.msg(f"{self.companion} joins you")
         self.companion.join(e)
+        self.engine.settlement_actions.pop(event.K_h, 0)
 
     def available(self) -> bool:
         if self.entity.fame_per_companion == 99: return False
