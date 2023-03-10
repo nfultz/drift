@@ -330,14 +330,18 @@ def cartographer(engine, entity):
     engine.msg("a local cartographer is selling maps of the region")
 
     class optiona(VisitAction):
+        from .actions import RevealAction
         flavor = "reveal (10)"
         limit = 5
         def perform(self):
+            rev = RevealAction(self.engine, self.entity)
+            rev.radius = 10
+            rev.min_dist=3
+            rev.available()
             if self.entity.credits >= 10:
                 self.entity.credits -= 10
                 self.limit = self.limit - 1
-                pass
-                #TODO
+                rev.perform()
             if self.limit == 0:
                 self.engine.settlement_actions.pop(event.K_6, None)
 
