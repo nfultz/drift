@@ -67,7 +67,7 @@ def earn(entity, level=1, **kwargs):
             entity.credits += v*level
         if k == 'quest':
             if entity.quest_guild is not None:
-                entity.quest += v*level
+                entity.quest += v*level + getattr(entity, "BETA_REROLL", 0)/2
             else:
                 kwargs.pop("quest")
         if k == 'water':

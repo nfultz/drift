@@ -527,6 +527,7 @@ class SellScrap(VisitAction):
             self.price = 40
 
         self.price += getattr(entity, "CREDIT_DUPLICATOR", 0)
+        self.price += getattr(entity, "JAX_BONUS", 0)
 
         self.FLAVOR = f"Sell {entity.cargo} cargo at {self.price} each"
 
@@ -563,6 +564,8 @@ class SellRelic(VisitAction):
         elif self.card.value >= 6:
             self.limit = 2
             self.price = 40
+
+        self.price += getattr(entity, "JAX_BONUS", 0) * 2
 
         self.amount = min(self.limit, self.entity.relic)
         self.FLAVOR = f"Sell {self.amount} relics at {self.price} each"

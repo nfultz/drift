@@ -35,10 +35,11 @@ class Scoundrel(Companion):
     title = 'Scoundrel'
     def _leave(self, entity):
         entity.r -=1
+        entity.JAX_BONUS = 0
 
     def _join(self, entity):
         entity.r +=1
-        #TODO scrap or relic trades
+        entity.JAX_BONUS = 5
 
 class Doctor(Companion):
     cost = 100
@@ -81,7 +82,6 @@ class Robot(Companion):
         self.h = entity.h
         entity.h = max(entity.h - 1, 1)
         entity.BETA_REROLL = 2
-        # todo bonus quest item
 
 class Mechanic(Companion):
     cost = 150
