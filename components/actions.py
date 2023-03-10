@@ -177,7 +177,7 @@ class MovementAction(Action):
         self.dy = dy
 
         self.COST = MixedFrac(1, 2 * (entity.speed + engine.WEATHER_WIND_BACK))
-        if engine.WEATHER_SAND_STORM == 1:
+        if engine.WEATHER_SAND_STORM == 1 and not hasattr(entity, "OPTICAL_LENSES"):
             self.COST *= 2
 
     def perform(self) -> None:

@@ -110,9 +110,9 @@ def thermal_underwear(entity):
 ### Glider Upgrades
 
 #TODO
-@_equip("Optical Navigation Glasses", 80,True)
-def f(entity):
-    pass
+@_equip("Optical Navigation Lenses", 80,True)
+def optical_lenses(entity):
+    entity.OPTICAL_LENSES = 1
 
 @_equip("Stabilized Relic Storage", 90,True)
 def stabilized_relics(entity):
