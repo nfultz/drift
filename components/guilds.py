@@ -1,4 +1,4 @@
-from .actions import Action, ExploreAction
+from .actions import Action, ExploreAction, MovementAction
 from .locations import Location
 from .explorations import skill_check, earn
 
@@ -574,7 +574,7 @@ class ExplorationGuild(Guild):
             engine.msg(self.message)
             self.level = 3.5
 
-            x,y = engine.game_map.nearest_empty(entity.x, entit.y, r=30, at_least=5)
+            x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
             foo = guild_of_exploration_settlment(x,y,self)
             engine.game_map.add_location(foo)
             self.settlement == foo
@@ -625,7 +625,7 @@ class ExplorationGuild(Guild):
             self.level = 5.5
             self.entity.quest = 1
 
-            x,y = engine.game_map.nearest_empty(entity.x, entit.y, r=30, at_least=5)
+            x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
             foo = ancient_temple(x,y)
             engine.game_map.add_location(foo)
 
@@ -675,111 +675,467 @@ class ExplorationGuild(Guild):
 
 class RestorationGuild(Guild):
     label = "Guild of Restoration"
-    restoration_level = 0
+
+    class recovery_center(location.Settlement):
+        def __init__(self,x,y,guild):
+            super().__init__(x,y)
+            self.guild = guild
+
+    class green_archives(location.GuildUnique):
+        level = 2
+        @staticmethod
+        def encounter(loc,entity,deck):
+            if entity.quest >= 1:
+                entity.cargo -= 1
+                entity.GA_QUEST = 1
+
+    class renewal_machines(location.GuildUnique):
+        level = 2
+        rc1 = True
+        rc2 = True
+        @staticmethod
+        def encounter(loc,entity,deck):
+            if loc.quest_level == 4.5 and loc.rc1:
+                if entity.quest >= 1:
+                    loc.rc1 = False
+                    entity.quest -= 1
+                    entity.RM1 += 1
+            if loc.quest_level == 4.5 and loc.rc2:
+                if entity.quest >= 1 and entity.cargo >= 5:
+                    loc.rc2 = False
+                    entity.quest -= 1
+                    entity.cargo -= 5
+                    entity.RM2 +=1
+
+            if entity.cargo >= 8:
+                entity.cargo -= 8
+                entity.SS_QUEST = 1
+
+    class solar_engine(location.Settlement):
+        def __init__(self,x,y,guild):
+            super().__init__(x,y)
+            self.guild = guild
+        @staticmethod
+        def encounter(loc,entity,deck):
+            if entity.relic >= 2 and entity.cargo >= 10:
+                entity.relic -= 2
+                entity.cargo -= 10
+                entity.SE1 = 1
+
     def guild_action(self, engine, entity):
         class A(Action):
             def perform(self):
-                pass
+                n = self.entity.cargo
+
+                if n <= 5:
+                    self.entity.water += 1
+                    self.entity.fuel += 1
+                    self.entity.credits += n*5
+
+                if n > 5:
+                    self.entity.water += 2
+                    self.entity.fuel += 1
+                    self.entity.credits += n*10
+
+                self.entity.cargo = 0
+
             def available(self):
-                return False
-        return A(engine, entity)
+                return self.entity.cargo > 0
+        if self.level >= 1:
+            return A(engine, entity)
+
     def _advance(self, engine, entity):
         if self.level == 0:
-            engine.msg("Recover 3 desert herbs")
+            self.message = "Discover the ruins of the past."
+            engine.msg(self.message)
             self.level = .5
-        elif self.level == 0.5:
+            self.idx = len(entity.moves)
+            return
 
-            self.level = 1
-            entity.quest_guild = None
+        elif self.level == 0.5:
+            #used below
+            new = set()
+            for m in self.entity.moves[self.idx:]:
+                if isinstance(m, ExploreAction) and m.success:
+                    new.add(set)
+            explored = len(new)
+
+            if explored >= 5:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fame += 1
+
+                self.level = 1
+                return
+            engine.msg(message)
+
         elif self.level == 1:
-            engine.msg("Recover 3 hydroponic storage units and return them to the moisture collector.")
-            self.level = 1.5
+            self.message = "Recover cargo for the restoration workers."
+            engine.msg(self.message)
+            self.idx = len(entity.moves)
 
         elif self.level == 1.5:
-            engine.msg("Recover 3 hydroponic storage units and return them to the moisture collector.")
-            self.level = 2
-            entity.quest_guild = None
+            if entity.cargo >= 5 and entity.water >= 2 and entity.fuel >= 1 and entity.credits >= 25:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.cargo -= 5
+                entity.water -= 2
+                entity.fuel -= 1
+                entity.credits -= 25
+                entity.fame += 1
+
+                #TODO free hotels
+
+                self.level = 2
+                return
+
+            engine.msg(self.message)
 
         elif self.level == 2:
+            self.message = ("The Restoration Center will be a key location for all future work.")
+            engine.msg(self.message)
             self.level = 2.5
+
+            x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=2)
+            foo = recovery_center(x,y,self)
+            engine.game_map.add_location(foo)
+            self.rc == foo
+
         elif self.level == 2.5:
-            self.level = 3
-            entity.quest_guild = None
+            if entity.quest >= 4 and (entity.x, entity.y) == (self.rc.x, self.rc.y):
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.credits += 40
+                entity.fame += 1
+
+                self.level = 3
+                return
+
+            engine.msg(message)
+
         elif self.level == 3:
+            self.message = "Transport the data to the green archives"
+            engine.msg(self.message)
             self.level = 3.5
+
+            x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
+            foo = green_archives(x,y,self)
+            engine.game_map.add_location(foo)
+            self.gc == foo
+
+            self.quest = 1
+
         elif self.level == 3.5:
-            self.level = 4
-            entity.quest_guild = None
+            if hasattr(entity, "GA_QUEST"):
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                #TODO Equip upgrade
+
+                self.level = 4
+                return
+
+            engine.msg(message)
+
         elif self.level == 4:
+            self.message = "Transport renewal keys to the three Renewal Machines."
+            engine.msg(self.message)
             self.level = 4.5
+            self.quest = 3
+            entity.RM1 = 0
+
+            x,y = entity.x, entity.y
+            for _ in range(3):
+                x,y = engine.game_map.nearest_empty(x, y, r=30, at_least=3)
+                foo = renewal_machines(x,y,self)
+                engine.game_map.add_location(foo)
+
         elif self.level == 4.5:
-            self.level = 5
-            entity.quest_guild = None
+            if entity.RM1 >= 3:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.stamina = entity.max_stamina
+                entity.water = entity.max_water
+
+                #TODO free fuel
+                self.level = 5
+                return
+
+            engine.msg(message)
         elif self.level == 5:
+            self.message = "Each machine needs supplies."
+            engine.msg(self.message)
             self.level = 5.5
+            entity.RM2 = 0
+
         elif self.level == 5.5:
-            self.level = 6
-            entity.quest_guild = None
+            if entity.RM2 >= 3:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                #TODO glider upgrade
+
+                self.level = 6
+                return
+
+            engine.msg(message)
         elif self.level == 6:
+            self.message = "Recover 6 Ancient Texts and 10 cargo"
+            engine.msg(self.message)
             self.level = 6.5
+            entity.SE1 = 0
+
+            x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=20)
+            foo = solar_engine(x,y,self)
+            engine.game_map.add_location(foo)
+
         elif self.level == 6.5:
-            self.level = 7
-            entity.quest_guild = None
+            if entity.SE1 > 0:
+                engine.msg("Guild maxed.")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fame += 2
+                entity.relic += 1
+                entity.credits += 200
+
+                self.level = 7
+                return
+            engine.msg(message)
 
 
 
 class GliderGuild(Guild):
     label = "Guild of the Glider"
 
-    def guild_action(self, engine, entity):
-        class A(Action):
-            def perform(self):
-                pass
-            def available(self):
-                return False
-        return A(engine, entity)
-    def _advance(self, engine, entity):
-        if self.level == 0:
-            engine.msg("Recover 3 desert herbs")
-            self.level = .5
-        elif self.level == 0.5:
+    class racetrack(location.GuildUnique):
+        xp = 999
+        def __init__(self,x,y,guild):
+            super().__init__(x,y)
+            self.guild = guild
 
-            self.level = 1
-            entity.quest_guild = None
+        @staticmethod
+        def encounter(loc, entity, deck):
+            target = deck.top.value
+            upgrades = entity.speed + entity.fuel
+            if target < upgrades:
+                entity.rt_wins += 1
+                entity.rt_streak += 1
+                if target > entity.speed:
+                    entity.fuel -= 1
+            else:
+                entity.rt_streak = 0
+
+        def available(self):
+            return True
+
+    class glider_factory(location.GuildUnique):
+        level = 3
+        xp = 999
+        won  = False
+        @staticmethod
+        def encounter(loc,entity,deck):
+            if deck.top.black:
+                i = skill_check(loc, entity, "kr", deck)
+                if i > 0 :
+                    entity.stamina = max(0, entity.stamina - 1)
+                    return i
+                if not loc.won:
+                    loc.won = True
+                    entity.fame += 1
+                    # TODO glider upgrade
+                return earn(entity,loc.level, cargo=1, quest=1)
+            else:
+                i = skill_check(loc, entity, "h", deck)
+                if i > 0 : return i
+                if not loc.won:
+                    loc.won = True
+                    entity.fame += 1
+                    # TODO glider upgrade
+                return earn(entity,loc.level, cargo=2, quest=1)
+
+
+
+    def _advance(self, engine, entity):
+        upgrades = entity.speed_upgrade + entity.relic_upgrade + entity.cargo_upgrade + entity.fuel_upgrade
+
+        if self.level == 0:
+            self.message = "The first rule of this Guild is speed..."
+            engine.msg(self.message)
+            self.level = .5
+            self.idx = len(entity.moves)
+            return
+
+        elif self.level == 0.5:
+            #used below
+            new = set()
+            for m in self.entity.moves[self.idx:]:
+                if isinstance(m, MovementAction):
+                    new.add(set)
+            moved = len(new)
+
+            if moved >= 15:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fame += 1
+                entity.fuel = entity.max_fuel
+                entity.credits += 30
+
+                self.level = 1
+                return
+            engine.msg(message)
+
         elif self.level == 1:
-            engine.msg("Recover 3 hydroponic storage units and return them to the moisture collector.")
-            self.level = 1.5
+            if self.fuel < 3:
+                engine.msg("Note enough fuel for the quest")
+                return
+            self.message = "Fuel is the lifeblood"
+            engine.msg(self.message)
+            self.idx = len(entity.moves)
 
         elif self.level == 1.5:
-            engine.msg("Recover 3 hydroponic storage units and return them to the moisture collector.")
-            self.level = 2
-            entity.quest_guild = None
+            if entity.fuel == 0:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fuel = entity.max_fuel
+                entity.credits += 30
+
+                self.level = 2
+                return
+
+            engine.msg(self.message)
 
         elif self.level == 2:
+            self.message = ("A glider is nothing more than a shell without upgrades")
+            engine.msg(self.message)
             self.level = 2.5
+
+
         elif self.level == 2.5:
-            self.level = 3
-            entity.quest_guild = None
+
+            if upgrades > 0:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fuel = entity.max_fuel
+                entity.fame += 1
+
+                self.level = 3
+                return
+
+            engine.msg(message)
+
         elif self.level == 3:
+            self.message = "Time to go fast."
+            engine.msg(self.message)
             self.level = 3.5
+
+            x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
+            foo = racetrack(x,y,self)
+            engine.game_map.add_location(foo)
+            entity.rt_wins = 0
+            entity.rt_streak = 0
+
+
         elif self.level == 3.5:
-            self.level = 4
-            entity.quest_guild = None
+            if entity.rt_wins >= 2:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fame += 1
+
+                self.level = 4
+                return
+
+            engine.msg(message)
+
         elif self.level == 4:
+            self.message = "Your dedication and respect to the Glider has paid off."
+            engine.msg(self.message)
             self.level = 4.5
+
+            x,y = entity.x, entity.y
+            x,y = engine.game_map.nearest_empty(x, y, r=30, at_least=3)
+            foo = glider_factory(x,y,self)
+            engine.game_map.add_location(foo)
+
         elif self.level == 4.5:
-            self.level = 5
-            entity.quest_guild = None
+            if entity.quest >= 1:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fame += 1
+
+                #TODO glider upgrade
+                self.level = 5
+                return
+
+            engine.msg(message)
         elif self.level == 5:
+            self.message = "If you want to ride with the best, you need the mods to keep up."
+            engine.msg(self.message)
             self.level = 5.5
+
         elif self.level == 5.5:
-            self.level = 6
-            entity.quest_guild = None
+            #used below
+            new = set()
+            for m in self.entity.moves[self.idx:]:
+                if isinstance(m, MovementAction):
+                    new.add(set)
+            moved = len(new)
+
+            if moved >= 30 and upgrades >= 3:
+                engine.msg("Quest Completed")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                #TODO free fuel at racetrack
+                entity.max_fuel += 1
+
+                self.level = 6
+                return
+
+            engine.msg(message)
         elif self.level == 6:
+
+            if upgrades < 5:
+                engine.msg("Not enough upgrades to progress")
+                return
+
+            self.message = "Show the guild you are the best Glide rider on Eridoor"
+            engine.msg(self.message)
             self.level = 6.5
+            entity.SE1 = 0
+
         elif self.level == 6.5:
-            self.level = 7
-            entity.quest_guild = None
+            if entity.rt_streak >= 3:
+                engine.msg("Guild maxed.")
+                entity.quest = 0
+                entity.quest_guild = None
+
+                entity.fame += 3
+
+                self.level = 7
+                return
+            engine.msg(message)
+
 
 
 
