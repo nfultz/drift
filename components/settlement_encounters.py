@@ -467,7 +467,14 @@ def bounty_hunters(engine, entity):
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "Sell intel."
         def perform(self):
-            self.entity.credits += amt
+
+            amt = 0
+            for y in self.engine.game_map.locations.values():
+                for loc in y.values():
+                    if isinstance(loc, locations.Settlement):
+                        amt += 1
+
+            self.entity.credits += 10 *amt
             self.engine.settlement_actions.pop(event.K_6, None)
             pass
 

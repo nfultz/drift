@@ -91,7 +91,7 @@ class Scoundrel(Background):
     from .actions import SellRelic
     def goal(self, player):
         n = 0
-        for i in player.events:
+        for i in player.moves:
             if isinstace(i, self.SellRelic):
                 n = n + i.amount
             if n >= 3:
