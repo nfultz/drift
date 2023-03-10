@@ -103,5 +103,7 @@ class Entity:
         if self.restoration != 99:
             self.fame = 0
             return self.restoration >= 10
+        for c in self.companions:
+            if c.win(self.relics): return True
         return self.fame >= 10
 

@@ -26,6 +26,9 @@ class Companion():
     def _join(self, entity):
         pass
 
+    def win(self, relics):
+        return False
+
 class Scoundrel(Companion):
     cost = 100
     name = 'Jax'
@@ -144,6 +147,9 @@ class Mystic(Companion):
     name = 'Kale'
     title = 'Mysteic'
 
+    def win(self, relics):
+        return relics >= 3
+
     def _leave(self, entity):
         entity.fame = entity.fame
         entity.h -= 1
@@ -158,7 +164,6 @@ class Mystic(Companion):
         entity.k += 1
         entity.r += 1
         entity.max_stamina += 2
-        # TODO : win condition
 
 COMPANION_DECK = {
   'A' : Scoundrel,
