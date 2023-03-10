@@ -330,9 +330,9 @@ def cartographer(engine, entity):
     engine.msg("a local cartographer is selling maps of the region")
 
     class optiona(VisitAction):
-        from .actions import RevealAction
         flavor = "reveal (10)"
         limit = 5
+        from .actions import RevealAction
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
             rev.radius = 10
@@ -398,24 +398,27 @@ def scouts(engine, entity):
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "reveal(20 credits)"
         limit = 2
+        from .actions import RevealAction
         def perform(self):
+            rev = RevealAction(self.engine, self.entity)
+            rev.radius = 5
+            rev.min_dist=2
+            rev.available()
+            rev2 = RevealAction(self.engine, self.entity)
+            rev2.radius = 5
+            rev2.min_dist=2
+            rev2.available()
             if self.entity.credits >= 20:
                 self.entity.credits -= 20
-                self.limit -= 1
-                #TODO reveal
-            pass
-        def available(self):
-            return self.limit >= 0
-
-    class optionB(SettlementEncounterResultAction):
-        FLAVOR = "+1 H (100 credits)"
-        def perform(self):
-            pass
+                self.limit = self.limit - 1
+                rev.perform()
+                rev2.perform()
+            if self.limit == 0:
+                self.engine.settlement_actions.pop(event.K_6, None)
 
     oa = optionA(engine, entity)
-    ob = optionB(engine, entity)
 
-    return [oa, ob]
+    return [oa]
 
 
 @_add("2D", "2H")
