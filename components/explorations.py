@@ -21,9 +21,14 @@ def skill_check(loc, entity, skill, deck, level=None):
 
 
     stat = entity.skill_test_n(skill, bonus)
-    stat = {1:2, 2:4, 3:7, 4:9, 5:11, 6:14}[stat]
 
     retry = getattr(entity, "EXPLORER_SLING", 0) + getattr(entity, "BETA_REROLL", 0)
+
+    # Duncan bonus
+    if 'h' in skill and entity.h + bonus['h'] == stat:
+        retry += getattr(entity, "DUNCAN_REROLL", 0)
+
+    stat = {1:2, 2:4, 3:7, 4:9, 5:11, 6:14}[stat]
 
     for i in range(level,0, -1):
         if deck.top.value > stat:

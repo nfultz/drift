@@ -61,11 +61,12 @@ class Mercenary(Companion):
     def _leave(self, entity):
         entity.h -=1
         entity.max_water -=1
+        entity.DUNCAN_REROLL = 0
 
     def _join(self, entity):
         entity.h +=1
         entity.max_water +=1
-        # TODO reroll H dice
+        entity.DUNCAN_REROLL = 2
 
 class Robot(Companion):
     cost = 150
