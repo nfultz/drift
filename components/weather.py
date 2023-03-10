@@ -35,7 +35,7 @@ def rain(engine):
         e.stamina = e.max_stamina
         e.water = e.max_water
 
-nasty = set(sand_storm, extreme_sun, spice_clouds, noxious_miasma)
+nasty = set([sand_storm, extreme_sun, spice_clouds, noxious_miasma])
 
 WEATHER_EVENTS = {
   'A': sand_storm,

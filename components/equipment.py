@@ -7,7 +7,7 @@ def _equip(name='', cost=0, glider=False):
     def wrap(f):
         f.name = name
         f.cost = cost
-        f.glider_upgrade = glider
+        f.glider = glider
         items.append(f)
         return f
     return wrap

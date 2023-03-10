@@ -110,7 +110,7 @@ class Settlement(Location):
         self.guild = guilds.draw(deck.bottom)
         self.companion = companions.draw(deck.bottom)
 
-    def can_explore(self): return False
+    def can_explore(self, entity): return False
     # Settlements are explored via visiting
 
 

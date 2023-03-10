@@ -437,7 +437,7 @@ class VisitEndAction(Action):
 class RestAction(VisitAction):
     FLAVOR = "Rest and Relax (5 credits)"
     def perform(self) -> None:
-        if isinstace(self, Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
+        if isinstace(self.loc, locations.Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
             if hasattr(self.entity, "MOONDEW_REST_WATER"):
                 self.entity.water = min(self.entity.max_water, self.entity.water + 1)
         else :
@@ -449,7 +449,7 @@ class RestAction(VisitAction):
 
     def available(self) -> bool:
         if self.entity.stamina >= self.entity.max_stamina: return False #TODO potential bug if gaining water from moondew_rest_water ???
-        if isinstace(self, Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
+        if isinstance(self.loc, locations.Home) and hasattr(self.entity, "MOONDEW_REST_DISCOUNT"):
             return  True
         return self.entity.credits >= 5
 
@@ -647,7 +647,7 @@ class FindCompanionAction(VisitAction):
         self.loc = loc
         self.companion = loc.companion
         if self.companion is not None:
-            self.cost = max(0, self.cost - getattr(entity, "COMPANION_DISCOUNT", 0))
+            self.cost = max(0, self.companion.cost - getattr(entity, "COMPANION_DISCOUNT", 0))
 
             self.FLAVOR = f"Hire {self.companion.name}, a {self.companion.title} for {self.companion.cost} credits."
         if len(self.entity.companions) > 0 :
@@ -663,7 +663,7 @@ class FindCompanionAction(VisitAction):
             self.loc.companion = leaving
             leaving.leave(e)
             return
-        if (e.credits < self.cost:
+        if (e.credits < self.cost):
             self.engine.msg("Not enough credits")
             return None
         if e.fame < len(e.companions) * e.fame_per_companion:
@@ -678,7 +678,7 @@ class FindCompanionAction(VisitAction):
         self.companion.join(e)
 
     def available(self) -> bool:
-        if self.entity.fame_per_companion == 99: return FAlse
+        if self.entity.fame_per_companion == 99: return False
         return self.loc.companion is not None or len(self.entity.companions) > 0
 
 class SettlementExploreAction(ExploreAction):
@@ -687,9 +687,9 @@ class SettlementExploreAction(ExploreAction):
         from .settlement_encounters import draw
 
         # Pick your poison
-        if hasattr(entity, "MARJORIE_BONUS"):
-            self.engine.settlement_actions[event.K_6] = MarjorieExplore(engine, entity)
-            self.engine.settlement_actions[event.K_7] = MarjorieExplore(engine, entity)
+        if hasattr(self.entity, "MARJORIE_BONUS"):
+            self.engine.settlement_actions[event.K_6] = MarjorieExplore(self.engine, self.entity)
+            self.engine.settlement_actions[event.K_7] = MarjorieExplore(self.engine, self.entity)
             self.engine.settlement_actions.pop(event.K_x, 0)
             return
 
@@ -703,7 +703,7 @@ class SettlementExploreAction(ExploreAction):
         return True
 
 class MarjorieExplore(ExploreAction):
-    def __init__(engine, entity):
+    def __init__(self, engine, entity):
         super().__init__(engine, entity)
         from .settlement_encounters import draw
         self.encounter = draw(self.engine.deck.top)
@@ -711,10 +711,12 @@ class MarjorieExplore(ExploreAction):
     def perform(self):
         self.engine.settlement_actions.pop(event.K_6,0)
         self.engine.settlement_actions.pop(event.K_7,0)
-        choices = encounter(self.engine, self.entity) or []
+        choices = self.encounter(self.engine, self.entity) or []
         for i, c in enumerate(choices):
             if c.available():
                 self.engine.settlement_actions[event.K_6 +i] = c
+    def available(self):
+        return True
 
 
 class SkilledLaborerAction(Action):

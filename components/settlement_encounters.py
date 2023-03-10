@@ -1,6 +1,6 @@
 from .explorations import skill_check, earn
 
-from .actions import Action, VisitAction
+from .actions import Action, VisitAction, RevealAction
 
 from  . import locations
 
@@ -21,7 +21,7 @@ def _add(*cards):
 @_add("AC", "AS")
 def mercs(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "hr", deck)
+    i = skill_check(loc, entity, "hr", engine.deck)
     if i > 0 : return None
 
     engine.msg("Mercenaries will train you, for a price")
@@ -84,7 +84,7 @@ def water_merchants(engine, entity):
 @_add("3C", "3S")
 def hire_minor(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "kr", deck)
+    i = skill_check(loc, entity, "kr", engine.deck)
     if i > 0 : return None
 
     engine.msg("Hire a minor house agent to establish an exchange.")
@@ -115,7 +115,7 @@ def hire_minor(engine, entity):
 @_add("4C", "4S")
 def hire_major(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "kr", deck)
+    i = skill_check(loc, entity, "kr", engine.deck)
     if i > 0 : return None
 
     engine.msg("Major house agent paying for intel.")
@@ -174,7 +174,7 @@ def market_day(engine, entity):
                 items.pop(self.idx)
 
         def available(self):
-            if not any(not i.glider for i in items ) return False
+            if not any(not i.glider for i in items ):return False
             n = 1
             for i, item in enumerate(items):
                 if item.glider:continue
@@ -194,7 +194,7 @@ def market_day(engine, entity):
 @_add("6C", "6S")
 def work_trader(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "hr", deck)
+    i = skill_check(loc, entity, "hr", engine.deck)
     if i > 0 : return None
 
     engine.msg("Sign up to work for a trader and make some extra credits.")
@@ -283,7 +283,6 @@ def informant(engine, entity):
 
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "reveal"
-        from .actions import RevealAction
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
             rev.radius = 10
@@ -341,7 +340,6 @@ def cartographer(engine, entity):
     class optiona(VisitAction):
         flavor = "reveal (10)"
         limit = 5
-        from .actions import RevealAction
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
             rev.radius = 10
@@ -407,7 +405,6 @@ def scouts(engine, entity):
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "reveal(20 credits)"
         limit = 2
-        from .actions import RevealAction
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
             rev.radius = 5
@@ -478,7 +475,7 @@ def bounty_hunters(engine, entity):
 @_add("4D", "4H")
 def raided(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "hk", deck)
+    i = skill_check(loc, entity, "hk", engine.deck)
     if i > 0 : return None
 
     engine.msg("Water has been raided, and people are paying for any you can spare.")
@@ -645,7 +642,7 @@ def tea(engine, entity):
 @_add("8D", "8H")
 def red_mercs(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "kr", deck)
+    i = skill_check(loc, entity, "kr", engine.deck)
     if i > 0 : return None
 
     engine.msg("Mercenaries offering Credits for job leads.")

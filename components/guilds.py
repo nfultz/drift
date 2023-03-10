@@ -19,7 +19,7 @@ class RelicsGuild(Guild):
 
     def guild_action(self, engine, entity):
         class A(Action):
-            def perform(self)
+            def perform(self):
                 pass
             def available(self):
                 return False
@@ -32,7 +32,7 @@ class ExplorationGuild(Guild):
     locations_explored = 0
     def guild_action(self, engine, entity):
         class A(Action):
-            def perform(self)
+            def perform(self):
                 pass
             def available(self):
                 return False
@@ -43,7 +43,7 @@ class RestorationGuild(Guild):
     restoration_level = 0
     def guild_action(self, engine, entity):
         class A(Action):
-            def perform(self)
+            def perform(self):
                 pass
             def available(self):
                 return False
@@ -53,7 +53,7 @@ class GliderGuild(Guild):
 
     def guild_action(self, engine, entity):
         class A(Action):
-            def perform(self)
+            def perform(self):
                 pass
             def available(self):
                 return False

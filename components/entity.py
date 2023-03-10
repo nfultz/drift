@@ -104,6 +104,6 @@ class Entity:
             self.fame = 0
             return self.restoration >= 10
         for c in self.companions:
-            if c.win(self.relics): return True
+            if c.win(self.relic): return True
         return self.fame >= 10
 
