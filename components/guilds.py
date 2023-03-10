@@ -1,5 +1,5 @@
 from .actions import Action, ExploreAction, MovementAction
-from .locations import Location
+from . import locations
 from .explorations import skill_check, earn
 
 class Guild():
@@ -22,7 +22,7 @@ class Guild():
 class EcologyGuild(Guild):
     label = "Guild of Ecology"
 
-    class moisture_collector(location.GuildUnique):
+    class moisture_collector(locations.GuildUnique):
         level = 1
         @staticmethod
         def encounter(loc,entity,deck):
@@ -31,7 +31,7 @@ class EcologyGuild(Guild):
                 entity.cargo -= 3
                 entity.MC_QUEST = 1
 
-    class wind_trap(location.GuildUnique):
+    class wind_trap(locations.GuildUnique):
         level = 2
         @staticmethod
         def encounter(loc,entity,deck):
@@ -40,7 +40,7 @@ class EcologyGuild(Guild):
                 entity.cargo -= 2
                 entity.WT_QUEST = 1
 
-    class secret_garden(location.GuildUnique):
+    class secret_garden(locations.GuildUnique):
         level = 1
         from .tile_types import hidden as tile
 
@@ -220,7 +220,7 @@ class RelicsGuild(Guild):
     label = "Guild of Relics"
     relics_recovered = 0
 
-    class relic_museum(location.GuildUnique):
+    class relic_museum(locations.GuildUnique):
         level = 2
         @staticmethod
         def encounter(loc,entity,deck):
@@ -241,12 +241,12 @@ class RelicsGuild(Guild):
                     entity.quest -= 6
                     entity.RM_QUEST4 = 1
 
-    class guild_of_relics_settlment(location.Settlement):
+    class guild_of_relics_settlment(locations.Settlement):
         def __init__(self,x,y,guild):
             super().__init__(x,y)
             self.guild = guild
 
-    class stasis_system(location.GuildUnique):
+    class stasis_system(locations.GuildUnique):
         level = 3
         @staticmethod
         def encounter(loc,entity,deck):
@@ -254,7 +254,7 @@ class RelicsGuild(Guild):
                 entity.cargo -= 8
                 entity.SS_QUEST = 1
 
-    class lost_great_house(location.GuildUnique):
+    class lost_great_house(locations.GuildUnique):
         level = 3
         xp = 99
         from .tile_types import hidden as tile
@@ -283,7 +283,7 @@ class RelicsGuild(Guild):
                 if old < 5 and new >= 5:
                     self.entity.credits += 100
 
-        if this.level > 3 and entity.relic > 0
+        if this.level > 3 and entity.relic > 0:
             return A(engine, entity)
 
     def _advance(self, engine, entity):
@@ -309,7 +309,7 @@ class RelicsGuild(Guild):
             self.message = "Take the relic to the Relic Museum"
             engine.msg(self.message)
             self.level = 1.5
-            self.relic += 1
+            entity.relic += 1
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
             foo = relic_museum(x,y,self)
@@ -342,7 +342,7 @@ class RelicsGuild(Guild):
 
 
         elif self.level == 2.5:
-            if entity.relic >= 1 and entity.x == self.new_settlement.x and entity.y = self.new_settlement.y:
+            if entity.relic >= 1 and (entity.x, entity.y) == (self.new_settlement.x, self.new_settlement.y):
                 engine.msg("Quest Completed")
                 entity.quest = 0
                 entity.quest_guild = None
@@ -447,7 +447,7 @@ class RelicsGuild(Guild):
 class ExplorationGuild(Guild):
     label = "Guild of Exploration"
 
-    class ancient_temple(location.GuildUnique):
+    class ancient_temple(locations.GuildUnique):
         level = 2
         @staticmethod
         def encounter(loc,entity,deck):
@@ -456,7 +456,7 @@ class ExplorationGuild(Guild):
                 entity.relic -= 1
                 entity.AT_QUEST = 1
 
-    class guild_of_exploration_settlment(location.Settlement):
+    class guild_of_exploration_settlment(locations.Settlement):
         def __init__(self,x,y,guild):
             super().__init__(x,y)
             self.guild = guild
@@ -676,12 +676,12 @@ class ExplorationGuild(Guild):
 class RestorationGuild(Guild):
     label = "Guild of Restoration"
 
-    class recovery_center(location.Settlement):
+    class recovery_center(locations.Settlement):
         def __init__(self,x,y,guild):
             super().__init__(x,y)
             self.guild = guild
 
-    class green_archives(location.GuildUnique):
+    class green_archives(locations.GuildUnique):
         level = 2
         @staticmethod
         def encounter(loc,entity,deck):
@@ -689,7 +689,7 @@ class RestorationGuild(Guild):
                 entity.cargo -= 1
                 entity.GA_QUEST = 1
 
-    class renewal_machines(location.GuildUnique):
+    class renewal_machines(locations.GuildUnique):
         level = 2
         rc1 = True
         rc2 = True
@@ -711,7 +711,7 @@ class RestorationGuild(Guild):
                 entity.cargo -= 8
                 entity.SS_QUEST = 1
 
-    class solar_engine(location.Settlement):
+    class solar_engine(locations.Settlement):
         def __init__(self,x,y,guild):
             super().__init__(x,y)
             self.guild = guild
@@ -918,7 +918,7 @@ class RestorationGuild(Guild):
 class GliderGuild(Guild):
     label = "Guild of the Glider"
 
-    class racetrack(location.GuildUnique):
+    class racetrack(locations.GuildUnique):
         xp = 999
         def __init__(self,x,y,guild):
             super().__init__(x,y)
@@ -939,7 +939,7 @@ class GliderGuild(Guild):
         def available(self):
             return True
 
-    class glider_factory(location.GuildUnique):
+    class glider_factory(locations.GuildUnique):
         level = 3
         xp = 999
         won  = False
