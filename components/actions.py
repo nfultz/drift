@@ -487,6 +487,9 @@ class ShoppingAction(VisitAction):
             self.cost -= 25
         if item.glider and hasattr(entity, 'GLIDER_DISCOUNT'):
             self.cost -= 25
+        if item.glider and hasattr(entity,'GERONIMO_BONUS'):
+            self.cost -= 50
+        self.cost = max(0, self.cost) # DO NOT GO NEGATIVE
         self.FLAVOR = f"Buy {item.name} ({self.cost})"
     def perform(self) -> None:
         if self.entity.credits < self.cost:

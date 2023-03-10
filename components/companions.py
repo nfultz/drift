@@ -91,11 +91,12 @@ class Mechanic(Companion):
     def _leave(self, entity):
         entity.max_fuel -= 1
         entity.speed -= 1
+        entity.GERONIMO_BONUS = 0
 
     def _join(self, entity):
         entity.max_fuel += 1
         entity.speed += 1
-        #TODO glider discount
+        entity.GERONIMO_BONUS = 1
 
 class Seeker(Companion):
     cost = 200
