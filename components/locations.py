@@ -459,9 +459,11 @@ REVEAL_DECK = {
 }
 
 
-def draw(deck, x, y):
+def draw(deck, x, y, redraw=False):
     card = deck.top
     ret = REVEAL_DECK[card](x,y,deck=deck)
+    if redraw and isinstance(ret, (Desert, NonTraversable)):
+        ret = REVEAL_DECK[card](x,y,deck=deck)
     if isinstance(ret, Unique):
         REVEAL_DECK[card] = Desert
     return ret

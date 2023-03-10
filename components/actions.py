@@ -220,7 +220,8 @@ class RevealAction(Action):
     min_dist = 0
 
     def perform(self) -> None:
-        loc = locations.draw(self.engine.deck, self.dest_x, self.dest_y)
+        redraw = hasattr(self.entity, "SAFFRON_BONUS")
+        loc = locations.draw(self.engine.deck, self.dest_x, self.dest_y, redraw)
 
         map = self.engine.game_map
         map.add_location(loc)

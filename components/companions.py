@@ -126,8 +126,7 @@ class Cartographer(Companion):
     def _join(self, entity):
         entity.SAFFRON_BONUS = 1
         pass
-        #TODO: draw 2
-        #TODO: draw 2
+        #TODO: draw 2 explore
 
 
 class HouseAgent(Companion):
