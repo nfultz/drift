@@ -103,10 +103,9 @@ def piezo_capture(entity):
     entity.PIEZO_CAPTURE = 1
     pass
 
-#TODO
 @_equip("Thermal Cooling Underwear", 360)
-def f(entity):
-    pass
+def thermal_underwear(entity):
+    entity.THERMAL_UNDERWEAR = 1
 
 
 ### Glider Upgrades

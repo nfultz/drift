@@ -305,6 +305,9 @@ class ExploreAction(Action):
         self.entity.ap -= self.COST
         self.entity.can_explore = False
 
+        if hasattr(self.entity, "THERMAL_UNDERWEAR"):
+            self.entity.stamina += 1
+
     def available(self) -> bool:
         if not self.entity.can_explore:
             self.engine.msg("Limit once per turn.")
