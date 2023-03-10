@@ -83,7 +83,19 @@ class Unique(Location):
         return self.encounter
 
 class GuildUnique(Location):
-    pass
+    tile = tile_types.explorable
+
+    def __init__(self,x,y,guild,level=None):
+        super().__init__(x,y,level=level)
+        self.guild = guild
+        self.quest_level = guild.level
+
+    def can_explore(self,entity):
+        return entity.quest_guild ==self.guild and self.guild.level == self.quest_level
+
+    def explore(self, entity):
+        return self.encounter
+
 
 class Settlement(Location):
     level = 2

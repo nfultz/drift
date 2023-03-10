@@ -50,9 +50,12 @@ settlement = new_tile(
     walkable=True, transparent=True, dark=(ord("s"), (255, 255, 255), (50, 50, 150)),
 )
 explorable = new_tile(
-    walkable=True, transparent=True, dark=(ord("."), (255, 255, 255), (180, 70, 180)),
+    walkable=True, transparent=True, dark=(ord("."), (255, 255, 255), (160, 70, 160)),
 )
 
+hidden = new_tile(
+    walkable=True, transparent=True, dark=(ord(" "), (255, 255, 255), (0, 0, 0)),
+)
 
 border_left = new_tile(
     walkable=False, transparent=True, dark=(ord("|"), (255, 255, 255), (0, 0, 0)),

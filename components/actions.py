@@ -516,7 +516,7 @@ class GuildAction(VisitAction):
             self.FLAVOR = f"Visit the {self.loc.guild.label}."
     def perform(self) -> None:
         self.engine.settlement_actions.pop(event.K_g)
-        self.loc.guild.advance(self.entity)
+        self.loc.guild.advance(self.engine, self.entity)
     def available(self) -> bool:
         return self.loc.guild is not None
 
