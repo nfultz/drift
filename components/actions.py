@@ -151,6 +151,9 @@ class CampingAction(Action):
         if hasattr(entity, "MEDICAL_PACK"):
             recover += 1
 
+        if hasattr(entity, "EFRA_BONUS"):
+            recover += 1
+
         if hasattr(entity, "SURVIVAL_KNOWLEDGE"):
             recover = entity.MAX_STAMINA
 
@@ -399,6 +402,7 @@ class VisitAction(Action):
 
         actions[event.K_x] = SettlementExploreAction(self.engine, self.entity)
         actions[event.K_k] = SkilledLaborerAction(self.engine, self.entity)
+        actions[event.K_e] = EfraSale(self.engine, self.entity)
 
         for i, item in enumerate(self.loc.items):
             key = event.K_0 + i + 2
@@ -695,3 +699,14 @@ class SkilledLaborerAction(Action):
         if not self.entity.x ==0 and self.entity.y == 0: return False
         if not self.entity.stamina >= 2: return False
         return True
+
+class EfraSale(Action):
+    FLAVOR = "Sell Relic to Efra (40)"
+    def perform(self):
+        self.entity.relic -= 1
+        self.entity.credits += 40
+        if self.entity.relic == 0:
+            self.engine.settlement_actions.pop(event.K_e, 0)
+    def available(self) -> bool:
+        if not hasattr(self.entity, "EFRA_BONUS"): return False
+        return self.entity.relic > 0

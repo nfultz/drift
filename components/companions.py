@@ -48,11 +48,11 @@ class Doctor(Companion):
 
     def _leave(self, entity):
         entity.k -=1
+        entity.EFRA_BONUS = 0
 
     def _join(self, entity):
         entity.k +=1
-        #TODO camping
-        # todo sell relics
+        entity.EFRA_BONUS = 1
 
 class Mercenary(Companion):
     cost = 100
