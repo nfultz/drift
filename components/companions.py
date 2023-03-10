@@ -120,13 +120,14 @@ class Cartographer(Companion):
     title = 'Cartographer'
 
     def _leave(self, entity):
+        entity.SAFFRON_BONUS = 0
         pass
 
     def _join(self, entity):
+        entity.SAFFRON_BONUS = 1
         pass
         #TODO: draw 2
         #TODO: draw 2
-        #TODO: exploration bonus
 
 
 class HouseAgent(Companion):

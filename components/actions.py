@@ -301,6 +301,8 @@ class ExploreAction(Action):
             self.loc.tile["dark"]["ch"] = ord(" ")
             if hasattr(self.entity, "AIR_PURIFIER"):
                 self.entity.stamina += 1
+            if hasattr(self.entity, "SAFFRON_BONUS"):
+                self.entity.credits += 5
 
         else :
             self.engine.msg(f"Failed by {self.result}")
@@ -357,6 +359,8 @@ class RetryAction(Action):
             self.loc.tile["dark"]["ch"] = ord(" ")
             if hasattr(self.entity, "AIR_PURIFIER"):
                 self.entity.stamina += 1
+            if hasattr(self.entity, "SAFFRON_BONUS"):
+                self.entity.credits += 5
         else :
             self.engine.msg(f"Failed by {result}")
 
