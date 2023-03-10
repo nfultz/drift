@@ -118,7 +118,18 @@ class Engine:
             self.msg("")
             self.msg(self.tomorrow().strftime("=== %A %B %d, %Y ==="))
             weather.reset(self)
-            weather.draw(deck)(self)
+
+            w = weather.draw(deck)
+
+            # weather radio redraw
+            if w in weather.nasty:
+                for e in self.entities:
+                    if hasattr(e, 'WEATHER_MONITOR'):
+                        w = weather.draw(deck)
+                        break
+            w(self)
+
+
             self.msg("The drift today is {0}".format(deck.drift))
             self.msg("with a high of {1} and low of {0}".format(*deck.heat))
 
@@ -149,6 +160,9 @@ class Engine:
 
                     else:
                         e.ai()
+
+                    if self.WEATHER_EXREME_HEAT == 1:
+                        e.stamina = max(0, e.stamina - 1)
 
                 if e.background:
                     if not e.goal_completed:

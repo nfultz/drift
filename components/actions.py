@@ -176,7 +176,9 @@ class MovementAction(Action):
         self.dx = dx
         self.dy = dy
 
-        self.COST = MixedFrac(1, 2 * entity.speed)
+        self.COST = MixedFrac(1, 2 * (entity.speed + engine.WEATHER_WIND_BACK))
+        if engine.WEATHER_SAND_STORM == 1:
+            self.COST *= 2
 
     def perform(self) -> None:
         entity = self.entity
@@ -252,6 +254,9 @@ class RevealAction(Action):
         self.entity.ap -= self.COST
 
     def available(self) -> bool:
+
+        if self.engine.WEATHER_SPICE_CLOUDS == 1:
+            return False
 
         if not check_ap(self.entity,self):
             return False
@@ -421,6 +426,8 @@ class RestAction(VisitAction):
         else :
             self.entity.credits -= 5
         self.entity.stamina = self.entity.max_stamina
+        if hasattr(self.entity, "SNACK"):
+            self.entity.stamina += 2
         self.engine.settlement_actions.pop(event.K_r)
 
     def available(self) -> bool:

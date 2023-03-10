@@ -12,10 +12,9 @@ def _equip(name='', cost=0, glider=False):
         return f
     return wrap
 
-#TODO
 @_equip("Snack Containers",25)
 def snack(entity):
-    pass
+    entity.SNACK = 1
 
 @_equip("Scavengers' Modular Storage", 25)
 def scav_storage(entity):
@@ -25,10 +24,10 @@ def scav_storage(entity):
 def desert_campsite_toolkit(entity):
     entity.DESERT_CAMPSITE_TOOLKIT = 1
 
-#TODO
+
 @_equip("Weather Monitor", 60)
 def f(entity):
-    pass
+    entity.WEATHER_MONITOR = 1
 
 #TODO
 @_equip("Explorer Sling", 75)
