@@ -517,6 +517,9 @@ class GuildAction(VisitAction):
     def perform(self) -> None:
         self.engine.settlement_actions.pop(event.K_g)
         self.loc.guild.advance(self.engine, self.entity)
+        a = self.loc.guild.guild_action(self.engine, self.entity)
+        if a:
+            self.engine.settlement_actions[event.K_g] = a
     def available(self) -> bool:
         return self.loc.guild is not None
 
