@@ -36,7 +36,7 @@ class Entity:
         self.speed = 1
         self.max_cargo = 5
         self.cargo = 0
-        self.max_relic = 5
+        self.max_relic = 2
         self.relic = 0
         self.max_fuel = 3
         self.fuel = 1
@@ -104,6 +104,6 @@ class Entity:
             self.fame = 0
             return self.restoration >= 10
         for c in self.companions:
-            if c.win(self.relic): return True
+            if c.win(self): return True
         return self.fame >= 10
 

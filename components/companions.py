@@ -149,11 +149,11 @@ class Mystic(Companion):
     name = 'Kale'
     title = 'Mysteic'
 
-    def win(self, relics):
-        return relics >= 3
+    def win(self, entity):
+        entity.fame = self.fame
+        return entity.relic >= 3
 
     def _leave(self, entity):
-        entity.fame = entity.fame
         entity.h -= 1
         entity.k -= 1
         entity.r -= 1
@@ -161,7 +161,6 @@ class Mystic(Companion):
 
     def _join(self, entity):
         self.fame = entity.fame
-        entity.fame = 0
         entity.h += 1
         entity.k += 1
         entity.r += 1

@@ -612,10 +612,10 @@ class DonateRelic(VisitAction):
 class RebuildAction(VisitAction):
     FLAVOR = "Rebuild the town. (2 cargo and 50 credits)"
     def perform(self) -> None:
-        self.engine.msg("You contribute cargo and cash to the restoration cause.")
         self.entity.cargo -= 2
         self.entity.credits -= 50
         self.entity.restoration += 1
+        self.engine.msg(f"You contribute cargo and cash to the restoration cause. ({self.restoration})")
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
@@ -626,11 +626,11 @@ class HideAction(VisitAction):
     FLAVOR = "Conceal your true identity. (2 relics or 150 credits)"
     def perform(self) -> None:
         if self.entity.relic >= 2:
-            self.engine.msg("You stash two relics.")
             self.entity.relic -= 2
             self.entity.secrecy += 1
+            self.engine.msg(f"You stash two relics. ({self.secrecy})")
         elif self.credits >= 150:
-            self.engine.msg("You pay a bribe to quiet loose tongues.")
+            self.engine.msg(f"You pay a bribe to quiet loose tongues. ({self.secrecy})")
             self.credits -= 150
             self.entity.secrecy += 1
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
