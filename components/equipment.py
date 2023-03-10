@@ -94,10 +94,9 @@ def tech_toolkit(entity):
     entity.r += 1
     entity.h -= 1
 
-#TODO
 @_equip("Credit Duplication Program", 250)
-def f(entity):
-    pass
+def credit_duplicator(entity):
+    entity.CREDIT_DUPLICATOR = 5
 
 @_equip("Piezo Moisture Capture", 300)
 def piezo_capture(entity):

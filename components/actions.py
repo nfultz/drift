@@ -521,6 +521,9 @@ class SellScrap(VisitAction):
             self.price = 60
         elif self.card.value >= 6:
             self.price = 40
+
+        self.price += getattr(entity, "CREDIT_DUPLICATOR", 0)
+
         self.FLAVOR = f"Sell {entity.cargo} cargo at {self.price} each"
 
     def perform(self) -> None:
