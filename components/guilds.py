@@ -1,6 +1,12 @@
+from .actions import Action
+from .locations import Location
 
 class Guild():
+    level = 0
     def advance(self, entity):
+        pass
+
+    def guild_action(self):
         pass
 
 
@@ -9,16 +15,49 @@ class EcologyGuild(Guild):
     pass
 class RelicsGuild(Guild):
     label = "Guild of Relics"
-    pass
+    relics_returned = 0
+
+    def guild_action(self, engine, entity):
+        class A(Action):
+            def perform(self)
+                pass
+            def available(self):
+                return False
+        return A(engine, entity)
+
+
 class ExplorationGuild(Guild):
     label = "Guild of Exploration"
-    pass
+
+    locations_explored = 0
+    def guild_action(self, engine, entity):
+        class A(Action):
+            def perform(self)
+                pass
+            def available(self):
+                return False
+        return A(engine, entity)
+
 class RestorationGuild(Guild):
     label = "Guild of Restoration"
-    pass
+    restoration_level = 0
+    def guild_action(self, engine, entity):
+        class A(Action):
+            def perform(self)
+                pass
+            def available(self):
+                return False
+        return A(engine, entity)
 class GliderGuild(Guild):
     label = "Guild of the Glider"
-    pass
+
+    def guild_action(self, engine, entity):
+        class A(Action):
+            def perform(self)
+                pass
+            def available(self):
+                return False
+        return A(engine, entity)
 class SmugglersGuild(Guild):
     #TODO
     label = "Smugglers"
