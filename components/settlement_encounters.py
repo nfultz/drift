@@ -149,7 +149,7 @@ def hire_major(engine, entity):
 @_add("5C", "5S")
 def market_day(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "hk", deck)
+    i = skill_check(loc, entity, "hk", engine.deck)
     if i > 0 : return None
 
     engine.msg("Market day in the settlement.")
@@ -311,6 +311,7 @@ def fortune_teller(engine, entity):
     roll = engine.deck.top
 
     mod = {}
+    # TODO Lookup table
     if roll.rank == 'W': mod['h']=1
     if roll.rank == 'K': mod['k']=1
     if roll.rank == 'Q': mod['r']=1
@@ -327,7 +328,7 @@ def fortune_teller(engine, entity):
     if roll.rank == 'A': mod['h']=1
 
     for k,v in mod.items():
-        setattr(self.entity, k, max(1, getattr(self.entity, k, 0) + v))
+        setattr(entity, k, max(1, getattr(entity, k, 0) + v))
 
     return none
 
@@ -397,7 +398,7 @@ def drifter(engine, entity):
 @_add("AD", "AH")
 def scouts(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "kr", deck)
+    i = skill_check(loc, entity, "kr", engine.deck)
     if i > 0 : return None
 
     engine.msg("Sand scouts selling information")
@@ -560,7 +561,7 @@ def food_vendor(engine, entity):
 @_add("6D", "6H")
 def trader_used(engine, entity): #TODO
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "kr", deck)
+    i = skill_check(loc, entity, "kr", engine.deck)
     if i > 0 : return None
 
     engine.msg("a trader selling a large collection of 'gently' used equipment")
@@ -659,7 +660,7 @@ def red_mercs(engine, entity):
 @_add("9D", "9H")
 def smugglers(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc, entity, "kr", deck)
+    i = skill_check(loc, entity, "kr", engine.deck)
     if i > 0 : return None
 
     engine.msg("Smugglers looking to purchase relics and scrap at a good price.")
