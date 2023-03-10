@@ -92,7 +92,7 @@ class Scoundrel(Background):
     def goal(self, player):
         n = 0
         for i in player.moves:
-            if isinstace(i, self.SellRelic):
+            if isinstance(i, self.SellRelic):
                 n = n + i.amount
             if n >= 3:
                 return True

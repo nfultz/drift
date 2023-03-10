@@ -61,6 +61,7 @@ class EcologyGuild(Guild):
     def _advance(self, engine, entity):
         if self.level == 0:
             self.message = "Recover 3 desert herbs"
+            entity.quest = 0
 
             engine.msg(self.message)
             self.level = .5

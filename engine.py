@@ -65,7 +65,7 @@ class Engine:
 
         relic = 'R'*p.relic + '-'*(p.max_relic - p.relic)
         cargo = 'C'*p.cargo + '-'*(p.max_cargo - p.cargo)
-        quest = 'Q'*p.quest
+        quest = 'Q'*int(p.quest)
 
         return f"{fuel} {stamina} {water} | {cargo} {relic} {quest} | AP: {p.ap}"
 

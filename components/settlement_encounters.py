@@ -332,7 +332,7 @@ def fortune_teller(engine, entity):
     for k,v in mod.items():
         setattr(entity, k, max(1, getattr(entity, k, 0) + v))
 
-    return none
+    return None
 
 @_add("JC", "JS")
 @_add("QC", "QS")
