@@ -74,11 +74,12 @@ class Robot(Companion):
 
     def _leave(self, entity):
         entity.h = self.h
+        entity.BETA_REROLL = 0
 
     def _join(self, entity):
         self.h = entity.h
         entity.h = max(entity.h - 1, 1)
-        #TODO reroll
+        entity.BETA_REROLL = 2
         # todo bonus quest item
 
 class Mechanic(Companion):
