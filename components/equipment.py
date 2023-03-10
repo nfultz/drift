@@ -29,10 +29,9 @@ def desert_campsite_toolkit(entity):
 def weather_monitor(entity):
     entity.WEATHER_MONITOR = 1
 
-#TODO
 @_equip("Explorer Sling", 75)
-def f(entity):
-    pass
+def explorer_sling(entity):
+    entity.EXPLORER_SLING = 1
 
 @_equip("Heat Regulator", 80)
 def heat_regulator(entity):

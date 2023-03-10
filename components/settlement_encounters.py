@@ -21,7 +21,7 @@ def _add(*cards):
 @_add("AC", "AS")
 def mercs(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
+    i = skill_check(loc, entity, "hr", deck)
     if i > 0 : return None
 
     engine.msg("Mercenaries will train you, for a price")
@@ -81,7 +81,7 @@ def water_merchants(engine, entity):
 @_add("3C", "3S")
 def hire_minor(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    i = skill_check(loc, entity, "kr", deck)
     if i > 0 : return None
 
     engine.msg("Hire a minor house agent to establish an exchange.")
@@ -112,7 +112,7 @@ def hire_minor(engine, entity):
 @_add("4C", "4S")
 def hire_major(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    i = skill_check(loc, entity, "kr", deck)
     if i > 0 : return None
 
     engine.msg("Major house agent paying for intel.")
@@ -144,7 +144,7 @@ def hire_major(engine, entity):
 @_add("5C", "5S")
 def market_day(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("hk"), deck)
+    i = skill_check(loc, entity, "hk", deck)
     if i > 0 : return None
 
     engine.msg("Market day in the settlement.")
@@ -172,7 +172,7 @@ def market_day(engine, entity):
 @_add("6C", "6S")
 def work_trader(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("hr"), deck)
+    i = skill_check(loc, entity, "hr", deck)
     if i > 0 : return None
 
     engine.msg("Sign up to work for a trader and make some extra credits.")
@@ -364,7 +364,7 @@ def drifter(engine, entity):
 @_add("AD", "AH")
 def scouts(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    i = skill_check(loc, entity, "kr", deck)
     if i > 0 : return None
 
     engine.msg("Sand scouts selling information")
@@ -440,7 +440,7 @@ def bounty_hunters(engine, entity):
 @_add("4D", "4H")
 def raided(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("hk"), deck)
+    i = skill_check(loc, entity, "hk", deck)
     if i > 0 : return None
 
     engine.msg("Water has been raided, and people are paying for any you can spare.")
@@ -522,7 +522,7 @@ def food_vendor(engine, entity):
 @_add("6D", "6H")
 def trader_used(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    i = skill_check(loc, entity, "kr", deck)
     if i > 0 : return None
 
     engine.msg("a trader selling a large collection of 'gently' used equipment")
@@ -595,7 +595,7 @@ def tea(engine, entity):
 @_add("8D", "8H")
 def red_mercs(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    i = skill_check(loc, entity, "kr", deck)
     if i > 0 : return None
 
     engine.msg("Mercenaries offering Credits for job leads.")
@@ -613,7 +613,7 @@ def red_mercs(engine, entity):
 @_add("9D", "9H")
 def smugglers(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
-    i = skill_check(loc.level, entity.skill_test_n("kr"), deck)
+    i = skill_check(loc, entity, "kr", deck)
     if i > 0 : return None
 
     engine.msg("Smugglers looking to purchase relics and scrap at a good price.")
