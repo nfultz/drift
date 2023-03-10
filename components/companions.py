@@ -30,44 +30,135 @@ class Scoundrel(Companion):
     cost = 100
     name = 'Jax'
     title = 'Scoundrel'
+    def _leave(self, entity):
+        entity.r -=1
+
+    def _join(self, entity):
+        entity.r +=1
+        #TODO scrap or relic trades
 
 class Doctor(Companion):
     cost = 100
     name = 'Dr. Efra'
     title = 'Galactic M.D.'
 
+    def _leave(self, entity):
+        entity.k -=1
+
+    def _join(self, entity):
+        entity.k +=1
+        #TODO camping
+        # todo sell relics
+
 class Mercenary(Companion):
     cost = 100
     name = 'Duncan'
     title = 'Ex-Mercenary'
+
+    def _leave(self, entity):
+        entity.h -=1
+        entity.max_water -=1
+
+    def _join(self, entity):
+        entity.h +=1
+        entity.max_water +=1
+        # TODO reroll H dice
 
 class Robot(Companion):
     cost = 150
     name = 'B3TA'
     title = 'Robot'
 
+    def _leave(self, entity):
+        entity.h = self.h
+
+    def _join(self, entity):
+        self.h = entity.h
+        entity.h = max(entity.h - 1, 1)
+        #TODO reroll
+        # todo bonus quest item
+
 class Mechanic(Companion):
     cost = 150
     name = 'Geronimo'
     title = 'Mechanic'
 
+    def _leave(self, entity):
+        entity.max_fuel -= 1
+        entity.speed -= 1
+
+    def _join(self, entity):
+        entity.max_fuel += 1
+        entity.speed += 1
+        #TODO glider discount
+
 class Seeker(Companion):
     cost = 200
     name = 'Host'
     title = 'Seeker'
+
+    def _leave(self, entity):
+        entity.k -= 1
+        entity.max_stamina -= 2
+        entity.max_water -= 1
+
+    def _join(self, entity):
+        entity.k += 1
+        entity.max_stamina += 2
+        entity.max_water += 1
+
+
 class Cartographer(Companion):
     cost = 200
     name = 'Saffron'
     title = 'Cartographer'
+
+    def _leave(self, entity):
+        pass
+
+    def _join(self, entity):
+        pass
+        #TODO: draw 2
+        #TODO: draw 2
+        #TODO: exploration bonus
+
+
 class HouseAgent(Companion):
     cost = 200
     name = 'Lady Marjorie'
     title = 'Minor House Agent'
 
+    def _leave(self, entity):
+        entity.r -= 1
+        entity.max_stamina = self.stamina
+
+    def _join(self, entity):
+        self.stamina = entity.max_stamina
+        entity.max_stamina = max(entity.max_stamina - 3, 1)
+        entity.r += 1
+        # TODO draw 2
+        # TODO pick 2
+
 class Mystic(Companion):
     cost = 0
     name = 'Kale'
     title = 'Mysteic'
+
+    def _leave(self, entity):
+        entity.fame = entity.fame
+        entity.h -= 1
+        entity.k -= 1
+        entity.r -= 1
+        entity.max_stamina -= 2
+
+    def _join(self, entity):
+        self.fame = entity.fame
+        entity.fame = 0
+        entity.h += 1
+        entity.k += 1
+        entity.r += 1
+        entity.max_stamina += 2
+        # TODO : win condition
 
 COMPANION_DECK = {
   'A' : Scoundrel,

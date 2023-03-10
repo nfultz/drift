@@ -594,18 +594,31 @@ class HideAction(VisitAction):
 
 
 class FindCompanionAction(VisitAction):
+
     def __init__(self, engine: Engine, entity: Entity, loc):
         super().__init__(engine, entity)
         self.loc = loc
         self.companion = loc.companion
-        self.FLAVOR = f"Hire {self.companion.name}, a {self.companion.title} for {self.companion.cost} credits."
+        if self.companion is not None:
+            self.FLAVOR = f"Hire {self.companion.name}, a {self.companion.title} for {self.companion.cost} credits."
+        if len(self.entity.companions) > 0 :
+            self.fire = next(iter(self.entity.companions))
+            if self.companion is None:
+                self.FLAVOR = f"Fire {self.companion.name}"
+
     def perform(self) -> None:
         e = self.entity
-        if e.credits < self.companion.cost:
+        if self.companion is None:
+            leaving = self.fire
+            self.engine.msg(f"{leaving.name} leaves")
+            self.loc.companion = leaving
+            leaving.leave(e)
+            return
+        if (e.credits < self.companion.cost:
             self.engine.msg("Not enough credits")
             return None
         if e.fame < len(e.companions) * e.fame_per_companion:
-            leaving = next(iter(e.companions))
+            leaving = self.fire
             self.engine.msg(f"{leaving.name} leaves")
             self.loc.companion = leaving
             leaving.leave(e)
@@ -616,7 +629,7 @@ class FindCompanionAction(VisitAction):
         self.companion.join(e)
 
     def available(self) -> bool:
-        return self.loc.companion is not None
+        return self.loc.companion is not None or len(self.entity.companions) > 0
 
 #TODO
 class SettlementExploreAction(ExploreAction):
