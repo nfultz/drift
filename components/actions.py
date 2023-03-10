@@ -624,12 +624,12 @@ class RebuildAction(VisitAction):
         self.entity.cargo -= 2
         self.entity.credits -= 50
         self.entity.restoration += 1
-        self.engine.msg(f"You contribute cargo and cash to the restoration cause. ({self.restoration})")
+        self.engine.msg(f"You contribute cargo and cash to the restoration cause. ({self.entity.restoration})")
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
             self.engine.settlement_actions.pop(event.K_s, 0)
     def available(self) -> bool:
         if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
-        return self.entity.restoration != 99 and (self.entity.cargo >= 2 or self.entity.credits >= 50)
+        return self.entity.restoration != 99 and (self.entity.cargo >= 2 and self.entity.credits >= 50)
 
 class HideAction(VisitAction):
     FLAVOR = "Conceal your true identity. (2 relics or 150 credits)"

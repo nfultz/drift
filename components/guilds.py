@@ -1,4 +1,4 @@
-from .actions import Action, ExploreAction, MovementAction
+from .actions import Action, ExploreAction, MovementAction, RevealAction
 from . import locations
 from .explorations import skill_check, earn
 
@@ -85,7 +85,7 @@ class EcologyGuild(Guild):
             self.level = 1.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            mc = moisture_collector(x,y,self)
+            mc = self.moisture_collector(x,y,self)
             engine.game_map.add_location(mc)
 
 
@@ -471,7 +471,7 @@ class ExplorationGuild(Guild):
                 old = this.old
                 new = set()
 
-                for m in self.entity.moves:
+                for m in entity.moves:
                     if isinstance(m, ExploreAction) and m.success:
                         new.add(set)
 
@@ -508,13 +508,13 @@ class ExplorationGuild(Guild):
 
         #used below
         new = set()
-        for m in self.entity.moves[self.idx:]:
+        for m in entity.moves[self.idx:]:
             if isinstance(m, ExploreAction) and m.success:
                 new.add(set)
         explored = len(new)
         new = set()
-        for m in self.entity.moves[self.idx:]:
-            if isinstance(m, RevealAction) and m.success:
+        for m in entity.moves[self.idx:]:
+            if isinstance(m, RevealAction):
                 new.add(set)
         revealed = len(new)
 
@@ -756,7 +756,7 @@ class RestorationGuild(Guild):
         elif self.level == 0.5:
             #used below
             new = set()
-            for m in self.entity.moves[self.idx:]:
+            for m in entity.moves[self.idx:]:
                 if isinstance(m, ExploreAction) and m.success:
                     new.add(set)
             explored = len(new)
@@ -980,7 +980,7 @@ class GliderGuild(Guild):
         elif self.level == 0.5:
             #used below
             new = set()
-            for m in self.entity.moves[self.idx:]:
+            for m in entity.moves[self.idx:]:
                 if isinstance(m, MovementAction):
                     new.add(set)
             moved = len(new)
@@ -1097,7 +1097,7 @@ class GliderGuild(Guild):
         elif self.level == 5.5:
             #used below
             new = set()
-            for m in self.entity.moves[self.idx:]:
+            for m in entity.moves[self.idx:]:
                 if isinstance(m, MovementAction):
                     new.add(set)
             moved = len(new)

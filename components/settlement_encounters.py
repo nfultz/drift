@@ -287,6 +287,7 @@ def informant(engine, entity):
         FLAVOR = "reveal"
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
+            rev.COST = 0
             rev.radius = 10
             rev.min_dist=3
             rev.available()
@@ -345,6 +346,7 @@ def cartographer(engine, entity):
         limit = 5
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
+            rev.COST = 0
             rev.radius = 10
             rev.min_dist=3
             rev.available()
@@ -410,10 +412,12 @@ def scouts(engine, entity):
         limit = 2
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
+            rev.COST = 0
             rev.radius = 5
             rev.min_dist=2
             rev.available()
             rev2 = RevealAction(self.engine, self.entity)
+            rev2.COST = 0
             rev2.radius = 5
             rev2.min_dist=2
             rev2.available()
