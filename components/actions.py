@@ -432,7 +432,6 @@ class VisitAction(Action):
 
 class VisitEndAction(Action):
     def perform(self) -> None:
-        #TODO
         self.entity.in_town = False
 
 class RestAction(VisitAction):
@@ -687,6 +686,14 @@ class SettlementExploreAction(ExploreAction):
     FLAVOR = "Explore the settlement"
     def perform(self):
         from .settlement_encounters import draw
+
+        # Pick your poison
+        if hasattr(entity, "MARJORIE_BONUS"):
+            self.engine.settlement_actions[event.K_6] = MarjorieExplore(engine, entity)
+            self.engine.settlement_actions[event.K_7] = MarjorieExplore(engine, entity)
+            self.engine.settlement_actions.pop(event.K_x, 0)
+            return
+
         encounter = draw(self.engine.deck.top)
         choices = encounter(self.engine, self.entity) or []
         for i, c in enumerate(choices):
@@ -695,6 +702,21 @@ class SettlementExploreAction(ExploreAction):
         self.engine.settlement_actions.pop(event.K_x, 0)
     def available(self) -> bool:
         return True
+
+class MarjorieExplore(ExploreAction):
+    def __init__(engine, entity):
+        super().__init__(engine, entity)
+        from .settlement_encounters import draw
+        self.encounter = draw(self.engine.deck.top)
+        self.FLAVOR = f'Explore the {self.encounter.__name__.replace("_"," ").title()}'
+    def perform(self):
+        self.engine.settlement_actions.pop(event.K_6,0)
+        self.engine.settlement_actions.pop(event.K_7,0)
+        choices = encounter(self.engine, self.entity) or []
+        for i, c in enumerate(choices):
+            if c.available():
+                self.engine.settlement_actions[event.K_6 +i] = c
+
 
 class SkilledLaborerAction(Action):
     FLAVOR = "Do skilled labor"

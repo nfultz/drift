@@ -33,7 +33,9 @@ def mercs(engine, entity):
                 self.entity.credits -= 100
                 self.entity.max_stamina += 1
                 self.engine.settlement_actions.pop(event.K_6, None)
-                self.engine.settlement_actions.pop(event.K_7, None)
+
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_7, None)
 
 
     class optionB(SettlementEncounterResultAction):
@@ -42,7 +44,8 @@ def mercs(engine, entity):
             if self.entity.credits >= 200:
                 self.entity.credits -= 200
                 self.entity.h += 1
-                self.engine.settlement_actions.pop(event.K_6, None)
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_6, None)
                 self.engine.settlement_actions.pop(event.K_7, None)
 
     oa = optionA(engine, entity)
@@ -121,7 +124,8 @@ def hire_major(engine, entity):
         FLAVOR = "Sell intel on guild locations."
         def perform(self):
             self.engine.settlement_actions.pop(event.K_6, None)
-            self.engine.settlement_actions.pop(event.K_7, None)
+            if not hasattr(entity, "MARJORIE_BONUS"):
+                self.engine.settlement_actions.pop(event.K_7, None)
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "Sell 1 relic (60 credits)"
@@ -129,7 +133,8 @@ def hire_major(engine, entity):
             if self.entity.relic > 0:
                 self.entity.credits += 60
                 self.entity.relic -= 1
-                self.engine.settlement_actions.pop(event.K_6, None)
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_6, None)
                 self.engine.settlement_actions.pop(event.K_7, None)
         def available(self):
             return self.entity.relic > 0
@@ -231,37 +236,43 @@ def guild_merchants(engine, entity):
 def traveling_mechanic(engine, entity):
     engine.msg("A famous traveling mechanic offering services you won't find anywhere else.")
 
+    picked = list(0)
+
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "speed tweaks (75 credits)"
         def perform(self):
             if self.entity.credits >= 75:
+                picked[0] += 1
                 self.entity.speed += 1
                 self.entity.credits -= 75
                 self.engine.settlement_actions.pop(event.K_6, None)
-                self.engine.settlement_actions.pop(event.K_7, None)
-                self.engine.settlement_actions.pop(event.K_8, None)
+                if not hasattr(entity, "MARJORIE_BONUS") or picked >= 2:
+                    self.engine.settlement_actions.pop(event.K_7, None)
+                    self.engine.settlement_actions.pop(event.K_8, None)
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "fuel tank tweaks (75)"
         def perform(self):
-            pass
             if self.entity.credits >= 75:
+                picked[0] += 1
                 self.entity.max_fuel += 1
                 self.entity.credits -= 75
-                self.engine.settlement_actions.pop(event.K_6, None)
                 self.engine.settlement_actions.pop(event.K_7, None)
-                self.engine.settlement_actions.pop(event.K_8, None)
+                if not hasattr(entity, "MARJORIE_BONUS") or picked >= 2:
+                    self.engine.settlement_actions.pop(event.K_6, None)
+                    self.engine.settlement_actions.pop(event.K_8, None)
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "cargo space tweaks (50)"
         def perform(self):
-            pass
             if self.entity.credits >= 50:
+                picked[0] += 1
                 self.entity.credits -= 50
                 self.entity.max_cargo += 1
-                self.engine.settlement_actions.pop(event.K_6, None)
-                self.engine.settlement_actions.pop(event.K_7, None)
                 self.engine.settlement_actions.pop(event.K_8, None)
+                if not hasattr(entity, "MARJORIE_BONUS") or picked >= 2:
+                    self.engine.settlement_actions.pop(event.K_6, None)
+                    self.engine.settlement_actions.pop(event.K_7, None)
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -532,14 +543,17 @@ def food_vendor(engine, entity):
                 self.entity.credits -= 25
                 self.entity.h += 1 #TODO choose
                 self.engine.settlement_actions.pop(event.K_6, None)
-                self.engine.settlement_actions.pop(event.K_7, None)
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_7, None)
+
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "quest item"
         def perform(self):
             if self.entity.credits >= 10:
                 self.entity.credits -= 10
                 self.entity.stamina = self.entity.max_stamina + 2
-                self.engine.settlement_actions.pop(event.K_6, None)
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_6, None)
                 self.engine.settlement_actions.pop(event.K_7, None)
             pass
 
@@ -577,41 +591,52 @@ def trader_used(engine, entity):
 def tea(engine, entity):
     engine.msg("enjoy a quiet cup of tea.")
 
+    picked = list(0)
+
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "h"
         def perform(self):
+            picked[0] += 1
             self.entity.h += 1
             self.engine.settlement_actions.pop(event.K_6, None)
-            self.engine.settlement_actions.pop(event.K_7, None)
-            self.engine.settlement_actions.pop(event.K_8, None)
-            self.engine.settlement_actions.pop(event.K_9, None)
+            if not hasattr(entity, "MARJORIE_BONUS") or picked[0] >= 2:
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
+                self.engine.settlement_actions.pop(event.K_8, None)
+                self.engine.settlement_actions.pop(event.K_9, None)
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "k"
         def perform(self):
+            picked[0] += 1
             self.entity.k += 1
-            self.engine.settlement_actions.pop(event.K_6, None)
             self.engine.settlement_actions.pop(event.K_7, None)
-            self.engine.settlement_actions.pop(event.K_8, None)
-            self.engine.settlement_actions.pop(event.K_9, None)
+            if not hasattr(entity, "MARJORIE_BONUS") or picked[0] >= 2:
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_8, None)
+                self.engine.settlement_actions.pop(event.K_9, None)
 
     class optionC(SettlementEncounterResultAction):
         FLAVOR = "r"
         def perform(self):
+            picked[0] += 1
             self.entity.r += 1
-            self.engine.settlement_actions.pop(event.K_6, None)
-            self.engine.settlement_actions.pop(event.K_7, None)
             self.engine.settlement_actions.pop(event.K_8, None)
-            self.engine.settlement_actions.pop(event.K_9, None)
+            if not hasattr(entity, "MARJORIE_BONUS") or picked[0] >= 2:
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
+                self.engine.settlement_actions.pop(event.K_9, None)
 
     class optionD(SettlementEncounterResultAction):
         FLAVOR = "max stamina"
         def perform(self):
+            picked[0] += 1
             self.entity.max_stamina += 1
-            self.engine.settlement_actions.pop(event.K_6, None)
-            self.engine.settlement_actions.pop(event.K_7, None)
-            self.engine.settlement_actions.pop(event.K_8, None)
             self.engine.settlement_actions.pop(event.K_9, None)
+            if not hasattr(entity, "MARJORIE_BONUS") or picked[0] >= 2:
+                self.engine.settlement_actions.pop(event.K_6, None)
+                self.engine.settlement_actions.pop(event.K_7, None)
+                self.engine.settlement_actions.pop(event.K_8, None)
 
 
     oa = optionA(engine, entity)
@@ -653,6 +678,8 @@ def smugglers(engine, entity):
             if self.entity.relic >= 1:
                 self.entity.relic -=1
                 self.entity.credits +=70
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_7, None)
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "Sell 2 cargo (20)"
@@ -660,6 +687,8 @@ def smugglers(engine, entity):
             if self.entity.cargo >= 2:
                 self.entity.relic -=2
                 self.entity.credits +=20
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_6, None)
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -688,7 +717,8 @@ def glider_race_mechanic(engine, entity):
                 self.entity.relic -=65
                 self.entity.speed += 1
                 self.engine.settlement_actions.pop(event.K_6, None)
-                self.engine.settlement_actions.pop(event.K_7, None)
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_7, None)
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "+1 max fuel (65)"
@@ -696,7 +726,8 @@ def glider_race_mechanic(engine, entity):
             if self.entity.credits >= 65:
                 self.entity.relic -=65
                 self.entity.max_fuel += 1
-                self.engine.settlement_actions.pop(event.K_6, None)
+                if not hasattr(entity, "MARJORIE_BONUS"):
+                    self.engine.settlement_actions.pop(event.K_6, None)
                 self.engine.settlement_actions.pop(event.K_7, None)
 
     oa = optionA(engine, entity)

@@ -137,11 +137,13 @@ class HouseAgent(Companion):
     def _leave(self, entity):
         entity.r -= 1
         entity.max_stamina = self.stamina
+        entity.MARJORIE_BONUS = 0
 
     def _join(self, entity):
         self.stamina = entity.max_stamina
         entity.max_stamina = max(entity.max_stamina - 3, 1)
         entity.r += 1
+        entity.MARJORIE_BONUS = 1
         # TODO draw 2
         # TODO pick 2
 
