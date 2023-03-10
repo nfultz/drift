@@ -214,6 +214,7 @@ class PassAction(Action):
 class RevealAction(Action):
     COST = 1
     radius = 1
+    min_dist = 0
 
     def perform(self) -> None:
         loc = locations.draw(self.engine.deck, self.dest_x, self.dest_y)
@@ -268,7 +269,7 @@ class RevealAction(Action):
 
         r = self.radius + 1 if hasattr(self.entity, "WAYFINDING") else self.radius
 
-        self.dest_x,self.dest_y = map.nearest_empty(x,y,r)
+        self.dest_x,self.dest_y = map.nearest_empty(x,y,r,self.min_dist)
 
         if self.dest_x is None:
             self.engine.msg(f"Nothing to see here. Move along.")

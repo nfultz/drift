@@ -161,12 +161,13 @@ def market_day(engine, entity):
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "equipment"
         from .equipment import items
+
         def perform(self):
             if self.entity.credits > self.cost:
                 self.entity.credits -= self.cost
                 self.item(self.entity)
                 items.pop(self.idx)
-            pass
+
         def available(self):
             if not any(not i.glider for i in items ) return False
             n = 1
@@ -273,10 +274,15 @@ def informant(engine, entity):
 
     class optionA(SettlementEncounterResultAction):
         FLAVOR = "reveal"
+        from .actions import RevealAction
         def perform(self):
+            rev = RevealAction(self.engine, self.entity)
+            rev.radius = 10
+            rev.min_dist=3
+            rev.available()
             if self.entity.credits >= 20:
-                pass
-                #TODO
+                self.entity.credits -=20
+                rev.perform()
 
     class optionB(SettlementEncounterResultAction):
         FLAVOR = "double scrap for a turn"

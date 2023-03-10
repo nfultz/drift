@@ -49,7 +49,13 @@ def earn(entity, level=1, **kwargs):
                     kwargs.pop('cargo')
                     kwargs['quest'] = kwargs.get('quest', 0) + 1
                 continue
-            entity.cargo = min(entity.cargo + v*level getattr(entity, "SCRAP_DETECTOR", 0), entity.max_cargo)
+            m = getattr(entity,"DOUBLE_SCRAP",0)
+            if m > 0:
+                m = min(informant, v)
+                v -= m
+                entity.DOUBLE_SCRAP -= m
+                kwargs['cargo'] += m
+            entity.cargo = min(entity.cargo + m + v*level+getattr(entity, "SCRAP_DETECTOR", 0), entity.max_cargo)
         if k == 'relic':
             entity.relic = min(entity.relic + v, entity.max_relic)
         if k == 'credits':
