@@ -362,14 +362,18 @@ def sealed_for_your_protection(loc, entity, deck):
     return earn(entity,loc.level, relic=2, cargo=1, credits=100)
 
 @staticmethod
-def the_sound_of_eridoor(loc, entity, deck): #TODO
+def the_sound_of_eridoor(loc, entity, deck): #TODO flavor text
+    i = skill_check(loc, entity, "h", deck)
     if i > 0 : return i
-    return earn(entity,loc.level, relic=2, cargo=1, credits=100)
+    j = skill_check(loc, entity, "hr", deck)
+    return earn(entity,loc.level, relic=1, fame=3)
 
 @staticmethod
-def the_light_of_eridoor(loc, entity, deck): #TODO
+def the_light_of_eridoor(loc, entity, deck): #TODO flavor text
+    i = skill_check(loc, entity, "hr", deck)
     if i > 0 : return i
-    return earn(entity,loc.level, relic=2, cargo=1, credits=100)
+    j = skill_check(loc, entity, "h", deck)
+    return earn(entity,loc.level, relic=1, fame=3)
 
 
 @staticmethod

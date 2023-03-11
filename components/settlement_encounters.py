@@ -176,7 +176,7 @@ def market_day(engine, entity):
                 items.pop(self.idx)
 
         def available(self):
-            if not any(not i.glider for i in items ):return False
+            if not any(not i.glider for i in items.values()): return False
             n = 1
             for i, item in enumerate(items):
                 if item.glider:continue
@@ -342,7 +342,7 @@ def cartographer(engine, entity):
     engine.msg("a local cartographer is selling maps of the region")
 
     class optiona(VisitAction):
-        flavor = "reveal (10)"
+        FLAVOR = "reveal (10)"
         limit = 5
         def perform(self):
             rev = RevealAction(self.engine, self.entity)
@@ -365,7 +365,7 @@ def drifter(engine, entity):
     from . import companions
 
     class optiona(VisitAction):
-        flavor = "Hire Host, a seeker"
+        FLAVOR = "Hire Host, a seeker"
         def perform(self):
             companion = companion.Host()
             self.engine.msg(f"{companion} joins you")
@@ -379,7 +379,7 @@ def drifter(engine, entity):
 
 
     class optionb(VisitAction):
-        flavor = "Hire Kale, a mystic"
+        FLAVOR = "Hire Kale, a mystic"
         def perform(self):
             companion = companion.Mystic()
             self.engine.msg(f"{self.companion} joins you")
