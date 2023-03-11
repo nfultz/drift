@@ -394,7 +394,7 @@ def drifter(engine, entity):
     class optiona(VisitAction):
         FLAVOR = "Hire Host, a seeker"
         def perform(self):
-            companion = companion.Host()
+            companion = companions.Seeker()
             self.engine.msg(f"{companion} joins you")
             companion.join(e)
             self.engine.settlement_actions.pop(event.K_6, None)
@@ -408,7 +408,7 @@ def drifter(engine, entity):
     class optionb(VisitAction):
         FLAVOR = "Hire Kale, a mystic"
         def perform(self):
-            companion = companion.Mystic()
+            companion = companions.Mystic()
             self.engine.msg(f"{self.companion} joins you")
             companion.join(e)
             self.engine.settlement_actions.pop(event.K_6, None)
@@ -572,7 +572,7 @@ def food_vendor(engine, entity):
     engine.msg("A food vendor, cooking up something mouthwatering.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "+1 to h"
+        FLAVOR = "+1 to h (25 credits)"
         def perform(self):
             if self.entity.credits >= 25:
                 self.entity.credits -= 25
@@ -582,7 +582,7 @@ def food_vendor(engine, entity):
                     self.engine.settlement_actions.pop(event.K_7, None)
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "quest item"
+        FLAVOR = "Restore Stamina (10)"
         def perform(self):
             if self.entity.credits >= 10:
                 self.entity.credits -= 10

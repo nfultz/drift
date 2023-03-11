@@ -1,7 +1,14 @@
 
 items = []
 def draw(card):
-    return items.pop(card.value % len(items)) if len(items) >0 else None
+    # Rotate through items so that not all upgrades are in endgame
+    if len(items) == 0: return none
+
+    i = card.value % len(items)
+    ret = items[i]
+    items[:] = items[:i] + items[i+1:]
+
+    return ret
 
 def _equip(name='', cost=0, glider=False):
     def wrap(f):

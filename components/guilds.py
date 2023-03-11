@@ -1148,7 +1148,7 @@ class SmugglersGuild(Guild):
     pass
 
 ALL_GUILDS = [EcologyGuild(), RelicsGuild(), ExplorationGuild(), RestorationGuild(), GliderGuild()]
-items = ALL_GUILDS + [None] * 3
+items = [*ALL_GUILDS, None, None, None]
 
 def draw(card):
     return items.pop(card.value % len(items)) if len(items) else None
