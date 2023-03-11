@@ -174,6 +174,7 @@ def market_day(engine, entity):
                 self.entity.credits -= self.cost
                 self.item(self.entity)
                 items.pop(self.idx)
+                return
 
         def available(self):
             if not any(not i.glider for i in items.values()): return False
@@ -214,18 +215,44 @@ def work_trader(engine, entity):
     return [oa]
 
 @_add("7C", "7S")
-def guild_merchants(engine, entity): #TODO
+def guild_merchants(engine, entity): #TODO choose
     engine.msg("Guild merchants selling high quality equipment surpluses.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "150"
+        FLAVOR = "Two for 150"
         def perform(self):
-            pass
+            n = 2
+            total = 100
+            if self.entity.credits >= 150:
+                self.entity.credits -= 150
+                from .equipment import items
+                for idx, i in enumerate(list(items)):
+                    if i.cost < total and not i.glider:
+                        items.pop(idx)
+                        i(self.entity)
+                        total -= i.cost
+                        n = n - 1
+                        self.engine.settlement_actions.pop(event.K_6, None)
+                        self.engine.settlement_actions.pop(event.K_7, None)
+                        if n == 0: return
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "300"
+        FLAVOR = "Two for 300"
         def perform(self):
-            pass
+            n = 2
+            total = 200
+            if self.entity.credits >= 300:
+                self.entity.credits -= 300:
+                from .equipment import items
+                for idx, i in enumerate(list(items)):
+                    if i.cost < total and not i.glider:
+                        items.pop(idx)
+                        i(self.entity)
+                        total -= i.cost
+                        n = n - 1
+                        self.engine.settlement_actions.pop(event.K_6, None)
+                        self.engine.settlement_actions.pop(event.K_7, None)
+                        if n == 0: return
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -480,7 +507,6 @@ def bounty_hunters(engine, entity):
 
             self.entity.credits += 10 *amt
             self.engine.settlement_actions.pop(event.K_6, None)
-            pass
 
     oa = optionA(engine, entity)
 
@@ -572,7 +598,7 @@ def food_vendor(engine, entity):
     return [oa, ob]
 
 @_add("6D", "6H")
-def trader_used(engine, entity): #TODO
+def trader_used(engine, entity):
     loc = engine.game_map.get_loc(entity.x, entity.y)
     i = skill_check(loc, entity, "kr", engine.deck)
     if i > 0 : return None
@@ -580,14 +606,32 @@ def trader_used(engine, entity): #TODO
     engine.msg("a trader selling a large collection of 'gently' used equipment")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "1 Equipment (100)"
+        FLAVOR = "Old Equipment (50)"
         def perform(self):
-            pass
+            if self.entity.credits >= 50:
+                from .equipment import items
+                for idx, i in enumerate(list(items)):
+                    if i.cost < 100 and not i.glider:
+                        items.pop(idx)
+                        i(self.entity)
+                        self.entity.credits -= 50
+                        self.engine.settlement_actions.pop(event.K_6, None)
+                        self.engine.settlement_actions.pop(event.K_7, None)
+                        return
 
     class optionB(SettlementEncounterResultAction):
-        FLAVOR = "2 Equipment (150)"
+        FLAVOR = "Nice Equipment (150)"
         def perform(self):
-            pass
+            if self.entity.credits >= 150:
+                from .equipment import items
+                for idx, i in enumerate(list(items)):
+                    if i.cost < 200 and not i.glider:
+                        items.pop(idx)
+                        i(self.entity)
+                        self.entity.credits -= 150
+                        self.engine.settlement_actions.pop(event.K_6, None)
+                        self.engine.settlement_actions.pop(event.K_7, None)
+                        return
 
     oa = optionA(engine, entity)
     ob = optionB(engine, entity)
@@ -662,8 +706,18 @@ def red_mercs(engine, entity):
     engine.msg("Mercenaries offering Credits for job leads.")
 
     class optionA(SettlementEncounterResultAction):
-        FLAVOR = "Sell intel." #TODO
+        FLAVOR = "Sell intel to mercenaries."
         def perform(self):
+
+            amt = 0
+            for y in self.engine.game_map.locations.values():
+                for loc in y.values():
+                    if isinstance(loc, locations.Settlement):
+                        amt += 1
+
+            self.entity.credits += 20 *amt
+            self.engine.settlement_actions.pop(event.K_6, None)
+
             pass
 
     oa = optionA(engine, entity)
@@ -764,9 +818,16 @@ def spike(engine, entity):
             return self.entity.quest_guild is not None
 
     class optionC(SettlementEncounterResultAction):
-        FLAVOR = "Equipment (100)" #TODO
+        FLAVOR = "Equipment (100)" #TODO choose
         def perform(self):
-            self.engine.settlement_actions.pop(event.K_8, None)
+            if self.entity.credits >= 100:
+                from .equipment import items
+                for idx, i in enumerate(list(items)):
+                    items.pop(idx)
+                    i(self.entity)
+                    self.entity.credits -= 100
+                    self.engine.settlement_actions.pop(event.K_8, None)
+                    return
 
 
     oa = optionA(engine, entity)
