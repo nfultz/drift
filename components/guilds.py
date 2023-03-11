@@ -584,10 +584,10 @@ class ExplorationGuild(Guild):
             engine.game_map.add_location(foo)
             self.settlement = foo
 
-            self.quest = 1
+            entity.quest = 1
 
         elif self.level == 3.5:
-            if self.settlement.x == entity.x and self.settlement.y == entity.y:
+            if entity.quest >= 1 and (self.settlement.x, self.settlement.y) == (entity.x, entity.y):
                 engine.msg("Quest Completed")
                 entity.quest = 0
                 entity.quest_guild = None
@@ -631,7 +631,7 @@ class ExplorationGuild(Guild):
             entity.quest = 1
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            foo = ExplorationGuild.ancient_temple(x,y)
+            foo = ExplorationGuild.ancient_temple(x,y,self)
             engine.game_map.add_location(foo)
 
         elif self.level == 5.5:
