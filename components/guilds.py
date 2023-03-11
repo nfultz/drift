@@ -87,7 +87,7 @@ class EcologyGuild(Guild):
             self.level = 1.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            mc = self.moisture_collector(x,y,self)
+            mc = EcologyGuild.moisture_collector(x,y,self)
             engine.game_map.add_location(mc)
 
 
@@ -112,7 +112,7 @@ class EcologyGuild(Guild):
             self.level = 2.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            mc = wind_trap(x,y,self)
+            mc = EcologyGuild.wind_trap(x,y,self)
             engine.game_map.add_location(mc)
 
         elif self.level == 2.5:
@@ -173,7 +173,7 @@ class EcologyGuild(Guild):
             entity.quest = 1
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            self.SG = secret_garden(x,y,self)
+            self.SG = EcologyGuild.secret_garden(x,y,self)
             engine.game_map.add_location(self.SG)
 
 
@@ -339,7 +339,7 @@ class RelicsGuild(Guild):
             self.level = 2.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            foo = guild_of_relics_settlment(x,y,self)
+            foo = RelicsGuild.guild_of_relics_settlment(x,y,self)
             engine.game_map.add_location(foo)
             self.new_settlement = foo
 
@@ -385,7 +385,7 @@ class RelicsGuild(Guild):
             self.level = 4.5
 
             x,y = engine.game_map.nearest_empty(self.rm.x, self.rm.y, r=30, at_least=3)
-            foo = stasis_system(x,y,self)
+            foo = RelicsGuild.stasis_system(x,y,self)
             engine.game_map.add_location(foo)
 
 
@@ -428,7 +428,7 @@ class RelicsGuild(Guild):
 
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=20)
-            foo = lost_great_house(x,y,self)
+            foo = RelicsGuild.lost_great_house(x,y,self)
             engine.game_map.add_location(foo)
             self.new_settlement = foo
 
@@ -579,7 +579,7 @@ class ExplorationGuild(Guild):
             self.level = 3.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            foo = guild_of_exploration_settlment(x,y,self)
+            foo = ExplorationGuild.guild_of_exploration_settlment(x,y,self)
             engine.game_map.add_location(foo)
             self.settlement == foo
 
@@ -630,7 +630,7 @@ class ExplorationGuild(Guild):
             self.entity.quest = 1
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            foo = ancient_temple(x,y)
+            foo = ExplorationGuild.ancient_temple(x,y)
             engine.game_map.add_location(foo)
 
         elif self.level == 5.5:
@@ -652,11 +652,6 @@ class ExplorationGuild(Guild):
             self.level = 6.5
             self.rm.quest_level = 6.5
 
-
-            x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=20)
-            foo = lost_great_house(x,y,self)
-            engine.game_map.add_location(foo)
-            self.new_settlement = foo
 
         elif self.level == 6.5:
             if entity.quest >= 4 and entity.cargo >= 10:
@@ -728,6 +723,7 @@ class RestorationGuild(Guild):
 
     def guild_action(self, engine, entity):
         class A(Action):
+            FLAVOR="Restoration efforts (cargo)"
             def perform(self):
                 n = self.entity.cargo
 
@@ -779,7 +775,7 @@ class RestorationGuild(Guild):
             self.message = "Recover cargo for the restoration workers."
             engine.msg(self.message)
             self.idx = len(entity.moves)
-            self.level = 1.5:
+            self.level = 1.5
 
         elif self.level == 1.5:
             if entity.cargo >= 5 and entity.water >= 2 and entity.fuel >= 1 and entity.credits >= 25:
@@ -806,7 +802,7 @@ class RestorationGuild(Guild):
             self.level = 2.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=2)
-            foo = recovery_center(x,y,self)
+            foo = RestorationGuild.recovery_center(x,y,self)
             engine.game_map.add_location(foo)
             self.rc == foo
 
@@ -830,7 +826,7 @@ class RestorationGuild(Guild):
             self.level = 3.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            foo = green_archives(x,y,self)
+            foo = RestorationGuild.green_archives(x,y,self)
             engine.game_map.add_location(foo)
             self.gc == foo
 
@@ -859,7 +855,7 @@ class RestorationGuild(Guild):
             x,y = entity.x, entity.y
             for _ in range(3):
                 x,y = engine.game_map.nearest_empty(x, y, r=30, at_least=3)
-                foo = renewal_machines(x,y,self)
+                foo = RestorationGuild.renewal_machines(x,y,self)
                 engine.game_map.add_location(foo)
 
         elif self.level == 4.5:
@@ -901,7 +897,7 @@ class RestorationGuild(Guild):
             entity.SE1 = 0
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=20)
-            foo = solar_engine(x,y,self)
+            foo = RestorationGuild.solar_engine(x,y,self)
             engine.game_map.add_location(foo)
 
         elif self.level == 6.5:
@@ -1052,7 +1048,7 @@ class GliderGuild(Guild):
             self.level = 3.5
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            foo = racetrack(x,y,self)
+            foo = GliderGuild.racetrack(x,y,self)
             engine.game_map.add_location(foo)
             entity.rt_wins = 0
             entity.rt_streak = 0
@@ -1078,7 +1074,7 @@ class GliderGuild(Guild):
 
             x,y = entity.x, entity.y
             x,y = engine.game_map.nearest_empty(x, y, r=30, at_least=3)
-            foo = glider_factory(x,y,self)
+            foo = GliderGuild.glider_factory(x,y,self)
             engine.game_map.add_location(foo)
 
         elif self.level == 4.5:
