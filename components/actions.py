@@ -330,7 +330,7 @@ class ExploreAction(Action):
 
         return check_ap(self.entity, self)
 
-class RetryAction(Action):
+class RetryAction(ExploreAction):
     COST = 0
     def __init__(self, engine, entity):
         super().__init__(engine, entity)

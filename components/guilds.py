@@ -1,4 +1,4 @@
-from .actions import Action, ExploreAction, MovementAction, RevealAction
+from .actions import Action, ExploreAction, MovementAction, RevealAction, RetryAction
 from . import locations
 from .explorations import skill_check, earn
 
