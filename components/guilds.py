@@ -473,7 +473,7 @@ class ExplorationGuild(Guild):
 
                 for m in entity.moves:
                     if isinstance(m, ExploreAction) and m.success:
-                        new.add(set)
+                        new.add(m)
 
                 new = len(new)
                 this.old = new
@@ -510,12 +510,12 @@ class ExplorationGuild(Guild):
         new = set()
         for m in entity.moves[self.idx:]:
             if isinstance(m, ExploreAction) and m.success:
-                new.add(set)
+                new.add(m)
         explored = len(new)
         new = set()
         for m in entity.moves[self.idx:]:
             if isinstance(m, RevealAction):
-                new.add(set)
+                new.add(m)
         revealed = len(new)
 
 
@@ -758,7 +758,7 @@ class RestorationGuild(Guild):
             new = set()
             for m in entity.moves[self.idx:]:
                 if isinstance(m, ExploreAction) and m.success:
-                    new.add(set)
+                    new.add(m)
             explored = len(new)
 
             if explored >= 5:
@@ -982,7 +982,7 @@ class GliderGuild(Guild):
             new = set()
             for m in entity.moves[self.idx:]:
                 if isinstance(m, MovementAction):
-                    new.add(set)
+                    new.add(m)
             moved = len(new)
 
             if moved >= 15:
@@ -1099,7 +1099,7 @@ class GliderGuild(Guild):
             new = set()
             for m in entity.moves[self.idx:]:
                 if isinstance(m, MovementAction):
-                    new.add(set)
+                    new.add(m)
             moved = len(new)
 
             if moved >= 30 and upgrades >= 3:
