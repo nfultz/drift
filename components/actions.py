@@ -586,6 +586,8 @@ class SellRelic(VisitAction):
             self.price = 40
 
         self.price += getattr(entity, "JAX_BONUS", 0) * 2
+        self.price += getattr(entity, "OFFWORLD_CONTACTS", 0)
+        self.price += getattr(entity, "HIGHEST_BIDDERS", 0)
 
         self.amount = min(self.limit, self.entity.relic)
         self.FLAVOR = f"Sell {self.amount} relics at {self.price} each"

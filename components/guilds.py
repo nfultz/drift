@@ -582,7 +582,7 @@ class ExplorationGuild(Guild):
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
             foo = ExplorationGuild.guild_of_exploration_settlment(x,y,self)
             engine.game_map.add_location(foo)
-            self.settlement == foo
+            self.settlement = foo
 
             self.quest = 1
 
@@ -805,7 +805,7 @@ class RestorationGuild(Guild):
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=2)
             foo = RestorationGuild.recovery_center(x,y,self)
             engine.game_map.add_location(foo)
-            self.rc == foo
+            self.rc = foo
 
         elif self.level == 2.5:
             if entity.quest >= 4 and (entity.x, entity.y) == (self.rc.x, self.rc.y):
@@ -829,7 +829,7 @@ class RestorationGuild(Guild):
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
             foo = RestorationGuild.green_archives(x,y,self)
             engine.game_map.add_location(foo)
-            self.gc == foo
+            self.gc = foo
 
             self.quest = 1
 
@@ -1147,7 +1147,8 @@ class SmugglersGuild(Guild):
     label = "Smugglers"
     pass
 
-items = [EcologyGuild(), RelicsGuild(), ExplorationGuild(), RestorationGuild(), GliderGuild(), None, None, None]
+ALL_GUILDS = [EcologyGuild(), RelicsGuild(), ExplorationGuild(), RestorationGuild(), GliderGuild()]
+items = ALL_GUILDS + [None] * 3
 
 def draw(card):
     return items.pop(card.value % len(items)) if len(items) else None

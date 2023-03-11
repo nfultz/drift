@@ -64,7 +64,7 @@ class Explorer(Background):
         super().__init__(2,1,3)
 
     def bonus(self, player):
-        player.DELVER = 1 #TODO
+        player.DELVER = 1
 
     from .actions import CampingAction
     def goal(self, player):
@@ -85,7 +85,7 @@ class Scoundrel(Background):
         super().__init__(1,2,3)
 
     def bonus(self, player):
-        player.OFFWORLD_CONTACTS = 1 #TODO
+        player.OFFWORLD_CONTACTS = 25
 
 
     from .actions import SellRelic
@@ -100,7 +100,7 @@ class Scoundrel(Background):
 
     def reward(self, player):
         player.r += 1
-        player.HIGHEST_BIDDERS = 25 #TODO
+        player.HIGHEST_BIDDERS = 25
 
 class Navigator(Background):
     def __init__(self):
@@ -129,15 +129,15 @@ class Freelancer(Background):
 
 
     def bonus(self, player):
-        player.WORK_FOR_HIRE = 1 #TODO
+        player.WORK_FOR_HIRE = 1
 
 
     def goal(self, player):
         n = 0
-        for i in player.moves:
-            if False: # TODO i.type == 'finish-quest':
-                n = n + 1
-            if n == 6:
+        from .guilds import ALL_GUILDS
+        for g in ALL_GUILDS:
+            n += int(g.level)
+            if n >= 6:
                 return True
         return False
 

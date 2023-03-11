@@ -22,7 +22,10 @@ def skill_check(loc, entity, skill, deck, level=None):
 
     stat = entity.skill_test_n(skill, bonus)
 
-    retry = getattr(entity, "EXPLORER_SLING", 0) + getattr(entity, "BETA_REROLL", 0)
+    retry = 0
+    retry += getattr(entity, "EXPLORER_SLING", 0)
+    retry += getattr(entity, "BETA_REROLL", 0)
+    retry += getattr(entity, "DELVER", 0)
 
     # Duncan bonus
     if 'h' in skill and entity.h + bonus['h'] == stat:
@@ -41,6 +44,11 @@ def skill_check(loc, entity, skill, deck, level=None):
     return 0
 
 def earn(entity, level=1, **kwargs):
+
+    if hasattr(entity, "WORK_FOR_HIRE"):
+        if entity.quest_guild is not None:
+            kwargs['quest'] = kwargs.get('quest', 0) + 1
+
     for k,v in list(kwargs.items()): #NB: need list() bc of quest.pop below
         if v == 0:
             kwargs.pop(k)

@@ -242,7 +242,7 @@ def guild_merchants(engine, entity): #TODO choose
             n = 2
             total = 200
             if self.entity.credits >= 300:
-                self.entity.credits -= 300:
+                self.entity.credits -= 300
                 from .equipment import items
                 for idx, i in enumerate(list(items)):
                     if i.cost < total and not i.glider:
