@@ -722,7 +722,7 @@ def glider_race_mechanic(engine, entity):
         FLAVOR = "+1 Speed (65)"
         def perform(self):
             if self.entity.credits >= 65:
-                self.entity.relic -=65
+                self.entity.credits -=65
                 self.entity.speed += 1
                 self.engine.settlement_actions.pop(event.K_6, None)
                 if not hasattr(entity, "MARJORIE_BONUS"):
@@ -732,7 +732,7 @@ def glider_race_mechanic(engine, entity):
         FLAVOR = "+1 max fuel (65)"
         def perform(self):
             if self.entity.credits >= 65:
-                self.entity.relic -=65
+                self.entity.credits -=65
                 self.entity.max_fuel += 1
                 if not hasattr(entity, "MARJORIE_BONUS"):
                     self.engine.settlement_actions.pop(event.K_6, None)

@@ -313,7 +313,7 @@ class RelicsGuild(Guild):
             entity.relic += 1
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
-            foo = relic_museum(x,y,self)
+            foo = RelicsGuild.relic_museum(x,y,self)
             engine.game_map.add_location(foo)
             self.rm = foo
 
