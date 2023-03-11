@@ -9,7 +9,9 @@ class Guild():
         if entity.quest_guild is None:
             entity.quest_guild = self
         elif entity.quest_guild is not self:
-            return
+            entity.quest_guild.level = int(entity.quest_guild.level)
+            entity.quest = 0
+            entity.quest_guild = self
         self._advance(engine, entity)
 
     def guild_action(self, engine, entity):
@@ -777,6 +779,7 @@ class RestorationGuild(Guild):
             self.message = "Recover cargo for the restoration workers."
             engine.msg(self.message)
             self.idx = len(entity.moves)
+            self.level = 1.5:
 
         elif self.level == 1.5:
             if entity.cargo >= 5 and entity.water >= 2 and entity.fuel >= 1 and entity.credits >= 25:
@@ -1000,12 +1003,13 @@ class GliderGuild(Guild):
             engine.msg(self.message)
 
         elif self.level == 1:
-            if self.fuel < 3:
+            if entity.fuel < 3:
                 engine.msg("Note enough fuel for the quest")
                 return
             self.message = "Fuel is the lifeblood"
             engine.msg(self.message)
             self.idx = len(entity.moves)
+            self.level = 1.5
 
         elif self.level == 1.5:
             if entity.fuel == 0:
