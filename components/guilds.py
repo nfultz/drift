@@ -227,7 +227,7 @@ class RelicsGuild(Guild):
         level = 2
         @staticmethod
         def encounter(loc,entity,deck):
-            if loc.quest_level == .5:
+            if loc.quest_level == 1.5:
                 if entity.relic >= 1:
                     entity.relic = 0
                     entity.RM_QUEST1 = 1
@@ -628,7 +628,7 @@ class ExplorationGuild(Guild):
             self.message = "Your hard work has paid off - an ancient temple is discovered."
             engine.msg(self.message)
             self.level = 5.5
-            self.entity.quest = 1
+            entity.quest = 1
 
             x,y = engine.game_map.nearest_empty(entity.x, entity.y, r=30, at_least=5)
             foo = ExplorationGuild.ancient_temple(x,y)
@@ -686,30 +686,30 @@ class RestorationGuild(Guild):
         @staticmethod
         def encounter(loc,entity,deck):
             if entity.quest >= 1:
-                entity.cargo -= 1
+                entity.quest -= 1
                 entity.GA_QUEST = 1
 
     class renewal_machines(locations.GuildUnique):
         level = 2
         rc1 = True
         rc2 = True
+        xp = 99
         @staticmethod
         def encounter(loc,entity,deck):
-            if loc.quest_level == 4.5 and loc.rc1:
+            if entity.guild.level == 4.5 and loc.rc1:
                 if entity.quest >= 1:
                     loc.rc1 = False
                     entity.quest -= 1
                     entity.RM1 += 1
-            if loc.quest_level == 4.5 and loc.rc2:
+                    loc.quest_level = 5.5
+                    loc.encounter.__name__ = "Fed the renewal machine"
+            elif entity.guild.level == 5.5 and loc.rc2:
                 if entity.quest >= 1 and entity.cargo >= 5:
                     loc.rc2 = False
                     entity.quest -= 1
                     entity.cargo -= 5
                     entity.RM2 +=1
-
-            if entity.cargo >= 8:
-                entity.cargo -= 8
-                entity.SS_QUEST = 1
+        encounter.__name__ = "Returned renewal key to machine."
 
     class solar_engine(locations.Settlement):
         def __init__(self,x,y,guild):
