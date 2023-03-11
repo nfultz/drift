@@ -557,7 +557,7 @@ class SellScrap(VisitAction):
         self.entity.cargo = 0
 
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
-            self.engine.settlement_actions.pop(event.K_s, 0)
+            self.engine.settlement_actions.pop(i, 0)
 
     def available(self) -> bool:
         return self.entity.cargo > 0
@@ -598,7 +598,7 @@ class SellRelic(VisitAction):
             self.entity.fame += 1
 
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
-            self.engine.settlement_actions.pop(event.K_s, 0)
+            self.engine.settlement_actions.pop(i, 0)
 
     def available(self) -> bool:
         return self.entity.relic > 0 and self.card.value >= 6
@@ -612,7 +612,7 @@ class DonateRelic(VisitAction):
         self.engine.msg(f"You donate {r} relics for preservation.")
         self.entity.fame += MixedFrac(r,2)
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
-            self.engine.settlement_actions.pop(event.K_s, 0)
+            self.engine.settlement_actions.pop(i, 0)
     def available(self) -> bool:
         if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
         if self.entity.secrecy == 99 or self.entity.restoration == 99: return False
@@ -626,7 +626,7 @@ class RebuildAction(VisitAction):
         self.entity.restoration += 1
         self.engine.msg(f"You contribute cargo and cash to the restoration cause. ({self.entity.restoration})")
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
-            self.engine.settlement_actions.pop(event.K_s, 0)
+            self.engine.settlement_actions.pop(i, 0)
     def available(self) -> bool:
         if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
         return self.entity.restoration != 99 and (self.entity.cargo >= 2 and self.entity.credits >= 50)
@@ -643,7 +643,7 @@ class HideAction(VisitAction):
             self.credits -= 150
             self.entity.secrecy += 1
         for i in (event.K_s, event.K_l, event.K_d, event.K_b, event.K_y):
-            self.engine.settlement_actions.pop(event.K_s, 0)
+            self.engine.settlement_actions.pop(i, 0)
     def available(self) -> bool:
         if self.entity.x != 0 or self.entity.y != 0: return False # only at Home
         return self.entity.secrecy != 99 and (self.entity.relic >= 2 or self.entity.credits >= 150)

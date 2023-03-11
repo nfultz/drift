@@ -286,7 +286,7 @@ def gone_with_the_desert_winds(loc, entity, deck):
 
 @staticmethod
 def a_friendly_keeper(loc, entity, deck):
-    e = earn(entity,loc.level, stamina=e.max_stamina)
+    e = earn(entity,loc.level, stamina=entity.max_stamina)
     # TODO Reveal
     return e
 
