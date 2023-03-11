@@ -373,7 +373,7 @@ def drifter(engine, entity):
             self.engine.settlement_actions.pop(event.K_6, None)
             self.engine.settlement_actions.pop(event.K_7, None)
         def available(self):
-            if len(self.companion) > 0 : return False
+            if len(self.entity.companions) > 0 : return False
             return companions.Seeker in companions.COMPANION_DECK.values()
 
 
@@ -388,7 +388,7 @@ def drifter(engine, entity):
             self.engine.settlement_actions.pop(event.K_7, None)
             pass
         def available(self):
-            if len(self.companion) > 0 : return False
+            if len(self.entity.companions) > 0 : return False
             return companions.Mystic in companions.COMPANION_DECK.values()
 
     oa = optiona(engine, entity)

@@ -536,6 +536,7 @@ class ExplorationGuild(Guild):
             self.message = "The Guild needs new location data on some empty locations."
             engine.msg(self.message)
             self.idx = len(entity.moves)
+            self.level = 1.5
 
         elif self.level == 1.5:
             if explored > 3:
