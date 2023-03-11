@@ -305,7 +305,7 @@ class RelicsGuild(Guild):
 
                 self.level = 1
                 return
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 1:
             self.message = "Take the relic to the Relic Museum"
             engine.msg(self.message)
@@ -356,7 +356,7 @@ class RelicsGuild(Guild):
                 self.level = 3
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 3:
             self.message = ("The Relic Museum requires additional donations.")
@@ -375,7 +375,7 @@ class RelicsGuild(Guild):
                 self.level = 4
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 4:
             self.message = "The Guild has almost finished their new Relic storage system"
@@ -400,7 +400,7 @@ class RelicsGuild(Guild):
                 self.level = 5
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 5:
             self.message = "Recvoer 4 Relics and return to relic museum"
             engine.msg(self.message)
@@ -417,7 +417,7 @@ class RelicsGuild(Guild):
                 self.level = 6
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 6:
             self.message = "Recover 6 Ancient House Artifacts and return to relic museum"
             engine.msg(self.message)
@@ -440,7 +440,7 @@ class RelicsGuild(Guild):
 
                 self.level = 7
                 return
-            engine.msg(message)
+            engine.msg(self.message)
 
 
 
@@ -531,7 +531,7 @@ class ExplorationGuild(Guild):
 
                 self.level = 1
                 return
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 1:
             self.message = "The Guild needs new location data on some empty locations."
             engine.msg(self.message)
@@ -568,7 +568,7 @@ class ExplorationGuild(Guild):
                 self.level = 3
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 3:
             self.message = "Transport the mapping data to the guild camps"
@@ -596,7 +596,7 @@ class ExplorationGuild(Guild):
                 self.level = 4
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 4:
             self.message = "While the cartographer is hard at work, collect more data."
@@ -619,7 +619,7 @@ class ExplorationGuild(Guild):
                 self.level = 5
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 5:
             self.message = "Your hard work has paid off - an ancient temple is discovered."
             engine.msg(self.message)
@@ -642,7 +642,7 @@ class ExplorationGuild(Guild):
                 self.level = 6
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 6:
             self.message = "Recover 6 Ancient Texts and 10 cargo"
             engine.msg(self.message)
@@ -668,7 +668,7 @@ class ExplorationGuild(Guild):
 
                 self.level = 7
                 return
-            engine.msg(message)
+            engine.msg(self.message)
 
 
 
@@ -770,7 +770,7 @@ class RestorationGuild(Guild):
 
                 self.level = 1
                 return
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 1:
             self.message = "Recover cargo for the restoration workers."
@@ -818,7 +818,7 @@ class RestorationGuild(Guild):
                 self.level = 3
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 3:
             self.message = "Transport the data to the green archives"
@@ -843,7 +843,7 @@ class RestorationGuild(Guild):
                 self.level = 4
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 4:
             self.message = "Transport renewal keys to the three Renewal Machines."
@@ -871,7 +871,7 @@ class RestorationGuild(Guild):
                 self.level = 5
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 5:
             self.message = "Each machine needs supplies."
             engine.msg(self.message)
@@ -889,7 +889,7 @@ class RestorationGuild(Guild):
                 self.level = 6
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 6:
             self.message = "Recover 6 Ancient Texts and 10 cargo"
             engine.msg(self.message)
@@ -912,7 +912,7 @@ class RestorationGuild(Guild):
 
                 self.level = 7
                 return
-            engine.msg(message)
+            engine.msg(self.message)
 
 
 
@@ -996,7 +996,7 @@ class GliderGuild(Guild):
 
                 self.level = 1
                 return
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 1:
             if self.fuel < 3:
@@ -1039,7 +1039,7 @@ class GliderGuild(Guild):
                 self.level = 3
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 3:
             self.message = "Time to go fast."
@@ -1064,7 +1064,7 @@ class GliderGuild(Guild):
                 self.level = 4
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
 
         elif self.level == 4:
             self.message = "Your dedication and respect to the Glider has paid off."
@@ -1088,7 +1088,7 @@ class GliderGuild(Guild):
                 self.level = 5
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 5:
             self.message = "If you want to ride with the best, you need the mods to keep up."
             engine.msg(self.message)
@@ -1113,7 +1113,7 @@ class GliderGuild(Guild):
                 self.level = 6
                 return
 
-            engine.msg(message)
+            engine.msg(self.message)
         elif self.level == 6:
 
             if upgrades < 5:
@@ -1135,7 +1135,7 @@ class GliderGuild(Guild):
 
                 self.level = 7
                 return
-            engine.msg(message)
+            engine.msg(self.message)
 
 
 
