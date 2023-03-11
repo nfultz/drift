@@ -465,6 +465,7 @@ class ExplorationGuild(Guild):
             self.guild = guild
 
 
+    old = 0
     def guild_action(self, engine, entity):
         this = self
         class A(Action):
@@ -541,7 +542,7 @@ class ExplorationGuild(Guild):
             self.level = 1.5
 
         elif self.level == 1.5:
-            if explored > 3:
+            if explored >= 3:
                 engine.msg("Quest Completed")
                 entity.quest = 0
                 entity.quest_guild = None
